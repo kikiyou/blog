@@ -1,0 +1,7 @@
+#!/bin/bash
+Unix_date=`date +%s`
+/usr/sbin/ntpdate cn.pool.ntp.org >/dev/null 2>&1
+token=`/usr/bin/python /usr/bin/v5_token.py`
+QQ_PASSWD="dawx@99!"
+date --set @${Unix_date} >/dev/null 2>&1
+sshpass -p ${token}${QQ_PASSWD} scp -oKexAlgorithms=+diffie-hellman-group1-sha1 $1 app100688853@10.204.174.31:/data/release/sgonline

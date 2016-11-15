@@ -1,0 +1,110 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+ENV = {
+  'fab_version':'0.0.1',
+  'fab_mode':'fanout',
+}
+
+print "Fabric v. %(fab_version)s" % ENV
+
+import getpass, sys, os
+try:
+  import paramiko as ssh
+except:
+  print "ERROR: paramiko is a required module. Please install it"
+  exit(1)
+
+def set(**variables):
+  "Set a number of Fabric environment variables."
+  for k, v in variables.items():
+    ENV[k] = (v % ENV)
+
+def get(name):
+  "Get the value of a given Fabric environment variable."
+  return ENV[name]
+
+def require(variable, **kvargs):
+  "Make sure that a certain environmet variable is available."
+  pass
+
+def put(localname, remotename, **kvargs):
+  "Upload a file to the current hosts."
+  pass
+
+def run(cmd, **kvargs):
+  "Run a shell command on the current hosts."
+  pass
+
+def sudo(cmd, **kvargs):
+  "Run a sudo (root privileged) command on the current hosts."
+  pass
+
+def local(cmd, **kvargs):
+  "Run a command locally."
+  os.system(cmd)
+
+def load(filename, **kvargs):
+  "Load up the given fabfile."
+  pass
+
+def lambda1(n):
+    print
+    print n
+    # print_stack(f=lambda1, limit=None, file=None)
+    print "###########"
+    print n[0]
+    print n[1]
+    print 
+    return (n[0][0] != '_') and callable(n[1])
+    #找出不是以"_"开头的私有方法  并且这个方法是可以调用的，可调用包括函数，类
+def main(args):
+  # loading:
+  execfile('fabfile')
+  #cmds = dict([n for n in filter(lambda n: (n[0][0] != '_') and callable(n[1]), locals().items())])
+  aa1 = locals().items()
+  
+  #把fabfile 中的 类 函数 变量获得  存入list中
+  #[ ('Student', <class __main__.Student at 0x7f83e0fc6390>),('setup', <function setup at 0x7fe5f1ec1de8>), ('production', <function production at 0x7fe5f1ec1cf8>)，('x','ccc')]
+  #如上，
+  #类 ('Student', <class __main__.Student at 0x7f83e0fc6390>)
+  #函数 ('setup', <function setup at 0x7fe5f1ec1de8>)
+  #变量 ('x','ccc')
+
+
+  print aa1
+  
+  # f = lambda n:  
+
+  
+  f = lambda1
+
+  bb = filter(f, aa1)
+
+  cc = [n for n in bb]
+  print cc
+  cmds = dict(cc)
+  print cmds
+  
+  # validation:
+  def lambda2(a,b):
+      print  a
+      return max(a, len(b))
+
+  max_name_len = reduce(lambda2, cmds.keys(), 0)
+  #求出函数名 最长的 的长度  为字符串对整作准备
+  print max_name_len
+  for cmd in args:
+    print "ccc"
+    if not cmd in cmds:
+      print "No such command: %s" % cmd
+      print "Available commands are:"
+      for name, fn in cmds.items():
+        print '  ', name.ljust(max_name_len), ':', fn.__doc__
+      exit(1)
+  
+  # execution:
+  for cmd in args:  #核心 能直接执行函数 靠的就是这个
+    cmds[cmd]()
+
+if __name__ == '__main__':
+  main(sys.argv[1:])
