@@ -188,3 +188,32 @@ print d1
     "b": 789, 
     "c": 456 
 }
+
++ 在python中dict中使用 iteritems
+``` python
+#!/usr/bin/python
+
+d={1:'one',2:'two',3:'three'}
+print 'd.items():'
+for k,v in d.items():
+   if d[k] is v: print '\tthey are the same object' 
+   else: print '\tthey are different'
+
+print 'd.iteritems():'   
+for k,v in d.iteritems():
+   if d[k] is v: print '\tthey are the same object' 
+   else: print '\tthey are different'   
+```
+*** 输出: ***
+``` python
+d.items():
+    they are the same object
+    they are the same object
+    they are the same object
+d.iteritems():
+    they are the same object
+    they are the same object
+    they are the same object
+```
+
+虽然结果是一样的 但是 iteritems 迭代器,不是一次性返回数组，性能更高资源更省
