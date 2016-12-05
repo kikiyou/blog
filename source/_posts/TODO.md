@@ -36,11 +36,8 @@ Vue + Vue-Router + Vuex + I18n + Validator + Webpack + PostCSS + Karma + Koa
 2. fabric 看完 v0.0.1了
 
 3. ansible 看完 v0.0.1了
-看到 SHA 4de7bbb1
-Allow conditional imports, see examples/playbook3.yml comments for a full explanation.  Extensive
-refactoring of playbooks now warranted, which we'll do before we move on.   This variable assignment
-system makes nearly all possible magic possible, for we can use these variables however we like,
-even as module names!
++看到 SHA e85355f0
+ -Allow conditional imports, see examples/playbook3.yml comments for a full explanation.  Extensive		 +cleaned up apt module style
 
 离 v0.0.2 还有一些距离
 

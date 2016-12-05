@@ -26,18 +26,26 @@ tags: editor
 
 + code runner 的使用安装
 1.安装插件 code runner
+
+(1) Ctrl+Shift+P 调出命令行
+（2）输入tasks：Configure Task Runner
+（3） 选other
 ``` tasks.json
 {
     "code-runner.executorMap": {
         "javascript": "node",
-        "php": "/usr/bin/php",
+        "php": "php",
         "python": "python",
         "perl": "perl",
         "ruby": "/usr/bin/ruby",
-        "go": "go run"
+        "go": "go run",
+        ".html": "/usr/bin/google-chrome",
+        "java": "cd $dir && javac $fileName && java $fileNameWithoutExt",
+        "c": "gcc $fullFileName && ./a.out"
     }
 }
 ```
+![图片](https://i.stack.imgur.com/IbyrC.png)
 2. 使用
 选中需要执行的命令
 执行：Ctrl+Alt+N

@@ -31,3 +31,14 @@ Google 之
 把代码 使用 ``` 注释起来就好了
 
 推荐： 以后引用的代码最好注释起来
+
+
+运行 $ hexo server 命令有时会返回这样的错误：
+
+1
+Error: watch ENOSPC ...
+可以用过运行 $ npm dedupe 来解决，如果不起作用的话，可以尝试在 Linux 终端中运行下列命令：
+
+1
+$ echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+这将会提高你能监视的文件数量。
