@@ -60,3 +60,12 @@ https://extensions.gnome.org/extension/307/dash-to-dock/
 
 + 在终端中打开 目录
     $ nautilus .
+
+
++ 添加 更新软件源  安装 mpv 播放器
+rpm -Uvh http://mirrors.aliyun.com/rpmfusion/free/fedora/rpmfusion-free-release-25.noarch.rpm
+rpm -Uvh http://mirrors.aliyun.com/rpmfusion/nonfree/fedora/rpmfusion-nonfree-release-25.noarch.rpm
+
+
+
+yum install mpv
