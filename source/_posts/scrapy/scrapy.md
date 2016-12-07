@@ -48,6 +48,13 @@ XPath表达式的例子及对应的含义:
 //td: 选择所有的 <td> 元素
 //div[@class="mine"]: 选择所有具有 class="mine" 属性的 div 元素
 
+>>> response.xpath('//base/@href').extract()
+[u'http://example.com/']
+
+>>> response.css('base::attr(href)').extract()
+[u'http://example.com/']
+
+@符号代表 属性
 
 映射:
 response.selector.xpath()  --》 response.xpath()
