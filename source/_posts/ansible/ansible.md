@@ -245,3 +245,8 @@ def template(text, vars):
     template = jinja2.Template(text)
     return template.render(vars)
 ```
+
++ ansible 中直接调用remote 主机的命令
+
+- name: Execute network report
+  shell: chdir=/usr/bin mysql -u root --password={{ MYSQLPASS }} --table < /usr/share/network_report.sql >> {{ REPORT_DIR }}/os_report_{{ lookup('pipe', 'date +%Y%m%d') }}.log
