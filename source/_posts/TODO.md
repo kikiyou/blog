@@ -35,11 +35,10 @@ Vue + Vue-Router + Vuex + I18n + Validator + Webpack + PostCSS + Karma + Koa
 
 2. fabric 看完 v0.0.1了
 
-3. ansible 看完 v0.0.1了
-+看到 SHA e85355f0
- -Allow conditional imports, see examples/playbook3.yml comments for a full explanation.  Extensive		 +cleaned up apt module style
+3. ansible 看完 v0.0.2了
+一行代码 一行代码的看 太累了，我准备直接看
+v1.0
 
-离 v0.0.2 还有一些距离
 
 好网站 ：http://nullege.com/ 大量python例子
 比如搜索:flask.Flask.create_jinja_environment

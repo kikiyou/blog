@@ -1,0 +1,30 @@
+# ansible selective_file_sources
+
+
+
+[参考](http://docs.ansible.com/ansible/playbooks_conditionals.html#selecting-files-and-templates-based-on-variables)
+---
+# this is an example of how to template a file over using some variables derived
+# from the system.  For instance, if you wanted to have different configuration
+# templates by OS version, this is a neat way to do it.  Any Ansible facts, facter facts,
+# or ohai facts could be used to do this.
+
+- hosts: all
+
+  tasks:
+
+  - name: template a config file
+    action: template dest=/etc/imaginary_file.conf
+    first_available_file:
+
+       # first see if we have a file for this specific host
+       - /srv/whatever/${ansible_hostname}.conf
+
+       # next try to load something like CentOS6.2.conf
+       - /srv/whatever/${ansible_distribution}${ansible_distribution_version}.conf
+
+       # next see if there's a CentOS.conf
+       - /srv/whatever/${ansible_distribution}.conf
+
+       # finally give up and just use something generic
+       - /srv/whatever/default

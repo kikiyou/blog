@@ -206,6 +206,16 @@ $port 和 {{ port }} 的写法相同
 - name: test basic shell, plus two ways to dereference a variable
 action: shell echo $HOME $port {{ port }}
 
+注：  必须在action中才可以
+
+  vars:
+    workdir: /tmp/cc
+  tasks:
+
+    - name: Create local directory to work from
+      action: file path=$workdir state=directory owner=yh group=yh 
+
+
 ``` python
 _KEYCRE = re.compile(r"\$(\w+)")
 
@@ -245,6 +255,8 @@ def template(text, vars):
     template = jinja2.Template(text)
     return template.render(vars)
 ```
+
+
 
 + ansible 中直接调用remote 主机的命令
 
