@@ -8,7 +8,19 @@ https://github.com/FZUG/repo/wiki/Sogou-Pinyin-%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2
 # 安装
 
 + 查看 有哪些目录
-smbclient -U monkey-L 172.16.200.250
+smbclient -U monkey -L 172.16.200.250
+
+Sharename       Type      Comment
+---------       ----      -------
+IPC$            IPC       IPC Service ()
+home            Disk      Home
+Upload          Disk      
+Release         Disk      
+wiki            Disk      
+KS              Disk      
+Restrict        Disk      
+Media           Disk      媒体资源库
+Public          Disk      System default share
 
 + 挂载
 sudo mount.cifs //172.16.200.250/Upload /home/monkey/it-fs/Upload -o username=monkey,password=123.coM
