@@ -8,8 +8,10 @@
 # will result in poor performance, so use transport=paramiko on older platforms rather than
 # removing it
 
-ssh_args=-o PasswordAuthentication=no -o ControlMaster=auto -o ControlPersist=1h -o ControlPath=/tmp/ansible-ssh-%h-%p-%r
+ssh_args=-o ControlMaster=auto -o ControlPersist=1h -o ControlPath=~/.ssh/sockets/ansible-ssh-%h-%p-%r
+#ssh_args=-o PasswordAuthentication=no -o ControlMaster=auto -o ControlPersist=1h -o ControlPath=~/.ssh/sockets/ansible-ssh-%h-%p-%r
 
+PasswordAuthentication=no 明确指定不使用密码认证
 # the following makes ansible use scp if the connection type is ssh (default is sftp)
 
 #scp_if_ssh=True
