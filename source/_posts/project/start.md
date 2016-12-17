@@ -11,3 +11,11 @@ redis
 
 
 无框架浏览器，phantomjs
+
+##
+BeautifulSoup  解析html
+
+scrapy  爬虫主体框架
+
+selenium  调用浏览器
+phantomjs 无框架浏览器
