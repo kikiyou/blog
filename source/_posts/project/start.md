@@ -13,9 +13,8 @@ redis
 无框架浏览器，phantomjs
 
 ##
-BeautifulSoup  解析html
-
+BeautifulSoup4  解析html (scrapy 的xpath解析可替换掉它)
 scrapy  爬虫主体框架
 
-selenium  调用浏览器
+selenium  调用phantomjs
 phantomjs 无框架浏览器
