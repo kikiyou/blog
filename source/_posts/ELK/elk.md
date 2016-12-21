@@ -27,3 +27,6 @@ http://grokdebug.herokuapp.com/
 
 + other
 [基于 POSTGRESQL 的数据统计系统](http://www.wklken.me/posts/2014/11/16/unit-statistics-system.html)
+
++ 插件
+es 插件 kopf
