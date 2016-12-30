@@ -1,4 +1,5 @@
 1. 如果输入的密码过于简单，报错密码验证不通过可以
+Your password does not satisfy the current policy requirements
 [root@db1 ~]#vim ~/my.cnf
 validate-password = off
 
