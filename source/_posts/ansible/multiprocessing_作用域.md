@@ -83,7 +83,7 @@ def f(x):
 class calculate(object):
     def run(self):
         p = Pool()
-        return p.map(f, [1,2,3，4])
+        return p.map(f, [1,2,3,4])
 
 cl = calculate()
 print cl.run()

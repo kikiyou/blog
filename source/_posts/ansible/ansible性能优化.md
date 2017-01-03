@@ -9,6 +9,7 @@
 # removing it
 
 ssh_args=-o ControlMaster=auto -o ControlPersist=1h -o ControlPath=~/.ssh/sockets/ansible-ssh-%h-%p-%r
+
 #ssh_args=-o PasswordAuthentication=no -o ControlMaster=auto -o ControlPersist=1h -o ControlPath=~/.ssh/sockets/ansible-ssh-%h-%p-%r
 
 PasswordAuthentication=no 明确指定不使用密码认证

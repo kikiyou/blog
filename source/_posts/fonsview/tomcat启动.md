@@ -1,0 +1,5 @@
+/opt/fonsview/3RD/jdk1.8/bin/java -Djava.util.logging.config.file=/opt/fonsview/3RD/tomcat7.0.63/conf/logging.properties -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager -Djgroups.bind_addr=127.0.0.1 -Djava.net.preferIPv4Stack=true -server -Xms1000m -Xmx1000m -Xmn875m -Xss256k -XX:SurvivorRatio=6 -XX:MaxPermSize=1024m -XX:ParallelGCThreads=1 -XX:MaxTenuringThreshold=0 -XX:+UseConcMarkSweepGC -Djava.endorsed.dirs=/opt/fonsview/3RD/tomcat7.0.63/endorsed -classpath /opt/fonsview/3RD/tomcat7.0.63/bin/bootstrap.jar:/opt/fonsview/3RD/tomcat7.0.63/bin/tomcat-juli.jar -Dcatalina.base=/opt/fonsview/3RD/tomcat7.0.63 -Dcatalina.home=/opt/fonsview/3RD/tomcat7.0.63 -Djava.io.tmpdir=/opt/fonsview/3RD/tomcat7.0.63/temp org.apache.catalina.startup.Bootstrap start
+
+
+
+### tomcat 启动不起来很可能式内存不够
