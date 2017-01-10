@@ -9,6 +9,8 @@ sudo systemctl  start mongod
 ## 使用
 $mongo
 
+
+默认端口  18087
 + 查看当前操作的数据库
 数据库 切换
 use db
@@ -29,6 +31,8 @@ WriteResult({ "nRemoved" : 2 })           # 删除了两条数据
 ……                                        # 没有数据
 
 + 改
+修改多行，要指定 multi=True，否则只是修改匹配到的第一行
+
 update() 方法
 update() 方法用于更新已存在的文档。语法格式如下：
 db.collection.update(
@@ -69,10 +73,12 @@ db.col.update( { "count" : { $gt : 15 } } , { $inc : { "count" : 1} },false,true
 db.col.update( { "count" : { $gt : 10 } } , { $inc : { "count" : 1} },false,false );
 
 
-
-
 + 查
 runoob 是集合名
+
+> show collections
+查询库中有哪些集合
+
 > db.runoob.find()
 { "_id" : ObjectId("5871cc462bea47350d13bb2e"), "x" : 10 }
 >db.col.find().pretty()
@@ -123,6 +129,8 @@ switched to db runoob
 
 httpinterface = true
 rest = true
+
+在默认端口上 加1000 是web端口
 
 
 ## 基本概念
