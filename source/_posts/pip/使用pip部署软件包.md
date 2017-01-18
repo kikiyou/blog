@@ -1,3 +1,16 @@
+mkdir -p ~/.pip/
+
+vim ~/.pip/pip.conf
+[global]
+index-url = http://mirrors.aliyun.com/pypi/simple/
+
+[install]
+trusted-host=mirrors.aliyun.com
+#####
+
+wget https://bootstrap.pypa.io/get-pip.py
+python get-pip.py
+
 前提条件 先安装pip
 可以使用pip 安装本地的软件包。
 
