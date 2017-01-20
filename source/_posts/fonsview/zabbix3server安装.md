@@ -1,4 +1,4 @@
-zabbix使用教程1：zabbix安装
+zabbix使用教程1：zabbix3Server安装
 一、环境介绍
 [root@centos63 ~]# cat /etc/redhat-release
 CentOS release 6.3 (Final)
@@ -21,6 +21,28 @@ php 设置：
 
 注： 推荐 mysql 设置  innodb_file_per_table=1 使用独立表空间
 
+0. 设置软件仓库
+下载:
+ \\it-fs\Upload\SS Department\monkey\zabbix\fsv_zabbix3.tar.gz
+
+mkdir -p /root/install/
+tar xf fsv_zabbix3.tar.gz -C /root/install/
+
+
+清除 默认无用的仓库
+
+mkdir -p /etc/yum.repos.d/bak
+mv /etc/yum.repos.d/*.repo /etc/yum.repos.d/bak/
+
+cat << _EOF > /etc/yum.repos.d/fsv_zabbix.repo
+[fsv_zabbix]
+name=fonsview repo
+baseurl=file:///root/install/fsv_zabbix3/6/
+enabled=0
+gpgcheck=0
+_EOF
+
+
 1. 创建mysql 登录认证文件
 shell> cat << _EOF > ~/.my.cnf
 [client]
@@ -34,10 +56,10 @@ yum remove php*
 
 3. php56 安装
 
-yum --enablerepo=remi,remi-php56 install php php-mysql php-gd php-bcmath php-common php-mbstring php-xml --nogpgcheck
+yum --enablerepo=fsv_zabbix install php php-mysql php-gd php-bcmath php-common php-mbstring php-xml
 
 4. 安装zabbix
-yum install zabbix-server-mysql zabbix-web zabbix-web-mysql zabbix-agent.x86_64 --nogpgcheck
+yum --enablerepo=fsv_zabbix install zabbix-server-mysql zabbix-web zabbix-web-mysql zabbix-agent.x86_64
 
 4. 查看当前主机 php版本
 php -v
@@ -101,7 +123,7 @@ chkconf zabbix-agent on
 /etc/init.d/zabbix-agent restart 
 
 chkconf zabbix-server on
-/etc/init.d/zabbix-agent restart
+/etc/init.d/zabbix-server restart
 
 chkconf httpd on
 /etc/init.d/httpd restart
@@ -156,7 +178,6 @@ tcp        0      0 0.0.0.0:10050               0.0.0.0:*                   LIST
 访问http://192.168.122.18/zabbix 进行安装
 
 数据库的 库名：zabbix 用户名：zabbix  密码：Mysql23+
-
 
 
 七、登录
