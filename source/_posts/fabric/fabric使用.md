@@ -1,0 +1,1 @@
+fab -H fonsview@172.16.6.66 --port=50000 -- uname -a
