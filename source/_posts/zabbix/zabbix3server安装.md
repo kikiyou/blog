@@ -26,10 +26,10 @@ php 设置：
 
 0. 设置软件仓库
 下载:
- \\it-fs\Upload\SS Department\monkey\zabbix\fsv_zabbix3_nginx.tar.gz
+ \\it-fs\Upload\SS Department\monkey\zabbix\fsv_zabbix3_nginx.tar.xz
 
 mkdir -p /root/install/
-tar xf fsv_zabbix3_nginx.tar.gz -C /root/install/
+tar xf fsv_zabbix3_nginx.tar.xz -C /root/install/
 
 
 清除 默认无用的仓库
@@ -248,7 +248,7 @@ sed -i -e '/keepalive_timeout/aserver_tokens  off;' /etc/nginx/nginx.conf
 /etc/init.d/nginx restart
 
 隐藏php版本：
-sed -i -e '/expose_php = On/expose_php = Off' /etc/nginx/nginx.conf
+sed -i -e '/expose_php = On/expose_php = Off' /etc/php-fpm.d/www.conf
 /etc/init.d/php-fpm restart
 
 检查：
