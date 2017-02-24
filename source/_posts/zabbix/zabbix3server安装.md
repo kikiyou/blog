@@ -23,6 +23,7 @@ php 设置：
 
 
 注： 推荐 mysql 设置  innodb_file_per_table=1 使用独立表空间
+注意： 本教程 默认mysql 密码是Mysql23+   如果不是，请修改
 
 0. 设置软件仓库
 下载:
