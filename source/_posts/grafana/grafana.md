@@ -68,7 +68,7 @@ Title（标题）
 Description（描述）
 
 Dimensions（尺度）
-Span（宽）
+Span（跨度）   --》最大为12
 Height(高)
 Transparent（透明）
 
