@@ -113,3 +113,9 @@ $netif	*.$host.Network interfaces.*
 
 + Singlestat 单值 状态面板
 选择 启用Gauge  可以达到 显示汽车仪表盘的功能
+
++ 添加zabbix 触发器
+图表中选择   Zabbix Triggers
+即可
+
+并且可以对一个触发器 显示通告，询问为什么？
