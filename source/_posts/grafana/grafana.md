@@ -1,3 +1,7 @@
+
+[参考-zabbix 图像显示 Grafana](http://qkxue.net/info/188153/zabbix-Grafana)
+[如何在CentOS 7的Zabbix中安装和配置Grafana绘制漂亮的图表](https://www.howtoing.com/how-to-install-and-configure-grafana-to-plot-beautiful-graphs-from-zabbix-on-centos-7/)
+
 1. grafana
 
 + 下载
@@ -20,7 +24,7 @@ docker run \
 0. 把zabbix enable
 1. Data Source --> Add data source -->
 
-Name zabbix
+Name zabbix   Default 选中
 Type zabbix
 Url http://xxxxx/zabbix/api_jsonrpc.php
 zabbix api details
@@ -75,12 +79,37 @@ Min span（最小宽度）
 2. Metrics（度量，规律）
 
 3. Axes（轴，x或y轴）
+Unit （这里设置数据的单位）
 
 4. Legend（铭文）
 定义汇总信息是在右边还是下面，汇总信息 包括 最大 最小 平均 当前
 
 5. Display(图形展示)
+Series  overrides  这里可以设定，把进流量,变到下面显示
+0. 添加 override
+alias or regex   /Incoming/   Transform: negative-Y （改变为负数在y轴）
+
 
 6. Alert（报警）
 
 7. 时间范围
+
+
+右上角设置选模板，可以设置变量
+
+$group	*
+$host	$group.*
+$netif	*.$host.Network interfaces.*
+
+
+说明，选ss的进流量 和 出流量进行对比，ss的进流量是 调度器访问所以比较平均，但是出流是就是有变化的，说明出流量是给客户的
+
+
++  添加饼图  
+在添加图形搜索中搜索  pie
+0. Metrics 中添加两个选项 一个是 总磁盘使用情况  另一个是当前磁盘使用情况
+1. 在Options 设置这里   选legend（铭文）
+   可以显示 占用百分比等
+
++ Singlestat 单值 状态面板
+选择 启用Gauge  可以达到 显示汽车仪表盘的功能
