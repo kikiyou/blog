@@ -138,3 +138,28 @@ There are currently four Panel types: Graph, Singlestat, Dashlist, Table,and Tex
 + Query Editor（查询编辑器）
 + Dashboard(面板)
 面板可以用  模板、描述、共享、快照 等
+
++ 支持正则
+
+比如：
+/NJ-HX-F4-IPTV-Server-EPG0[1-3]/
+
+做一到3张图
+
+Group /.*/
+Item  /CPU (system|user) time/
+
+Functions
+groupBy(10s, avg)
+
+支持聚合  各自10秒钟的平均值
+
+setAlias(xxx/s)
+
++ 如果一个区间图点过多，可以减少
+Max data points 
+
++ Histogram 柱状图
+
++ 把自己做的图 分享出去
+ Publish to snapshot.raintank.io
