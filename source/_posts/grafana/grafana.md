@@ -74,7 +74,7 @@ Transparent（透明）
 
 Templating（模板）
 Repeat Panel（复制面板）
-Min span（最小宽度）
+Min span（最小跨度）
 
 2. Metrics（度量，规律）
 
@@ -85,7 +85,9 @@ Unit （这里设置数据的单位）
 定义汇总信息是在右边还是下面，汇总信息 包括 最大 最小 平均 当前
 
 5. Display(图形展示)
-Series  overrides  这里可以设定，把进流量,变到下面显示
+0. Series  overrides  这里可以设定，把进流量,变到下面显示
+1. Draw modes(画图模式)  这里可以设置图形是 bars条状图 lines折线图   points点图
+
 0. 添加 override
 alias or regex   /Incoming/   Transform: negative-Y （改变为负数在y轴）
 
@@ -119,3 +121,20 @@ $netif	*.$host.Network interfaces.*
 即可
 
 并且可以对一个触发器 显示通告，询问为什么？
+
++ 显示当前时间
+clock
+
++ ajax 
+使用ajax 动态的从远程 获取文件内容
+
+可以把连接地址共享，嵌入到一个页面
+
++ ROW (行)
+最小的排列单元  可以有12个
++ Panel（面板）
+There are currently four Panel types: Graph, Singlestat, Dashlist, Table,and Text.
+
++ Query Editor（查询编辑器）
++ Dashboard(面板)
+面板可以用  模板、描述、共享、快照 等
