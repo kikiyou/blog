@@ -46,10 +46,9 @@ yum install  nginx
 
 yum install install zabbix-get
 
-
-
 mkdir -p /tmp/cc
-find ./ -name *.rpm -exec cp -rp  {}  /tmp/cc \;
+cd /var/cache/yum/
+find /var/cache/yum/ -name *.rpm -exec cp -rp  {}  /tmp/cc \;
 
 
 

@@ -1,6 +1,3 @@
-patching file ./include/func.inc.php
-patching file ./include/menu.inc.php
-
 
 
 [root@ZX-OTT-ZabbixServer ~]# cd /usr/share/zabbix
@@ -14,3 +11,14 @@ patching file ./include/menu.inc.php
 
 
 [root@ZX-OTT-ZabbixServer zabbix]# chown -R nginx:nginx oneoaas/ 
+
+
+0. 
+修改这里
+patching file ./include/menu.inc.php
+把  Graphtree 改为图形树
+
+
+
+vi /usr/share/zabbix/oneoaas/templates/graphtree/graphtree.tpl
+删除多余的信息
