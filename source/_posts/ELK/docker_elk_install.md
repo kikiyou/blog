@@ -118,3 +118,83 @@ EOF
     - apt-get update 更新源
     - apt-cache search package 搜索包
     - apt-get install 安装
+
+
+--------------------------------
++ 安装
+docker pull sebp/elk
+
++ 运行
+docker run -p 5601:5601 -p 9200:9200 -p 5044:5044 -p 5000:5000 -it --name elk sebp/elk
+
++ 配置
+其实没什么配置，这里的 "配置"，只是往 logstash 中加入一条数据，从而可以进行后续的操作：
+
+1
+docker exec -it elk /bin/bash
+执行
+
+1
+/opt/logstash/bin/logstash -e 'input { stdin { } } output { elasticsearch { hosts => ["localhost"] } }'
+这个是将 logstash 的输出导到 ElasticSearch 中，而数据是从标准输入来的。
+
+然后随便输入下东西，例如 "Hello World"，然后打开
+
+1
+http://<your-host>:5601
+点击"创建"，即可进入下一步。
+
+查看日志
+ElasticSearch
+
+1
+http://vmubuntu.info:9200/_search?pretty
+Kibana
+
+1
+http://vmubuntu.info:5601
+添加日志
+添加日志一般将日志导入到 logstash 中，而因为 logstash 在 docker 中，所以本地的话需要加一个日志收集器 filebeat。
+
+安装 filebeat
+
+1
+2
+curl -L -O https://download.elastic.co/beats/filebeat/filebeat_1.2.3_amd64.deb
+sudo dpkg -i filebeat_1.2.3_amd64.deb
+配置 filebeat
+
+1
+vim /etc/filebeat/filebeat.yml
+在里面添加以下内容：
+
+output:
+      logstash:
+        enabled: true
+        hosts:
+          - elk:5044
+        tls:
+          certificate_authorities:
+            - /etc/pki/tls/certs/logstash-beats.crt
+        timeout: 15
+
+    filebeat:
+      prospectors:
+        -
+          paths:
+            - /var/log/syslog
+            - /var/log/auth.log
+          document_type: syslog
+        -
+          paths:
+            - "/var/log/nginx/*.log"
+          document_type: nginx-access
+这样就可以了。然后启动 filebeat
+
+1
+service filebeat start
+然后打开 kibana
+
+设置图
+
+首先要想添加一个 index，步骤如下：

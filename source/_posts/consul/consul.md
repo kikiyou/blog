@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-
-
 推荐方案
 Consul + confd
 或
@@ -98,18 +95,8 @@ consul agent -server -bootstrap-expect 1 -data-dir /tmp/consul -ui-dir=./  -conf
 ##查看信息
 consul info
 
-
-
-
-
-
-
-
-
-
 [Consul 搭建服务框架（使用篇）](http://dockone.io/article/1565)
 [Docker结合Consul实现的服务发现（二）参考](http://dockone.io/article/1360)
 
 https://github.com/jippi/hashi-ui
 nomad
->>>>>>> 5bf926e27834279218c53e89dd8fc609777e5726
