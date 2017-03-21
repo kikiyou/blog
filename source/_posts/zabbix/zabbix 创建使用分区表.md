@@ -38,6 +38,9 @@ truncate table trends_uint;
 optimize table trends_uint;
 -----
 
+#关闭housekeeper
+ALTER TABLE housekeeper ENGINE = BLACKHOLE;
+
 ## 使用分区表
 
 + 创建存储过程
