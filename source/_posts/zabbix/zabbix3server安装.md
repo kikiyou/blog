@@ -119,18 +119,19 @@ Timeout=4
 AlertScriptsPath=/usr/lib/zabbix/alertscripts
 ExternalScripts=/usr/lib/zabbix/externalscripts
 LogSlowQueries=3000
-StartPollers=30
+StartPollers=40
 StartPollersUnreachable=3
-StartTrappers=5
-StartPingers=5
-StartDiscoverers=5
+StartTrappers=10
+StartPingers=10
+StartDiscoverers=10
 MaxHousekeeperDelete=20000
 CacheSize=256M
 StartDBSyncers=4
 HistoryCacheSize=256M
 ValueCacheSize=256M
-TrendCacheSize=8M
-HistoryTextCacheSize=32M
+TrendCacheSize=16M
+HistoryCacheSize=32M
+HistoryIndexCacheSize=16M
 _EOF
 
 13. 修改客户端的配置
