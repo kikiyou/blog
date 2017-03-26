@@ -73,9 +73,6 @@ yum --enablerepo=fsv_zabbix install nginx
 sed -i "s/user = apache/user = nginx/g" /etc/php-fpm.d/www.conf
 sed -i "s/group = apache/group = nginx/g" /etc/php-fpm.d/www.conf
 
-/etc/init.d/php-fpm restart
-chkconfig php-fpm on
-
 7. 查看当前主机 php版本
 php -v
 PHP 5.6.30 (cli) (built: Jan 19 2017 08:09:42)
@@ -169,14 +166,17 @@ chown root:nginx /var/lib/php/session/
 chown nginx:nginx /var/lib/php/session/*
 
 15. 启动服务
-chkconf zabbix-agent on
-/etc/init.d/zabbix-agent restart 
+chkconfig zabbix-agent on
+service zabbix-agent restart 
 
-chkconf zabbix-server on
-/etc/init.d/zabbix-server restart
+chkconfig zabbix-server on
+service zabbix-server restart
 
-chkconf nginx on
-/etc/init.d/nginx restart
+chkconfig php-fpm on
+service php-fpm restart
+
+chkconfig nginx on
+service nginx restart
 
 
 16. 检查

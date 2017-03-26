@@ -41,7 +41,9 @@ gpgcheck=0
 yum install zabbix-server-mysql zabbix-web zabbix-web-mysql  zabbix-agent.x86_64 zabbix-get 
 
 yum --nogpgcheck --enablerepo=remi-php56 --disablerepo=base,updates install php php-fpm php-mysql php-common-5.6.30-1.el6.remi.x86_64 php-pdo-5.6.30-1.el6.remi.x86_64
-
+########CentOS7 
+yum --nogpgcheck --enablerepo=remi-php56 install --disablerepo=base,updates zabbix-server-mysql zabbix-web zabbix-web-mysql  zabbix-agent.x86_64 zabbix-get 
+########
 yum install  nginx
 
 yum install install zabbix-get
