@@ -2,6 +2,10 @@ zabbix使用教程1：zabbix3Server安装
 
 
 nginx 版本： 1.10.2-1.el6.ngx
+zabbix版本：
+zabbix_server: 3.0.7
+zabbix_agentd: 3.2.3
+
 一、环境介绍
 [root@centos63 ~]# cat /etc/redhat-release
 CentOS release 6.3 (Final)
@@ -14,7 +18,7 @@ IP地址	角色
 zabbix-web、zabbix-server、zabbix-agent、mysql，php5.6，httpd	centos6.3
 
 二、软件包安装
-安装依赖：
+安装依赖（fsv_zabbix3_nginx.tar.xz 中已提供）：
 php 版本大于等于 php 5.4.0	
 PHP gd	大于等于	2.0
 PHP libxml	大于等于	2.6.15
@@ -23,7 +27,30 @@ php 设置：
 
 
 注： 推荐 mysql 设置  innodb_file_per_table=1 使用独立表空间
+如下为zabbix 调优建议
+##zabbix tuning
+innodb_file_per_table=1
+event_scheduler=ON
+wait_timeout=600
+sync_binlog=500 
+query_cache_type=0
+query_cache_size=0
+innodb_flush_method = O_DIRECT
+innodb_io_capacity  = 2000
+innodb_old_blocks_time = 1000
+innodb_buffer_pool_size=10G
+innodb_buffer_pool_instances=16
+innodb_flush_log_at_trx_commit=0
+innodb_log_file_size = 512M
+innodb_log_buffer_size  = 128M
+#tmpdir = /dev/shm/mysql
+##zabbix -end
+
+
 注意： 本教程 默认mysql 密码是Mysql23+   如果不是，请修改
+注意： 本教程 默认mysql 密码是Mysql23+   如果不是，请修改
+注意： 本教程 默认mysql 密码是Mysql23+   如果不是，请修改
+
 
 0. 设置软件仓库
 下载:
