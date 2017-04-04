@@ -52,3 +52,8 @@ for row in reader:
 
 -----上面代码可以用下面一句话代替-------
 enrollments = list(reader)
+
+
+
+from datetime import datetime as dt
+dt.strptime(date, '%Y-%m-%d')

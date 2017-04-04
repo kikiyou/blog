@@ -48,3 +48,11 @@ example.com/index.php/products/shoes/sandals/123
 在 application/config/routes.php 中定义了默认控制器 welcome
 
 $route['default_controller'] = 'welcome';  访问网站首页时跳转到这里
+
++ 辅助函数 
+辅助函数位于 system/helpers 或者 application/helpers 目录 目录下。
+
++ CodeIgniter 类库
+所有的系统类库都位于 system/libraries/ 目录下
+
++ 使用 CodeIgniter 驱动器
