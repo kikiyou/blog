@@ -38,10 +38,13 @@ truncate table trends_uint;
 optimize table trends_uint;
 -----
 
+#关闭housekeeper
+ALTER TABLE housekeeper ENGINE = BLACKHOLE;
+
 ## 使用分区表
 
 + 创建存储过程
-
+use zabbix
 
 DELIMITER $$
 CREATE PROCEDURE `partition_create`(SCHEMANAME varchar(64), TABLENAME varchar(64), PARTITIONNAME varchar(64), CLOCK int)

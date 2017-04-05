@@ -5,9 +5,6 @@
 2. pip install easysnmp
 
 
-
-
-
 from easysnmp import Session
 
 # Create an SNMP session to be used for all our requests
