@@ -69,7 +69,7 @@ cat << _EOF > /etc/yum.repos.d/fsv_zabbix.repo
 [fsv_zabbix]
 name=fonsview repo
 baseurl=file:///root/install/fsv_zabbix3/6/
-enabled=0
+enabled=1
 gpgcheck=0
 _EOF
 
@@ -123,6 +123,7 @@ sed -i -e "s/;always_populate_raw_post_data = -1/always_populate_raw_post_data =
 shell> mysql -uroot
 mysql> create database zabbix character set utf8 collate utf8_bin;
 mysql> grant all privileges on zabbix.* to zabbix@localhost identified by 'Mysql23+';
+mysql> flush privileges;
 mysql> quit;
 
 11. 数据库导入  （注：需要等待三分钟）
@@ -154,7 +155,6 @@ StartDBSyncers=4
 HistoryCacheSize=256M
 ValueCacheSize=256M
 TrendCacheSize=16M
-HistoryCacheSize=32M
 HistoryIndexCacheSize=16M
 _EOF
 
@@ -339,3 +339,5 @@ Query OK,0 rows affected (0.01 sec)
 Rows matched:1Changed:0Warnings:0
 zabbix 的用户密码是使用md5的方式进行的加密 ，上面的mysql语句执行后，admin 管理员用户的密码就会改为zabbix 。
 ####################
+
+

@@ -37,14 +37,25 @@ optimize table trends;
 truncate table trends_uint;
 optimize table trends_uint;
 -----
+use zabbix
 
 #关闭housekeeper
 ALTER TABLE housekeeper ENGINE = BLACKHOLE;
 
+#删除主键
+mysql> Alter table history_text drop primary key, add index (id), drop index history_text_2, add index history_text_2 (itemid, id);
+Query OK, 0 rows affected (0.49 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> Alter table history_log drop primary key, add index (id), drop index history_log_2, add index history_log_2 (itemid, id);
+Query OK, 0 rows affected (2.71 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql>
+
 ## 使用分区表
 
 + 创建存储过程
-use zabbix
 
 DELIMITER $$
 CREATE PROCEDURE `partition_create`(SCHEMANAME varchar(64), TABLENAME varchar(64), PARTITIONNAME varchar(64), CLOCK int)
