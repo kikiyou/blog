@@ -290,7 +290,9 @@ mysql>
 覆盖监控项趋势期间  勾选
 数据存储时间（天） 730
 
-
+注释：
+mysql> CALL partition_maintenance('zabbix', 'history', 28, 24, 14);
+表明：历史数据保留28天，24小时，14代表一次创建14个表
 
 
 ## 参考
