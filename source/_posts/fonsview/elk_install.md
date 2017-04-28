@@ -18,7 +18,7 @@ elasticsearch hard nofile 131072
 elasticsearch soft nproc 2048
 elasticsearch hard nproc 4096
 
-vi /etc/sysctl.conf 
+vi /etc/sysctl.conf
 vm.max_map_count=655360
 
 
@@ -63,3 +63,38 @@ ln -s /etc/logstash ./config
 
 生成logstash 启动脚本
 /usr/share/logstash/bin/system-install /etc/logstash/startup.options  sysv
+
+
+
+导入 filebeat的模板
+curl -XPUT 'http://1.58.125.129:9200/_template/filebeat' -d@/etc/filebeat/filebeat.template.json
+
+
+
+----------
+[root@ZX-OTT-AAA3 ~]# cat  /etc/filebeat/filebeat.yml 
+filebeat.prospectors:
+    - input_type: log
+      document_type: "tomcat-log"
+      scan_frequency: "10s"
+      backoff: "1s"
+      paths: ["/opt/fonsview/3RD/tomcat7.0.63/logs/localhost_access_log*"]
+      json.message_key: event
+      json.keys_under_root: true
+      fields:
+            tags: ["viewlog"]
+      fields_under_root: true
+      registry_file: /var/lib/filebeat/registry
+
+shipper:
+  name: ZX-OTT-AAA3
+
+output.elasticsearch:
+    hosts: ["1.58.125.129:9200"]
+    index: "logstash-tomcat-log-%{+YYYY.MM.dd}"
+    template.name: filebeat
+    template.path: filebeat.template.json
+    worker: 4
+    compression_level: 3
+    loadbalance: true
+---------------典型配置
