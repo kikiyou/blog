@@ -113,3 +113,12 @@ post_controller 在你的控制器完全运行结束时执行。
 display_override 覆盖 _display() 方法，该方法用于在系统执行结束时向浏览器发送最终的页面结果。 这可以让你有自己的显示页面的方法。注意你可能需要使用 $this->CI =& get_instance() 方法来获取 CI 超级对象，以及使用 $this->CI->output->get_output() 方法来 获取最终的显示数据。
 cache_override 使用你自己的方法来替代 输出类 中的 _display_cache() 方法，这让你有自己的缓存显示机制。
 post_system 在最终的页面发送到浏览器之后、在系统的最后期被调用。
+
++ URI 路由
+一般情况下，一个 URL 字符串和它对应的控制器中类和方法是一一对应的关系。 URL 中的每一段通常遵循下面的规则:
+
+example.com/class/function/id/
+
++ 首页第一个索引在
+
+application/controllers/Welcome.php
