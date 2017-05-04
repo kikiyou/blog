@@ -16,12 +16,45 @@ Please use the following password to proceed to installation:
 
 This may also be found at: /var/jenkins_home/secrets/initialAdminPassword
 
-
+1. 在插件管理中添加仓库
 清华大学镜像仓库：
 https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/update-center.json
 
 仓库添加好之后 还要重新获取update
 
+2. 安装pipeline模块
 
 构建步骤
 scm	build	existence	regression	report	deploy
+
+
+
+
+-----jenkins 目录结构
+root ➜  ~ rpm -ql jenkins
+/etc/init.d/jenkins
+/etc/logrotate.d/jenkins
+/etc/sysconfig/jenkins
+/usr/lib/jenkins
+/usr/lib/jenkins/jenkins.war
+/usr/sbin/rcjenkins
+/var/cache/jenkins
+/var/lib/jenkins
+/var/log/jenkins
+
+
+----docker 团队
+https://jenkins.dockerproject.org/
+
+
+
+问题：
+1.
+groovy的脚本 可以在http://<jenkins>:8080/script 执行
+写到pipeline中，调用系统有些库，会报错 不允许。
+
+原因：在pipeline中,为了安全性groovy默认是在一个sandbox环境中运行的
+
+解决办法：
+1. Jenkins -> 系统管理 -> In-process Script Approval 当在sanbox环境中被拒绝调用的api会显示在这里，点击Approval 允许即可  （ps：这里很反人类，允许只能一个个的允许，点一堆很痛苦）
+2. 在新建的pipeline任务中，下面有个默认勾选的选项，去除勾选，让任务不在sandbox中允许即可。
