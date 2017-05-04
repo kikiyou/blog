@@ -63,25 +63,3 @@ ${ str1.is(str2) }
 
 pickEven(10) {println it}
 pickEven(10) { evenNumber -> printlen evenNumber }
-
-
-引入外部sdk
-1. Go to Jenkins > Manage Jenkins > Configure System
-2. Check "Environment variables"
-3. add name: ANDROID_HOME, value -> your android sdk dir
-4. click "add"
-5. SCROLL DOWN CLICK SAVE
-
-
------远程执行脚本
-(fonsview_deploy) monkey ➜  groovy cat run.sh 
-script_path=$1
-echo $script_path
-mytoken=$(curl --user 'monkey:123.coM' -s http://127.0.0.1:8080/crumbIssuer/api/json | python -c 'import sys,json;j=json.load(sys.stdin);print j["crumbRequestField"] + "=" + j["crumb"]')
-curl --user 'monkey:123.coM' -d "$mytoken" --data-urlencode "script=$(<$script_path)" http://127.0.0.1:8080/scriptText
----
-run.sh 1.groovy
-
-
-
-http://myserver/jenkins/scriptler/run/<yourScriptId>?param1=value1

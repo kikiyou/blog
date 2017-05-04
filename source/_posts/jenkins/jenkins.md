@@ -58,3 +58,23 @@ groovy的脚本 可以在http://<jenkins>:8080/script 执行
 解决办法：
 1. Jenkins -> 系统管理 -> In-process Script Approval 当在sanbox环境中被拒绝调用的api会显示在这里，点击Approval 允许即可  （ps：这里很反人类，允许只能一个个的允许，点一堆很痛苦）
 2. 在新建的pipeline任务中，下面有个默认勾选的选项，去除勾选，让任务不在sandbox中允许即可。
+
+
+引入外部sdk
+1. Go to Jenkins > Manage Jenkins > Configure System
+2. Check "Environment variables"
+3. add name: ANDROID_HOME, value -> your android sdk dir
+4. click "add"
+5. SCROLL DOWN CLICK SAVE
+
+
+-----远程执行脚本
+(fonsview_deploy) monkey ➜  groovy cat run.sh 
+script_path=$1
+echo $script_path
+mytoken=$(curl --user 'monkey:123.coM' -s http://127.0.0.1:8080/crumbIssuer/api/json | python -c 'import sys,json;j=json.load(sys.stdin);print j["crumbRequestField"] + "=" + j["crumb"]')
+curl --user 'monkey:123.coM' -d "$mytoken" --data-urlencode "script=$(<$script_path)" http://127.0.0.1:8080/scriptText
+---
+run.sh 1.groovy
+
+http://myserver/jenkins/scriptler/run/<yourScriptId>?param1=value1
