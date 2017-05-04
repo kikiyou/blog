@@ -78,3 +78,17 @@ curl --user 'monkey:123.coM' -d "$mytoken" --data-urlencode "script=$(<$script_p
 run.sh 1.groovy
 
 http://myserver/jenkins/scriptler/run/<yourScriptId>?param1=value1
+
+## jenksins 启用ssh server
+install sshd 模块
+jenkins -> 系统管理 -> 系统设置 --> SSH Server --> SSHD Port	--> 随机一个port
+
+## 启动docker镜像端口
+安装Docker plugin 模块
+ tcp://172.16.42.43:4243 or unix:///var/run/docker.sock
+
+
+CloudBees Docker Build and Publish1.3.2  利用dockerfile 构建系统
+
+好网站教你怎么打包镜像
+https://www.katacoda.com/
