@@ -62,6 +62,7 @@ ${ str1.is(str2) }
 ##闭包
 
 pickEven(10) {println it}
+<<<<<<< HEAD
 pickEven(10) { evenNumber -> printlen evenNumber }
 
 ## 正则表达式
@@ -124,3 +125,5 @@ return result/System.out
 远程访问
 $curl --data-urlencode "script=$(<./somescript.groovy)" http://<jenkins>/scriptText
 $curl --user 'username:password'
+=======
+pickEven(10) { evenNumber -> printlen evenNumber }
