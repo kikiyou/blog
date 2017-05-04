@@ -62,7 +62,6 @@ ${ str1.is(str2) }
 ##闭包
 
 pickEven(10) {println it}
-<<<<<<< HEAD
 pickEven(10) { evenNumber -> printlen evenNumber }
 
 ## 正则表达式
