@@ -92,3 +92,7 @@ CloudBees Docker Build and Publish1.3.2  利用dockerfile 构建系统
 
 好网站教你怎么打包镜像
 https://www.katacoda.com/
+
+https://go.cloudbees.com/docs/cloudbees-documentation/cje-user-guide/index.html#docker-workflow
+
+https://my.oschina.net/donhui/blog/481230
