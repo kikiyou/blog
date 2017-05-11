@@ -1,0 +1,1 @@
+groovy里的任何变量必须是number，string或可序列化的类型
