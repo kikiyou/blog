@@ -96,3 +96,7 @@ https://www.katacoda.com/
 https://go.cloudbees.com/docs/cloudbees-documentation/cje-user-guide/index.html#docker-workflow
 
 https://my.oschina.net/donhui/blog/481230
+
+
+##  自动清除工作空间
+    deleteDir()
