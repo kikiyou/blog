@@ -1,0 +1,50 @@
+[root@monkey1 ~]# rpm -ql kubernetes-master-1.5.3-1.fc25.x86_64
+/etc/kubernetes
+/etc/kubernetes/apiserver
+/etc/kubernetes/config
+/etc/kubernetes/controller-manager
+/etc/kubernetes/scheduler
+/run/kubernetes
+/usr/bin/hyperkube
+/usr/bin/kube-apiserver
+/usr/bin/kube-controller-manager
+/usr/bin/kube-scheduler
+/usr/lib/systemd/system/kube-apiserver.service
+/usr/lib/systemd/system/kube-controller-manager.service
+/usr/lib/systemd/system/kube-scheduler.service
+/usr/lib/tmpfiles.d/kubernetes.conf
+/usr/share/doc/kubernetes-master
+/usr/share/doc/kubernetes-master/CHANGELOG.md
+/usr/share/doc/kubernetes-master/CONTRIBUTING.md
+/usr/share/doc/kubernetes-master/README.md
+/usr/share/doc/kubernetes-master/code-of-conduct.md
+/usr/share/licenses/kubernetes-master
+/usr/share/licenses/kubernetes-master/LICENSE
+/usr/share/man/man1/kube-apiserver.1.gz
+/usr/share/man/man1/kube-controller-manager.1.gz
+/usr/share/man/man1/kube-scheduler.1.gz
+[root@monkey1 ~]# rpm -ql kubernetes-node-1.5.3-1.fc25.x86_64
+/etc/kubernetes
+/etc/kubernetes/config
+/etc/kubernetes/kubelet
+/etc/kubernetes/proxy
+/etc/systemd/system.conf.d/kubernetes-accounting.conf
+/run/kubernetes
+/usr/bin/hyperkube
+/usr/bin/kube-proxy
+/usr/bin/kubelet
+/usr/lib/systemd/system/kube-proxy.service
+/usr/lib/systemd/system/kubelet.service
+/usr/lib/tmpfiles.d/kubernetes.conf
+/usr/share/doc/kubernetes-node
+/usr/share/doc/kubernetes-node/CHANGELOG.md
+/usr/share/doc/kubernetes-node/CONTRIBUTING.md
+/usr/share/doc/kubernetes-node/README.md
+/usr/share/doc/kubernetes-node/code-of-conduct.md
+/usr/share/licenses/kubernetes-node
+/usr/share/licenses/kubernetes-node/LICENSE
+/usr/share/man/man1/kube-proxy.1.gz
+/usr/share/man/man1/kubelet.1.gz
+/var/lib/kubelet
+[root@monkey1 ~]# rpm -ql kubernetes-1.5.3-1.fc25.x86_64
+(contains no files)
