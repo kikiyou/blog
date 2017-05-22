@@ -83,7 +83,8 @@ $ etcdctl member list
 db1fc1144eff6ac6: name=infra0 peerURLs=http://172.16.6.58:2380 clientURLs=http://172.16.6.58:2379 isLeader=true
 
 
-
+集群节点删除：
+$etcdctl member remove infra1 http://172.16.199.224:2380
 
 集群节点添加:
 $etcdctl member add infra1 http://172.16.199.224:2380
@@ -93,6 +94,4 @@ ETCD_NAME="infra1"
 ETCD_INITIAL_CLUSTER="infra1=http://172.16.199.224:2380,infra2=http://172.16.12.41:2380,infra0=http://172.16.6.58:2380"
 ETCD_INITIAL_CLUSTER_STATE="existing"
 
-
-集群节点删除：
-$etcdctl member remove infra1 http://172.16.199.224:2380
+添加后,把配置文件删除后，重新启动进程
