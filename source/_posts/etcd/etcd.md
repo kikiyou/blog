@@ -45,6 +45,12 @@ http DELETE http://127.0.0.1:2379/v2/keys/message
 
 
 配置方法，三个节点 分别是 infra0=http://172.16.6.58:2380,infra1=http://172.16.199.224:2380,infra2=http://172.16.12.41:2380
+root ➜  ~ etcdctl --version
+etcdctl version: 3.1.3
+API version: 2
+
+export ETCDCTL_API=3
+etcdctl version
 
 $ etcd --name infra0 --initial-advertise-peer-urls http://172.16.6.58:2380 \
   --listen-peer-urls http://172.16.6.58:2380 \
@@ -61,6 +67,7 @@ $ etcd --name infra1 --initial-advertise-peer-urls http://172.16.199.224:2380 \
   --initial-cluster-token etcd-cluster-1 \
   --initial-cluster infra0=http://172.16.6.58:2380,infra1=http://172.16.199.224:2380,infra2=http://172.16.12.41:2380 \
   --initial-cluster-state new
+  
 $ etcd --name infra2 --initial-advertise-peer-urls http://172.16.12.41:2380 \
   --listen-peer-urls http://172.16.12.41:2380 \
   --listen-client-urls http://172.16.12.41:2379,http://127.0.0.1:2379 \
@@ -74,3 +81,18 @@ $ etcdctl member list
 2b4fd535115ae11c: name=infra2 peerURLs=http://172.16.12.41:2380 clientURLs=http://172.16.12.41:2379 isLeader=false
 6e626765ce2d2c33: name=infra1 peerURLs=http://172.16.199.224:2380 clientURLs=http://172.16.199.224:2379 isLeader=false
 db1fc1144eff6ac6: name=infra0 peerURLs=http://172.16.6.58:2380 clientURLs=http://172.16.6.58:2379 isLeader=true
+
+
+
+
+集群节点添加:
+$etcdctl member add infra1 http://172.16.199.224:2380
+Added member named infra1 with ID 1a507103ca1c349c to cluster
+
+ETCD_NAME="infra1"
+ETCD_INITIAL_CLUSTER="infra1=http://172.16.199.224:2380,infra2=http://172.16.12.41:2380,infra0=http://172.16.6.58:2380"
+ETCD_INITIAL_CLUSTER_STATE="existing"
+
+
+集群节点删除：
+$etcdctl member remove infra1 http://172.16.199.224:2380
