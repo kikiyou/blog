@@ -2,7 +2,9 @@
 
 
 
-[参考](http://docs.ansible.com/ansible/playbooks_conditionals.html#selecting-files-and-templates-based-on-variables)
+[electing-files-and-templates-based-on-variables](http://docs.ansible.com/ansible/playbooks_conditionals.html#selecting-files-and-templates-based-on-variables)
+
+``` python
 ---
 # this is an example of how to template a file over using some variables derived
 # from the system.  For instance, if you wanted to have different configuration
@@ -28,3 +30,4 @@
 
        # finally give up and just use something generic
        - /srv/whatever/default
+``` 
