@@ -1,5 +1,5 @@
 docker info   查看docker相关信息
-
+``` shell
 root@monkey:~/docker_work# docker login 172.16.18.5:30088
 Username (admin): admin
 Password: 
@@ -40,3 +40,5 @@ root ➜  ~ docker login 172.16.18.5:30088
 Username (admin): monkey
 Password: 
 Login Succeeded
+
+```

@@ -1,5 +1,5 @@
 # docker 使用
-
+``` shell
 + 运行一个docker
 docker search redis
 
@@ -281,3 +281,4 @@ docker -d \
 -H unix:///var/run/docker.sock \
 --label com.katacoda.environment="production" \
 --label com.katacoda.storage="ssd"
+```
