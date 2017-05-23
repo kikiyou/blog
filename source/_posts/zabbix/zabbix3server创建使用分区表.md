@@ -2,7 +2,7 @@
 zabbix 默认使用的是mysql数据库,当时zabbxi历史数据大的时候，会出现 cpu iowait的报警。
 可以使用 mysql的分区表来解决，使用方法如下；
 
-
+``` shell
 ##zabbix
 innodb_file_per_table=1
 sync_binlog=0 
@@ -20,7 +20,7 @@ tmpdir = /dev/shm/mysql
 
 
 ## zabbix 清空 所有历史数据
----
+
 use zabbix;
 truncate table history;
 optimize table history;
@@ -36,7 +36,8 @@ truncate table trends;
 optimize table trends;
 truncate table trends_uint;
 optimize table trends_uint;
------
+
+```
 use zabbix
 
 #关闭housekeeper
@@ -56,7 +57,7 @@ mysql>
 ## 使用分区表
 
 + 创建存储过程
-
+``` shell
 DELIMITER $$
 CREATE PROCEDURE `partition_create`(SCHEMANAME varchar(64), TABLENAME varchar(64), PARTITIONNAME varchar(64), CLOCK int)
 BEGIN
@@ -223,7 +224,7 @@ BEGIN
 END$$
 DELIMITER ;
 
-
+```
 
 ##
 设置上面后 存储过程调用方法是
