@@ -1,5 +1,5 @@
 ## k8s 介绍
-
+``` shell
 # 启动一个单节点的集群
 ## 启动etcd集群
 docker run -d --name=etcd \
@@ -186,3 +186,5 @@ kubectl -s http://host01:8080 create -f ~/skydns-svc.yaml
 echo "Starting Kubernetes UI..."
 kubectl -s http://host01:8080 create -f ~/dashboard.yaml
 kubectl -s http://host01:8080 cluster-info
+
+```

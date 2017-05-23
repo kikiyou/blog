@@ -20,7 +20,7 @@ fonsview  ALL=(ALL)       ALL
 test2 ansible_host=10.x.x.x	ansible_user=fonsview	ansible_ssh_pass=xxxxx  ansible_port=50000  proxy_ip=219.x.x.x
 
 -- group_vars/gatewayed
-ansible_ssh_common_args: '-o ProxyCommand="ssh -p 50000 -W %h:%p -i ~/.ssh/id_rsa.pub fonsview@{{ proxy_ip }}"'
+#ansible_ssh_common_args: '-o ProxyCommand="ssh -p 50000 -W %h:%p -i ~/.ssh/id_rsa.pub fonsview@{{ proxy_ip }}"'
 
 ---
 - hosts: gatewayed
