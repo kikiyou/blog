@@ -2,7 +2,7 @@
 
 
 
-[electing-files-and-templates-based-on-variables](http://docs.ansible.com/ansible/playbooks_conditionals.html#selecting-files-and-templates-based-on-variables)
+[electing-files-and-templates-based-on-variables]：(http://docs.ansible.com/ansible/playbooks_conditionals.html#selecting-files-and-templates-based-on-variables)
 
 ``` python
 ---

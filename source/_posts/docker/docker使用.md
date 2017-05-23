@@ -1,12 +1,17 @@
 # docker 使用
-``` shell
+
 + 运行一个docker
+
+``` shell
 docker search redis
 
 docker run -d redis
 
 加tags 放后台运行
 docker run -d redis:3.2
+```
+
+``` shell
 
 + 发现运行中的docker
 docker ps  查看哪些镜像 在后台运行
@@ -48,6 +53,7 @@ docker exec -it <friendly-name|container-id> ps
 docker exec -it <friendly-name|container-id> bash
 
 ## 创建和构建一个新的镜像
+
 1. 创建一个dockerfile
 Dockerfile
 

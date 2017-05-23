@@ -1,12 +1,14 @@
-docker info   查看docker相关信息
+# docker info   查看docker相关信息
+
 ``` shell
 root@monkey:~/docker_work# docker login 172.16.18.5:30088
 Username (admin): admin
 Password: 
 Login Succeeded
 
-
+```
 登录成功的证明：
+``` shell
 root@monkey:~/docker_work# cat ~/.docker/config.json
 {
 	"auths": {
@@ -14,10 +16,12 @@ root@monkey:~/docker_work# cat ~/.docker/config.json
 			"auth": "YWRtaW46aGVsbG8xMjM="
 		}
 	}
-}#                                                                                                                                                                           
+}
+
 root@monkey:~/docker_work# 
+```
 
-
+``` shell
 
 -----------------
 root ➜  ~ docker login 172.16.18.5:30088
