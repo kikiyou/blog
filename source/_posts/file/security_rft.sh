@@ -174,7 +174,7 @@ awk '{if($2=="required")sub(/#auth/, "auth")sub(/use_uid/, "group=wheel")};1' /e
 
 ###################### add user ###################
 user="fonsview"
-passwd="FonsView!23+"
+passwd="monkeyLoveYou"
 
 suPasswd="hello123"
 
