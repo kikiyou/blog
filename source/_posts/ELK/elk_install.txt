@@ -1,17 +1,21 @@
-
 # elk安装
 
 ## 依赖
+
 java8
 
+``` shell
 export ES_JAVA_OPTS = "-Xms16038.5m -Xmx16038.5m -Xmn6014.4375m -XX:MaxDirectMemorySize=16038.5m"
-## 软件包
-elasticsearch-5.2.2.rpm
-filebeat-5.2.2-x86_64.rpm
-kibana-5.2.2-x86_64.rpm
-logstash-5.2.2.rpm
+```
 
+软件包
 
+'elasticsearch-5.2.2.rpm'
+'filebeat-5.2.2-x86_64.rpm'
+'kibana-5.2.2-x86_64.rpm'
+'logstash-5.2.2.rpm'
+
+``` shell
 vi /etc/security/limits.conf
 elasticsearch soft nofile 65536
 elasticsearch hard nofile 131072
@@ -21,19 +25,23 @@ elasticsearch hard nproc 4096
 vi /etc/sysctl.conf
 vm.max_map_count=655360
 
+```
 
-在elasticsearch.yml中配置bootstrap.system_call_filter为false，注意要在Memory下面:
-bootstrap.system_call_filter: false
-# 增加新的参数，这样head插件可以访问es
+在elasticsearch.yml中配置bootstrap.system_call_filter为false，注意要在Memory下面
+bootstrap.system_call_filter:false
+
++  增加新的参数，这样head插件可以访问es
+``` yaml
 http.cors.enabled: true
 http.cors.allow-origin: "*"
-
-## 启动
+```
+```
++ 启动
 su - elasticsearch  -s /bin/bash
 /usr/share/elasticsearch/bin/elasticsearch -p /var/run/elasticsearch/elasticsearch.pid -d -Edefault.path.logs=/var/log/elasticsearch -Edefault.path.data=/var/lib/elasticsearch -Edefault.path.conf=/etc/elasticsearch
 
 
-## 报错处理
++ 报错处理
 [root@ZX-OTT-ZabbixServer elasticsearch]# /etc/init.d/elasticsearch start 
 Starting elasticsearch: Error: encountered environment variables that are no longer supported
 Use jvm.options or ES_JAVA_OPTS to configure the JVM
@@ -97,4 +105,5 @@ output.elasticsearch:
     worker: 4
     compression_level: 3
     loadbalance: true
+```
 ---------------典型配置

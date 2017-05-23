@@ -3,7 +3,6 @@ SNMP Trap 就是被管理设备主动发送消息给 NMS 的一种机制。
 
 基本上是trap v2的协议
 
-
 207	5.420257220	172.16.12.41	104.236.166.95	SNMP	162	snmpV2-trap SNMPv2-MIB::sysUpTime.0 SNMPv2-MIB::snmpTrapOID.0 IF-MIB::ifIndex.123 IF-MIB::ifAdminStatus.123 IF-MIB::ifOperStatus.123
 
 https://github.com/etingof/pysnmp/blob/master/examples/hlapi/asyncore/sync/agent/ntforg/v2c-trap-with-notification-objects.py
