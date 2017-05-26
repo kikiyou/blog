@@ -91,6 +91,8 @@ curl -XPUT http://127.0.0.1:4001/v2/keys/skydns/arpa/in-addr/10/0/1/125 \
 etcdctl  set /skydns/arpa/in-addr/58/6/16/172 '{"host":"4.service.rhel.local"}'
 
 ----------------------------------
+http://7xw819.com1.z0.glb.clouddn.com/confd-0.11.0-linux-amd64
+
 Create the confdir
 
 The confdir is where template resource configs and source templates are stored.
