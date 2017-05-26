@@ -1,18 +1,21 @@
-# etcd 和skydns的集成
-
-export ETCD_MACHINES='http://jp.rhel.cc:2379'
-./skydns
-
-
-默认即可解析：
-dig @localhost baidu.com
-
-初始化dns：
-etcdctl --endpoint=http://jp.rhel.cc:2379 set /skydns/config '{"dns_addr":"127.0.0.1:53","ttl":3600,"nameservers": ["8.8.8.8:53","8.8.4.4:53"]}'
-{"dns_addr":"127.0.0.1:53","ttl":3600,"nameservers": ["8.8.8.8:53","8.8.4.4:53"]}
-
-
-测试一个不存在的域名:
+// Place your settings in this file to overwrite the default settings
+{
+    "editor.fontFamily": "'Source Han Sans', 'Courier New', monospace, 'Droid Sans Fallback'",
+    "editor.fontSize": 14,
+    "editor.renderWhitespace": true,
+    "editor.insertSpaces": true,
+    "editor.formatOnType": true,
+    "editor.wrappingColumn": 0,
+    "window.zoomLevel": 2,
+    "workbench.iconTheme": "vscode-icons",
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true
+    }
+}试一个不存在的域名:
 dig @localhost test1.monkey.local
 
 
@@ -26,3 +29,109 @@ etcdctl set /skydns/local/skydns/shenshouer/test1. '{"host":"14.215.177.38","por
 
  etcdctl set /skydns/local/skydns/shenshouer/test1. '{"host":"test1.skydns.local","port":8080}'
  etcdctl set /skydns/local/skydns/test1 '{"host":"127.0.0.1","port":30001}'
+
+
+DNS 有如下优点：
+1. 域名见名知意并且方便记忆
+2. 域名是持久的，但是ip是经常改变的（比如：当你把迁移一个服务到另一个主机）
+3. 一个域名可以对应多个ip地址/主机 （负载均衡）
+4. 一个ip地址（和服务）可以使用多个域名 - 节省主机费用,简化管理
+5. 域名请求可以支持SSL/HTTPS 加密通信
+
+域名可以支持 service-to-service and client-to-service 通信，负载均衡和零-停机时间 升级。
+
+
+export ETCDCTL_ENDPOINT=http://jp.rhel.cc:2379
+etcdctl  set /skydns/local/rhel/test1 '{"host":"172.16.4.12"}' 
+
+
+etcdctl  set /skydns/local/rhel/monkey1 '{"host":"172.16.6.43"}' 
+
+
+
+etcdctl  set /skydns/local/rhel/service/1 '{"host":"172.16.6.43"}'
+etcdctl  set /skydns/local/rhel/service/2 '{"host":"172.16.6.170"}'
+etcdctl  set /skydns/local/rhel/service/3 '{"host":"172.16.6.58"}'
+
+root ➜  harbor nslookup service
+Server:		139.162.120.128
+Address:	139.162.120.128#53
+
+Name:	service.rhel.local
+Address: 172.16.6.58
+Name:	service.rhel.local
+Address: 172.16.6.170
+Name:	service.rhel.local
+Address: 172.16.6.43
+
+
+同时 可以利用上面的方式，区分版本，比如 http://v1.service   http://v2.service
+etcdctl  set /skydns/local/rhel/service/v1 '{"host":"172.16.6.43"}'
+etcdctl  set /skydns/local/rhel/service/v2 '{"host":"172.16.6.66"}'
+
+
+
+chattr +i /etc/resolv.conf 保证dns解析文件不被修改
+
+
+
+
+
+查看dns是否缓存
+dig archlinux.org | grep "Query time"
+
+etcdctl  set /skydns/local/rhel/service/4 '{"host":"172.16.6.58","port":8080}'
+
+
+4.rails.staging.east.skydns.local. 10.0.1.125
+反向解析：
+curl -XPUT http://127.0.0.1:4001/v2/keys/skydns/arpa/in-addr/10/0/1/125 \
+    -d value='{"host":"4.rails.staging.east.skydns.local"}'
+
+etcdctl  set /skydns/arpa/in-addr/58/6/16/172 '{"host":"4.service.rhel.local"}'
+
+----------------------------------
+Create the confdir
+
+The confdir is where template resource configs and source templates are stored.
+
+sudo mkdir -p /etc/confd/{conf.d,templates}
+Create a template resource config
+
+Template resources are defined in TOML config files under the confdir.
+
+/etc/confd/conf.d/myconfig.toml
+
+[template]
+src = "myconfig.conf.tmpl"
+dest = "/tmp/myconfig.conf"
+keys = [
+    "/myapp/database/url",
+    "/myapp/database/user",
+]
+Create the source template
+
+Source templates are Golang text templates.
+
+/etc/confd/templates/myconfig.conf.tmpl
+
+[myconfig]
+database_url = {{getv "/myapp/database/url"}}
+database_user = {{getv "/myapp/database/user"}}
+
+
+
+etcdctl set /myapp/database/url db.example.com
+etcdctl set /myapp/database/user rob
+
+confd -onetime -backend etcd -node http://jp.rhel.cc:2379
+./confd-0.11.0-linux-amd64 -onetime=false -interval=1 -backend etcd -node http://jp.rhel.cc:2379
+
+etcdctl set /myapp/database/user rob
+
+/fonsview/ne/epg/epg.conf
+config_file="/home/monkey/sync/monkey-ott-cdn/roles/epg/templates/epg/config.properties.j2"
+curl -XPUT -d "value=$(<$config_file)"  http://jp.rhel.cc:2379/v2/keys/fonsview/ne/epg/epg.conf
+
+
+
