@@ -1,0 +1,40 @@
+
+
+export MASTER_IP=172.16.6.43 # 替换为 kubernetes maste 集群任一机器 IP
+export KUBE_APISERVER="https://${MASTER_IP}:6443"
+
+
+curl -o kubernetes-client-linux-amd64.tar.gz  http://7xw819.com1.z0.glb.clouddn.com/kubernetes-client-linux-amd64.tar.gz
+tar -xzvf kubernetes-client-linux-amd64.tar.gz
+sudo cp kubernetes/client/bin/kube* /root/local/bin/
+chmod a+x /root/local/bin/kube*
+export PATH=/root/local/bin:$PATH
+
+
+
+
+cfssl gencert -ca=/etc/kubernetes/ssl/ca.pem \
+  -ca-key=/etc/kubernetes/ssl/ca-key.pem \
+  -config=/etc/kubernetes/ssl/ca-config.json \
+  -profile=kubernetes admin-csr.json | cfssljson -bare admin
+ls admin*
+sudo mv admin*.pem /etc/kubernetes/ssl/
+
+
+
+# 设置集群参数
+kubectl config set-cluster kubernetes \
+  --certificate-authority=/etc/kubernetes/ssl/ca.pem \
+  --embed-certs=true \
+  --server=${KUBE_APISERVER}
+# 设置客户端认证参数
+kubectl config set-credentials admin \
+  --client-certificate=/etc/kubernetes/ssl/admin.pem \
+  --embed-certs=true \
+  --client-key=/etc/kubernetes/ssl/admin-key.pem
+# 设置上下文参数
+kubectl config set-context kubernetes \
+  --cluster=kubernetes \
+  --user=admin
+# 设置默认上下文
+kubectl config use-context kubernetes

@@ -1,0 +1,53 @@
+export MASTER_IP=172.16.6.43 
+source /root/local/bin/environment.sh
+
+
+cfssl gencert -ca=/etc/kubernetes/ssl/ca.pem \
+  -ca-key=/etc/kubernetes/ssl/ca-key.pem \
+  -config=/etc/kubernetes/ssl/ca-config.json \
+  -profile=kubernetes kubernetes-csr.json | cfssljson -bare kubernetes
+ls kubernetes*
+sudo mkdir -p /etc/kubernetes/ssl/
+sudo mv kubernetes*.pem /etc/kubernetes/ssl/
+
+
+
+
+
+curl -o kubernetes-server-linux-amd64.tar.gz  http://monkey.rhel.cc:8000/kubernetes-server-linux-amd64.tar.gz
+tar -xzvf kubernetes-server-linux-amd64.tar.gz
+cd kubernetes
+tar -xzvf  kubernetes-src.tar.gz
+
+
+
+
+
+
+sudo cp kube-apiserver.service /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable kube-apiserver
+sudo systemctl start kube-apiserver
+sudo systemctl status kube-apiserver
+$
+
+
+
+
+
+sudo cp kube-controller-manager.service /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable kube-controller-manager
+sudo systemctl start kube-controller-manager
+$
+
+
+
+
+
+
+sudo cp kube-scheduler.service /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable kube-scheduler
+sudo systemctl start kube-scheduler
+$

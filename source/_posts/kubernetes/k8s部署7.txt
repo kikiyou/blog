@@ -1,0 +1,221 @@
+export MASTER_IP=172.16.6.43
+export KUBE_APISERVER="https://${MASTER_IP}:6443"
+export NODE_IP=172.16.6.43
+source /root/local/bin/environment.sh
+
+---------------
+
+export MASTER_IP=172.16.6.43
+export KUBE_APISERVER="https://${MASTER_IP}:6443"
+export NODE_IP=172.16.6.170
+source /root/local/bin/environment.sh
+
+--------
+export MASTER_IP=172.16.6.43
+export KUBE_APISERVER="https://${MASTER_IP}:6443"
+export NODE_IP=172.16.6.58
+source /root/local/bin/environment.sh
+
+
+
+curl -o docker-17.04.0-ce.tgz  http://monkey.rhel.cc:8000/docker-17.04.0-ce.tgz
+
+tar -xvf docker-17.04.0-ce.tgz
+cp docker/docker* /root/local/bin
+cp docker/completion/bash/docker /etc/bash_completion.d/
+$
+
+
+sudo cp docker.service /etc/systemd/system/docker.service
+sudo systemctl daemon-reload
+sudo systemctl stop firewalld
+sudo systemctl disable firewalld
+sudo iptables -F && sudo iptables -X && sudo iptables -F -t nat && sudo iptables -X -t nat
+sudo systemctl enable docker
+sudo systemctl start docker
+$
+
+
+
+curl -o kubernetes-server-linux-amd64.tar.gz  http://monkey.rhel.cc:8000/kubernetes-server-linux-amd64.tar.gz
+tar -xzvf kubernetes-server-linux-amd64.tar.gz
+cd kubernetes
+tar -xzvf  kubernetes-src.tar.gz
+sudo cp -r ./server/bin/{kube-proxy,kubelet} /root/local/bin/
+$
+
+
+# 设置集群参数
+kubectl config set-cluster kubernetes \
+  --certificate-authority=/etc/kubernetes/ssl/ca.pem \
+  --embed-certs=true \
+  --server=${KUBE_APISERVER} \
+  --kubeconfig=bootstrap.kubeconfig
+# 设置客户端认证参数
+kubectl config set-credentials kubelet-bootstrap \
+  --token=${BOOTSTRAP_TOKEN} \
+  --kubeconfig=bootstrap.kubeconfig
+# 设置上下文参数
+kubectl config set-context default \
+  --cluster=kubernetes \
+  --user=kubelet-bootstrap \
+  --kubeconfig=bootstrap.kubeconfig
+# 设置默认上下文
+kubectl config use-context default --kubeconfig=bootstrap.kubeconfig
+mv bootstrap.kubeconfig /etc/kubernetes/
+
+
+
+
+
+启动 kubelet
+
+sudo cp kubelet.service /etc/systemd/system/kubelet.service
+sudo systemctl daemon-reload
+sudo systemctl enable kubelet
+sudo systemctl start kubelet
+systemctl status kubelet
+$
+
+
+
+
+
+错误处理：
+May 23 20:42:35 monkey-1.novalocal kubelet[21727]: I0523 20:42:35.171386   21727 feature_gate.go:144] feature gates: map[]
+May 23 20:42:35 monkey-1.novalocal kubelet[21727]: I0523 20:42:35.178050   21727 bootstrap.go:58] Using bootstrap kubeconfig to generate TLS client cert, key and kubeconfig file
+May 23 20:42:35 monkey-1.novalocal kubelet[21727]: error: failed to run Kubelet: cannot create certificate signing request: User "kubelet-bootstrap" cannot create certificatesigningrequests.certificates.k8s.io at the cluster scope. (post certificatesigningrequests.certificates.k8s.io)
+May 23 20:42:35 monkey-1.novalocal systemd[1]: kubelet.service: Main process exited, code=exited, status=1/FAILURE
+
+解决办法：
+kubectl create clusterrolebinding kubelet-bootstrap --clusterrole=system:node-bootstrapper --user=kubelet-bootstrap
+
+
+
+错误处理：
+[root@monkey-1 kubernetes]# kubectl create clusterrolebinding kubelet-bootstrap --clusterrole=system:node-bootstrapper --user=kubelet-bootstrap
+Error from server (Timeout): Timeout: request did not complete within allowed duration
+
+
+是因为 apiserver对应的 etcdserver地址没有配置正确，导致apiserver 无法写入，返回Timeout
+
+
+
+
+
+
+
+
+
+[root@monkey-1 kubernetes]# kubectl get csr
+NAME        AGE       REQUESTOR           CONDITION
+csr-0d6ht   3m        kubelet-bootstrap   Pending
+csr-2b3rf   3m        kubelet-bootstrap   Pending
+csr-4nlz0   3m        kubelet-bootstrap   Pending
+csr-lx91m   26s       kubelet-bootstrap   Pending
+[root@monkey-1 kubernetes]# kubectl get nodes
+No resources found.
+[root@monkey-1 kubernetes]# kubectl certificate approve csr-0d6ht
+certificatesigningrequest "csr-0d6ht" approved
+[root@monkey-1 kubernetes]# kubectl certificate approve csr-2b3rf
+certificatesigningrequest "csr-2b3rf" approved
+[root@monkey-1 kubernetes]# kubectl certificate approve csr-4nlz0
+certificatesigningrequest "csr-4nlz0" approved
+[root@monkey-1 kubernetes]# kubectl certificate approve csr-lx91m
+certificatesigningrequest "csr-lx91m" approved
+[root@monkey-1 kubernetes]# kubectl get nodes
+NAME           STATUS     AGE       VERSION
+172.16.6.170   Ready      23s       v1.6.2
+172.16.6.43    NotReady   4s        v1.6.2
+172.16.6.58    Ready      19s       v1.6.2
+
+
+
+
+
+cfssl gencert -ca=/etc/kubernetes/ssl/ca.pem \
+  -ca-key=/etc/kubernetes/ssl/ca-key.pem \
+  -config=/etc/kubernetes/ssl/ca-config.json \
+  -profile=kubernetes  kube-proxy-csr.json | cfssljson -bare kube-proxy
+ls kube-proxy*
+sudo mv kube-proxy*.pem /etc/kubernetes/ssl/
+
+
+
+# 设置集群参数
+kubectl config set-cluster kubernetes \
+  --certificate-authority=/etc/kubernetes/ssl/ca.pem \
+  --embed-certs=true \
+  --server=${KUBE_APISERVER} \
+  --kubeconfig=kube-proxy.kubeconfig
+# 设置客户端认证参数
+kubectl config set-credentials kube-proxy \
+  --client-certificate=/etc/kubernetes/ssl/kube-proxy.pem \
+  --client-key=/etc/kubernetes/ssl/kube-proxy-key.pem \
+  --embed-certs=true \
+  --kubeconfig=kube-proxy.kubeconfig
+# 设置上下文参数
+kubectl config set-context default \
+  --cluster=kubernetes \
+  --user=kube-proxy \
+  --kubeconfig=kube-proxy.kubeconfig
+# 设置默认上下文
+kubectl config use-context default --kubeconfig=kube-proxy.kubeconfig
+mv kube-proxy.kubeconfig /etc/kubernetes/
+
+
+
+sudo cp kube-proxy.service /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable kube-proxy
+sudo systemctl start kube-proxy
+systemctl status kube-proxy
+$
+
+
+
+[root@monkey-1 kubernetes]# kubectl get pods  -o wide|grep nginx-ds
+nginx-ds-9hk66   0/1       ContainerCreating   0          5m        <none>        172.16.6.170
+nginx-ds-kwpm0   1/1       Running             0          5m        172.30.27.2   172.16.6.43
+nginx-ds-l8qgl   0/1       ContainerCreating   0          5m        <none>        172.16.6.58
+
+
+kubectl describe pod|tail -8
+
+
+kubectl logs -f nginx-ds-kwpm0
+
+
+
+curl -o pod-infrastructure.tar http://monkey.rhel.cc:8000/pod-infrastructure.tar
+
+参考；
+http://www.itread01.com/articles/1476356108.html
+
+
+改变前：
+[root@monkey-1 kubernetes]# kubectl get clusterrolebindings system:kube-dns -o yaml
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  annotations:
+    rbac.authorization.kubernetes.io/autoupdate: "true"
+  creationTimestamp: 2017-05-23T13:19:23Z
+  labels:
+    kubernetes.io/bootstrapping: rbac-defaults
+  name: system:kube-dns
+  resourceVersion: "60"
+  selfLink: /apis/rbac.authorization.k8s.io/v1beta1/clusterrolebindingssystem%3Akube-dns
+  uid: 7051376f-3fba-11e7-ae0b-fa163ec95431
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: system:kube-dns
+subjects:
+- kind: ServiceAccount
+  name: kube-dns
+  namespace: kube-system
+
+
+
+kubectl get services kubernetes-dashboard -n kube-system

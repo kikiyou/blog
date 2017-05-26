@@ -1,0 +1,6 @@
+
+
+网元：
+
+HTTP_USER_AGENT %{WORD}/%{USERNAME}
+APIGW %{TIMESTAMP_ISO8601:kafaka_time} %{NOTSPACE:pod_name} %{WORD:topic}: %{IPORHOST:remote_addr}\|%{NGUSERNAME:http_x_forwarded_for}\|%{HTTPDATE:timestamp}\|%{WORD:verb} %{URIPATHPARAM:request} HTTP/%{NUMBER:httpversion}\|%{NUMBER:status}\|(?:%{NUMBER:request_length}|-)\|(?:%{NUMBER:bytes_sent}|-)\|%{NGUSERNAME:http_referer}\|%{HTTP_USER_AGENT:http_user_agent}\|%{IPORHOST:upstream_addr}:%{NUMBER:upstream_port}\|%{NUMBER:upstream_status}\|%{BASE10NUM:upstream_connect_time}\|%{BASE10NUM:upstream_response_time}

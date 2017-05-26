@@ -1,0 +1,92 @@
+export NODE_IP=172.16.6.43 # 当前部署节点的 IP
+source /root/local/bin/environment.sh
+
+
+
+export NODE_IP=172.16.6.170 # 当前部署节点的 IP
+source /root/local/bin/environment.sh
+
+
+export NODE_IP=172.16.6.58 # 当前部署节点的 IP
+source /root/local/bin/environment.sh
+
+
+cfssl gencert -ca=/etc/kubernetes/ssl/ca.pem \
+  -ca-key=/etc/kubernetes/ssl/ca-key.pem \
+  -config=/etc/kubernetes/ssl/ca-config.json \
+  -profile=kubernetes flanneld-csr.json | cfssljson -bare flanneld
+ls flanneld*
+sudo mkdir -p /etc/flanneld/ssl
+sudo mv flanneld*.pem /etc/flanneld/ssl
+
+
+设置：
+/root/local/bin/etcdctl \
+  --ca-file=/etc/kubernetes/ssl/ca.pem \
+  --cert-file=/etc/flanneld/ssl/flanneld.pem \
+  --key-file=/etc/flanneld/ssl/flanneld-key.pem \
+  set ${FLANNEL_ETCD_PREFIX}/config '{"Network":"'${CLUSTER_CIDR}'", "SubnetLen": 24, "Backend": {"Type": "vxlan"}}'
+
+查询：
+  /root/local/bin/etcdctl \
+  --ca-file=/etc/kubernetes/ssl/ca.pem \
+  --cert-file=/etc/flanneld/ssl/flanneld.pem \
+  --key-file=/etc/flanneld/ssl/flanneld-key.pem \
+  get ${FLANNEL_ETCD_PREFIX}/config 
+
+
+
+mkdir flannel
+curl -o flannel-v0.7.1-linux-amd64.tar.gz  http://7xw819.com1.z0.glb.clouddn.com/flannel-v0.7.1-linux-amd64.tar.gz
+tar -xzvf flannel-v0.7.1-linux-amd64.tar.gz -C flannel
+sudo cp flannel/{flanneld,mk-docker-opts.sh} /root/local/bin
+
+
+创建 flanneld 的 systemd unit 文件
+
+$ cat > flanneld.service << EOF
+[Unit]
+Description=Flanneld overlay address etcd agent
+After=network.target
+After=network-online.target
+Wants=network-online.target
+After=etcd.service
+Before=docker.service
+
+[Service]
+Type=notify
+ExecStart=/root/local/bin/flanneld \\
+  -etcd-cafile=/etc/kubernetes/ssl/ca.pem \\
+  -etcd-certfile=/etc/flanneld/ssl/flanneld.pem \\
+  -etcd-keyfile=/etc/flanneld/ssl/flanneld-key.pem \\
+  -etcd-prefix=${FLANNEL_ETCD_PREFIX}
+ExecStartPost=/root/local/bin/mk-docker-opts.sh -k DOCKER_NETWORK_OPTIONS -d /run/flannel/docker
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+RequiredBy=docker.service
+EOF
+
+
+
+sudo cp flanneld.service /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable flanneld
+sudo systemctl start flanneld
+systemctl status flanneld
+
+
+
+
+
+
+[root@monkey-2 ~]# /root/local/bin/etcdctl \
+>   --ca-file=/etc/kubernetes/ssl/ca.pem \
+>   --cert-file=/etc/flanneld/ssl/flanneld.pem \
+>   --key-file=/etc/flanneld/ssl/flanneld-key.pem \
+>   ls ${FLANNEL_ETCD_PREFIX}/subnets
+2017-05-23 18:52:13.832796 I | warning: ignoring ServerName for user-provided CA for backwards compatibility is deprecated
+/kubernetes/network/subnets/172.30.27.0-24
+/kubernetes/network/subnets/172.30.3.0-24
+/kubernetes/network/subnets/172.30.6.0-24

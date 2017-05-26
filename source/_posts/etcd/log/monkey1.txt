@@ -1,0 +1,122 @@
+[root@monkey-1 etcd-v3.1.8-linux-amd64]# ./etcd --name monkey0 --initial-advertise-peer-urls http://172.16.6.43:2380 \
+>   --listen-peer-urls http://172.16.6.43:2380 \
+>   --listen-client-urls http://172.16.6.43:2379,http://127.0.0.1:2379 \
+>   --advertise-client-urls http://172.16.6.43:2379 \
+>   --initial-cluster-token etcd-cluster-1 \
+>   --initial-cluster monkey0=http://172.16.6.43:2380,monkey1=http://172.16.6.170:2380,monkey2=http://172.16.6.58:2380 \
+>   --initial-cluster-state new
+2017-05-23 07:28:08.497131 I | etcdmain: etcd Version: 3.1.8
+2017-05-23 07:28:08.497951 I | etcdmain: Git SHA: d267ca9
+2017-05-23 07:28:08.497970 I | etcdmain: Go Version: go1.7.5
+2017-05-23 07:28:08.497985 I | etcdmain: Go OS/Arch: linux/amd64
+2017-05-23 07:28:08.497999 I | etcdmain: setting maximum number of CPUs to 2, total number of available CPUs is 2
+2017-05-23 07:28:08.498017 W | etcdmain: no data-dir provided, using default data-dir ./monkey0.etcd
+2017-05-23 07:28:08.498569 I | embed: listening for peers on http://172.16.6.43:2380
+2017-05-23 07:28:08.498698 I | embed: listening for client requests on 127.0.0.1:2379
+2017-05-23 07:28:08.498785 I | embed: listening for client requests on 172.16.6.43:2379
+2017-05-23 07:28:08.509636 I | etcdserver: name = monkey0
+2017-05-23 07:28:08.509677 I | etcdserver: data dir = monkey0.etcd
+2017-05-23 07:28:08.509691 I | etcdserver: member dir = monkey0.etcd/member
+2017-05-23 07:28:08.509700 I | etcdserver: heartbeat = 100ms
+2017-05-23 07:28:08.509709 I | etcdserver: election = 1000ms
+2017-05-23 07:28:08.509717 I | etcdserver: snapshot count = 10000
+2017-05-23 07:28:08.509740 I | etcdserver: advertise client URLs = http://172.16.6.43:2379
+2017-05-23 07:28:08.509751 I | etcdserver: initial advertise peer URLs = http://172.16.6.43:2380
+2017-05-23 07:28:08.509798 I | etcdserver: initial cluster = monkey0=http://172.16.6.43:2380,monkey1=http://172.16.6.170:2380,monkey2=http://172.16.6.58:2380
+2017-05-23 07:28:08.518833 I | etcdserver: starting member e023116dcc92bf04 in cluster dcc781a00a101aaf
+2017-05-23 07:28:08.519000 I | raft: e023116dcc92bf04 became follower at term 0
+2017-05-23 07:28:08.519049 I | raft: newRaft e023116dcc92bf04 [peers: [], term: 0, commit: 0, applied: 0, lastindex: 0, lastterm: 0]
+2017-05-23 07:28:08.519065 I | raft: e023116dcc92bf04 became follower at term 1
+2017-05-23 07:28:08.541957 I | rafthttp: starting peer 75434e19a6586fc2...
+2017-05-23 07:28:08.542519 I | rafthttp: started HTTP pipelining with peer 75434e19a6586fc2
+2017-05-23 07:28:08.546714 I | rafthttp: started streaming with peer 75434e19a6586fc2 (writer)
+2017-05-23 07:28:08.558232 I | rafthttp: started peer 75434e19a6586fc2
+2017-05-23 07:28:08.558574 I | rafthttp: added peer 75434e19a6586fc2
+2017-05-23 07:28:08.558775 I | rafthttp: starting peer db1fc1144eff6ac6...
+2017-05-23 07:28:08.558956 I | rafthttp: started HTTP pipelining with peer db1fc1144eff6ac6
+2017-05-23 07:28:08.564284 I | rafthttp: started peer db1fc1144eff6ac6
+2017-05-23 07:28:08.576697 I | rafthttp: started streaming with peer db1fc1144eff6ac6 (stream Message reader)
+2017-05-23 07:28:08.577156 I | rafthttp: started streaming with peer 75434e19a6586fc2 (stream MsgApp v2 reader)
+2017-05-23 07:28:08.577351 I | rafthttp: started streaming with peer 75434e19a6586fc2 (stream Message reader)
+2017-05-23 07:28:08.577717 I | rafthttp: started streaming with peer db1fc1144eff6ac6 (writer)
+2017-05-23 07:28:08.580846 I | rafthttp: started streaming with peer db1fc1144eff6ac6 (writer)
+2017-05-23 07:28:08.580972 I | rafthttp: started streaming with peer 75434e19a6586fc2 (writer)
+2017-05-23 07:28:08.581234 I | rafthttp: added peer db1fc1144eff6ac6
+2017-05-23 07:28:08.581280 I | etcdserver: starting server... [version: 3.1.8, cluster version: to_be_decided]
+2017-05-23 07:28:08.582426 I | rafthttp: started streaming with peer db1fc1144eff6ac6 (stream MsgApp v2 reader)
+2017-05-23 07:28:08.583656 I | etcdserver/membership: added member 75434e19a6586fc2 [http://172.16.6.170:2380] to cluster dcc781a00a101aaf
+2017-05-23 07:28:08.583912 I | etcdserver/membership: added member db1fc1144eff6ac6 [http://172.16.6.58:2380] to cluster dcc781a00a101aaf
+2017-05-23 07:28:08.584211 I | etcdserver/membership: added member e023116dcc92bf04 [http://172.16.6.43:2380] to cluster dcc781a00a101aaf
+2017-05-23 07:28:08.920162 I | raft: e023116dcc92bf04 is starting a new election at term 1
+2017-05-23 07:28:08.920627 I | raft: e023116dcc92bf04 became candidate at term 2
+2017-05-23 07:28:08.920818 I | raft: e023116dcc92bf04 received MsgVoteResp from e023116dcc92bf04 at term 2
+2017-05-23 07:28:08.921018 I | raft: e023116dcc92bf04 [logterm: 1, index: 3] sent MsgVote request to 75434e19a6586fc2 at term 2
+2017-05-23 07:28:08.921175 I | raft: e023116dcc92bf04 [logterm: 1, index: 3] sent MsgVote request to db1fc1144eff6ac6 at term 2
+2017-05-23 07:28:10.620180 I | raft: e023116dcc92bf04 is starting a new election at term 2
+2017-05-23 07:28:10.620312 I | raft: e023116dcc92bf04 became candidate at term 3
+2017-05-23 07:28:10.620338 I | raft: e023116dcc92bf04 received MsgVoteResp from e023116dcc92bf04 at term 3
+2017-05-23 07:28:10.620386 I | raft: e023116dcc92bf04 [logterm: 1, index: 3] sent MsgVote request to 75434e19a6586fc2 at term 3
+2017-05-23 07:28:10.620437 I | raft: e023116dcc92bf04 [logterm: 1, index: 3] sent MsgVote request to db1fc1144eff6ac6 at term 3
+2017-05-23 07:28:12.120171 I | raft: e023116dcc92bf04 is starting a new election at term 3
+2017-05-23 07:28:12.120511 I | raft: e023116dcc92bf04 became candidate at term 4
+2017-05-23 07:28:12.120667 I | raft: e023116dcc92bf04 received MsgVoteResp from e023116dcc92bf04 at term 4
+2017-05-23 07:28:12.120824 I | raft: e023116dcc92bf04 [logterm: 1, index: 3] sent MsgVote request to 75434e19a6586fc2 at term 4
+2017-05-23 07:28:12.120998 I | raft: e023116dcc92bf04 [logterm: 1, index: 3] sent MsgVote request to db1fc1144eff6ac6 at term 4
+2017-05-23 07:28:13.422416 I | raft: e023116dcc92bf04 is starting a new election at term 4
+2017-05-23 07:28:13.422519 I | raft: e023116dcc92bf04 became candidate at term 5
+2017-05-23 07:28:13.422555 I | raft: e023116dcc92bf04 received MsgVoteResp from e023116dcc92bf04 at term 5
+2017-05-23 07:28:13.422585 I | raft: e023116dcc92bf04 [logterm: 1, index: 3] sent MsgVote request to 75434e19a6586fc2 at term 5
+2017-05-23 07:28:13.422611 I | raft: e023116dcc92bf04 [logterm: 1, index: 3] sent MsgVote request to db1fc1144eff6ac6 at term 5
+2017-05-23 07:28:13.577872 W | rafthttp: health check for peer 75434e19a6586fc2 could not connect: dial tcp 172.16.6.170:2380: getsockopt: connection refused
+2017-05-23 07:28:13.581965 W | rafthttp: health check for peer db1fc1144eff6ac6 could not connect: dial tcp 172.16.6.58:2380: getsockopt: connection refused
+2017-05-23 07:28:14.820250 I | raft: e023116dcc92bf04 is starting a new election at term 5
+2017-05-23 07:28:14.820337 I | raft: e023116dcc92bf04 became candidate at term 6
+2017-05-23 07:28:14.820376 I | raft: e023116dcc92bf04 received MsgVoteResp from e023116dcc92bf04 at term 6
+2017-05-23 07:28:14.820435 I | raft: e023116dcc92bf04 [logterm: 1, index: 3] sent MsgVote request to 75434e19a6586fc2 at term 6
+2017-05-23 07:28:14.820493 I | raft: e023116dcc92bf04 [logterm: 1, index: 3] sent MsgVote request to db1fc1144eff6ac6 at term 6
+2017-05-23 07:28:15.583579 E | etcdserver: publish error: etcdserver: request timed out
+2017-05-23 07:28:16.120159 I | raft: e023116dcc92bf04 is starting a new election at term 6
+2017-05-23 07:28:16.120608 I | raft: e023116dcc92bf04 became candidate at term 7
+2017-05-23 07:28:16.120871 I | raft: e023116dcc92bf04 received MsgVoteResp from e023116dcc92bf04 at term 7
+2017-05-23 07:28:16.121050 I | raft: e023116dcc92bf04 [logterm: 1, index: 3] sent MsgVote request to 75434e19a6586fc2 at term 7
+2017-05-23 07:28:16.121255 I | raft: e023116dcc92bf04 [logterm: 1, index: 3] sent MsgVote request to db1fc1144eff6ac6 at term 7
+2017-05-23 07:28:16.453978 I | rafthttp: peer 75434e19a6586fc2 became active
+2017-05-23 07:28:16.454393 I | rafthttp: established a TCP streaming connection with peer 75434e19a6586fc2 (stream MsgApp v2 reader)
+2017-05-23 07:28:16.455616 I | rafthttp: established a TCP streaming connection with peer 75434e19a6586fc2 (stream Message reader)
+2017-05-23 07:28:16.464000 I | rafthttp: established a TCP streaming connection with peer 75434e19a6586fc2 (stream MsgApp v2 writer)
+2017-05-23 07:28:16.467553 I | rafthttp: established a TCP streaming connection with peer 75434e19a6586fc2 (stream Message writer)
+2017-05-23 07:28:17.404524 I | raft: e023116dcc92bf04 [term: 7] ignored a MsgVote message with lower term from 75434e19a6586fc2 [term: 2]
+2017-05-23 07:28:17.820075 I | raft: e023116dcc92bf04 is starting a new election at term 7
+2017-05-23 07:28:17.820352 I | raft: e023116dcc92bf04 became candidate at term 8
+2017-05-23 07:28:17.820554 I | raft: e023116dcc92bf04 received MsgVoteResp from e023116dcc92bf04 at term 8
+2017-05-23 07:28:17.820730 I | raft: e023116dcc92bf04 [logterm: 1, index: 3] sent MsgVote request to 75434e19a6586fc2 at term 8
+2017-05-23 07:28:17.820892 I | raft: e023116dcc92bf04 [logterm: 1, index: 3] sent MsgVote request to db1fc1144eff6ac6 at term 8
+2017-05-23 07:28:17.830214 I | raft: e023116dcc92bf04 received MsgVoteResp from 75434e19a6586fc2 at term 8
+2017-05-23 07:28:17.830430 I | raft: e023116dcc92bf04 [quorum:2] has received 2 MsgVoteResp votes and 0 vote rejections
+2017-05-23 07:28:17.830643 I | raft: e023116dcc92bf04 became leader at term 8
+2017-05-23 07:28:17.830835 I | raft: raft.node: e023116dcc92bf04 elected leader e023116dcc92bf04 at term 8
+2017-05-23 07:28:17.844158 I | etcdserver: published {Name:monkey0 ClientURLs:[http://172.16.6.43:2379]} to cluster dcc781a00a101aaf
+2017-05-23 07:28:17.844526 W | etcdserver: failed to reach the peerURL(http://172.16.6.58:2380) of member db1fc1144eff6ac6 (Get http://172.16.6.58:2380/version: dial tcp 172.16.6.58:2380: getsockopt: connection refused)
+2017-05-23 07:28:17.844741 I | embed: ready to serve client requests
+2017-05-23 07:28:17.845013 W | etcdserver: cannot get the version of member db1fc1144eff6ac6 (Get http://172.16.6.58:2380/version: dial tcp 172.16.6.58:2380: getsockopt: connection refused)
+2017-05-23 07:28:17.845500 I | etcdserver: setting up the initial cluster version to 3.0
+2017-05-23 07:28:17.846014 E | etcdmain: forgot to set Type=notify in systemd service file?
+2017-05-23 07:28:17.846214 I | embed: ready to serve client requests
+2017-05-23 07:28:17.846740 N | embed: serving insecure client requests on 172.16.6.43:2379, this is strongly discouraged!
+2017-05-23 07:28:17.848845 N | embed: serving insecure client requests on 127.0.0.1:2379, this is strongly discouraged!
+2017-05-23 07:28:17.851533 N | etcdserver/membership: set the initial cluster version to 3.0
+2017-05-23 07:28:17.851791 I | etcdserver/api: enabled capabilities for version 3.0
+2017-05-23 07:28:18.582482 W | rafthttp: health check for peer db1fc1144eff6ac6 could not connect: dial tcp 172.16.6.58:2380: getsockopt: connection refused
+2017-05-23 07:28:21.847740 W | etcdserver: failed to reach the peerURL(http://172.16.6.58:2380) of member db1fc1144eff6ac6 (Get http://172.16.6.58:2380/version: dial tcp 172.16.6.58:2380: getsockopt: connection refused)
+2017-05-23 07:28:21.847795 W | etcdserver: cannot get the version of member db1fc1144eff6ac6 (Get http://172.16.6.58:2380/version: dial tcp 172.16.6.58:2380: getsockopt: connection refused)
+2017-05-23 07:28:23.583155 W | rafthttp: health check for peer db1fc1144eff6ac6 could not connect: dial tcp 172.16.6.58:2380: getsockopt: connection refused
+2017-05-23 07:28:25.853327 W | etcdserver: failed to reach the peerURL(http://172.16.6.58:2380) of member db1fc1144eff6ac6 (Get http://172.16.6.58:2380/version: dial tcp 172.16.6.58:2380: getsockopt: connection refused)
+2017-05-23 07:28:25.856180 W | etcdserver: cannot get the version of member db1fc1144eff6ac6 (Get http://172.16.6.58:2380/version: dial tcp 172.16.6.58:2380: getsockopt: connection refused)
+2017-05-23 07:28:26.533809 I | rafthttp: peer db1fc1144eff6ac6 became active
+2017-05-23 07:28:26.534080 I | rafthttp: established a TCP streaming connection with peer db1fc1144eff6ac6 (stream Message reader)
+2017-05-23 07:28:26.535371 I | rafthttp: established a TCP streaming connection with peer db1fc1144eff6ac6 (stream Message writer)
+2017-05-23 07:28:26.535988 I | rafthttp: established a TCP streaming connection with peer db1fc1144eff6ac6 (stream MsgApp v2 writer)
+2017-05-23 07:28:26.569631 I | rafthttp: established a TCP streaming connection with peer db1fc1144eff6ac6 (stream MsgApp v2 reader)
+2017-05-23 07:28:29.864338 I | etcdserver: updating the cluster version from 3.0 to 3.1
+2017-05-23 07:28:29.866482 N | etcdserver/membership: updated the cluster version from 3.0 to 3.1
+2017-05-23 07:28:29.866583 I | etcdserver/api: enabled capabilities for version 3.1

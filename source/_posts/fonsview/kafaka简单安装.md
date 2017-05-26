@@ -29,4 +29,4 @@ test
 
 
 + 读取kafak中的内容
-> bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test --from-beginning
+> bin/kafka-console-consumer.sh --bootstrap-server localhost:9092  --from-beginning --topic test

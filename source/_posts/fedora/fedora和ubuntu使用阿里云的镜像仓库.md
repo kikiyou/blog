@@ -35,8 +35,7 @@ curl -o /etc/yum.repos.d/fedora.repo http://mirrors.aliyun.com/repo/fedora.repo
 curl -o /etc/yum.repos.d/fedora-updates.repo http://mirrors.aliyun.com/repo/fedora-updates.repo
 
 5. 重新生成缓存
-dnf makecache
-
+ 
 
 fedora 配置使用阿里的yum源-使用curl
 
