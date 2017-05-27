@@ -4,6 +4,7 @@
 2. 解压
 3. 编辑 harbor.cfg
 
+默认端口：80
 默认用户名  密码
 admin/Harbor12345
 
