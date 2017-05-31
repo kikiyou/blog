@@ -75,7 +75,7 @@ docker images | grep  viewer
 docker run -d -p 9999:8080 nikfoundas/etcd-viewer
 
 访问：
-http://127.0.0.1:9999/
+http://monkey.rhel.cc:9999
 
 添加远程etcd
 monkey1
