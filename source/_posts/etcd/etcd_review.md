@@ -1,10 +1,20 @@
 # etcd集群与etcd相关生态介绍 -- etcd能干什么
 
-1.etcd集群
-2.etcd-viewer -- etcd简单图形化界面
-3.etcd与skydns集成 -- 基于dns的主机发现
-4.etcd与confd的集成 -- 配置自动下发
-5.etcd与ansible集成 -- ansible主机配置信息，从etcd获取
+1. etcd集群
+2. etcd-viewer -- etcd简单图形化界面
+3. etcd与skydns集成 -- 基于dns的主机发现
+4. etcd与confd的集成 -- 配置自动下发
+5. etcd与ansible集成 -- ansible主机配置信息，从etcd获取
+
++ 演示环境:
+
+    monkey_desktop 172.16.12.41
+
+    monkey1 172.16.6.43
+
+    monkey2 172.16.6.170
+
+    monkey3 172.16.6.58
 
 
 ## etcd集群
@@ -12,6 +22,7 @@ etcd介绍 etcd是一个适用于分布式系统关键数据的 分布式可靠�
 
 etcd  -->  /etc  + distributed
 
+``` shell
 monkey1
 
 ./etcd --name monkey11 --initial-advertise-peer-urls http://172.16.6.43:3380 \
@@ -42,9 +53,9 @@ monkey3
    --initial-cluster monkey11=http://172.16.6.43:3380,monkey12=http://172.16.6.170:3380,monkey13=http://172.16.6.58:3380 \
    --initial-cluster-state new
 
-
-
-export ETCDCTL_ENDPOINT=http://127.0.0.1:3379
+```
+``` shell
+export ETCDCTL_ENDPOINT=http://172.16.6.43:3379,http://172.16.6.170:3379,http://172.16.6.58:3379
 ./etcdctl member list
 
 monkey1
@@ -53,8 +64,9 @@ monkey1
 ./etcdctl get /opt/fonsview/3rd/tomcat/version
 
 
+
 在monkey2 上查询
-export ETCDCTL_ENDPOINT=http://127.0.0.1:3379
+export ETCDCTL_ENDPOINT=http://172.16.6.43:3379,http://172.16.6.170:3379,http://172.16.6.58:3379
 ./etcdctl get /opt/fonsview/3rd/tomcat/version
 
 
@@ -66,24 +78,22 @@ curl -X PUT   http://172.16.6.43:3379/v2/keys/opt/fonsview/3rd/nginx/version -d 
 查询：
 
 curl   http://172.16.6.43:3379/v2/keys/opt/fonsview/3rd/nginx/version | python3 -m json.tool
-
+```
 ## etcd-viewer
+
 查看本机镜像:
-docker images | grep  viewer
+
+    docker images | grep  viewer
 
 启动：
-docker run -d -p 9999:8080 nikfoundas/etcd-viewer
+
+    docker run -d -p 9999:8080 nikfoundas/etcd-viewer
 
 访问：
-http://monkey.rhel.cc:9999
 
-添加远程etcd
-monkey1
-http://172.16.6.43:3379
+    monkey1
+    http://172.16.6.43:3379
 
-
-monkey_remote
-http://139.162.120.128:2379
 
 
 ## etcd与skydns集成
@@ -101,58 +111,73 @@ DNS 有如下优点：
 
 
 安装：
+
 wget http://7xw819.com1.z0.glb.clouddn.com/skydns
+
+chmod +x skydns
 
 1. 启动
 
-初始化设置：
-export ETCD_MACHINES='http://172.16.6.43:3379'
-etcdctl set /skydns/config '{"dns_addr":"0.0.0.0:53","ttl":60,"domain": "fonsview.local.","nameservers": ["8.8.8.8:53","8.8.4.4:53"]}'
+    初始化设置：
 
-./skydns -verbose
+    export ETCD_MACHINES='http://172.16.6.43:3379'
+    etcdctl set /skydns/config '{"dns_addr":"0.0.0.0:53","ttl":60,"domain": "fonsview.local.","nameservers": ["8.8.8.8:53","8.8.4.4:53"]}'
 
+    ./skydns -verbose
 
 2.  设置dns
-vi /etc/resolv.conf
-search fonsview.local
-nameserver 172.16.6.43
+
+    vi /etc/resolv.conf
+    search fonsview.local
+    nameserver 172.16.6.43
 
 
 3. 查询现在dns设置是否正确
-root ➜  ~ nslookup www.baidu.com
-Server:		172.16.6.43
-Address:	172.16.6.43#53
+    root ➜  ~ nslookup www.baidu.com
+    Server:		172.16.6.43
+    Address:	172.16.6.43#53
 
-Non-authoritative answer:
-www.baidu.com	canonical name = www.a.shifen.com.
-Name:	www.a.shifen.com
-Address: 103.235.46.39
+    Non-authoritative answer:
+    www.baidu.com	canonical name = www.a.shifen.com.
+    Name:	www.a.shifen.com
+    Address: 103.235.46.39
 
 
 4. 设置自定义dns
-export ETCDCTL_ENDPOINT=http://172.16.6.43:3379
-etcdctl  set /skydns/local/fonsview/test1 '{"host":"172.16.12.41"}' 
+``` shell
+    export ETCDCTL_ENDPOINT=http://172.16.6.43:3379
+    etcdctl  set /skydns/local/fonsview/test1 '{"host":"172.16.12.41"}' 
 
-etcdctl  set /skydns/local/fonsview/monkey1 '{"host":"172.16.6.43"}' 
+    etcdctl  set /skydns/local/fonsview/monkey1 '{"host":"172.16.6.43"}' 
+    
+    nslookup test1
+
+```
 
 5. 查询
-nslookup test1
+``` shell
+    dns轮训
 
+    etcdctl  set /skydns/local/fonsview/epg/1 '{"host":"172.16.6.43"}'
+    etcdctl  set /skydns/local/fonsview/epg/2 '{"host":"172.16.6.170"}'
+    etcdctl  set /skydns/local/fonsview/epg/3 '{"host":"172.16.6.58"}'
 
-etcdctl  set /skydns/local/fonsview/service/1 '{"host":"172.16.6.43"}'
-etcdctl  set /skydns/local/fonsview/service/2 '{"host":"172.16.6.170"}'
-etcdctl  set /skydns/local/fonsview/service/3 '{"host":"172.16.6.58"}'
+    nslookup epg.fonsview.local
 
+    nslookup 1.epg.fonsview.local
+```
 
 ## etcd与confd的集成
 1. 下载
 
-wget http://7xw819.com1.z0.glb.clouddn.com/confd-0.11.0-linux-amd64
+    wget http://7xw819.com1.z0.glb.clouddn.com/confd-0.11.0-linux-amd64
 
-chmod +x confd-0.11.0-linux-amd64
+    chmod +x confd-0.11.0-linux-amd64
 
 
 2. 建立初始化目录
+
+```
 sudo mkdir -p /etc/confd/{conf.d,templates}
 
 
@@ -165,26 +190,27 @@ keys = [
     "/myapp/database/user",
 ]
 
-
 /etc/confd/templates/myconfig.conf.tmpl
 [myconfig]
 database_url = {{getv "/myapp/database/url"}}
 database_user = {{getv "/myapp/database/user"}}
 
-
-
-
+export ETCDCTL_ENDPOINT=http://172.16.6.43:3379
 etcdctl set /myapp/database/url db.example.com
 etcdctl set /myapp/database/user rob
 
-
 ./confd-0.11.0-linux-amd64 -onetime=false -interval=1 -backend etcd -node http://172.16.6.43:3379
 
+cat /tmp/myconfig.conf
+
+```
 
 ## etcd与ansible集成
 
-export ETCD_INI_PATH=/home/monkey/sync/monkey-ott-cdn/etcd.ini
+etcd 有基于各种主流语言的客户端，C，c++,java,python
 
+``` shell
+export ETCD_INI_PATH=/home/monkey/sync/monkey-ott-cdn/etcd.ini
 
 etcdctl  set /ansible/groupvars/zabbix/foo v2 
 etcdctl  set /ansible/hostvars/OTT-NA-EPG1/ansible_host 127.0.0.1
@@ -195,9 +221,20 @@ etcdctl  set /ansible/hostvars/OTT-NA-EPG1/ansible_port 22
 etcdctl  set /ansible/hostvars/OTT-NA-EPG1/ansible_become_pass "redhat"
 etcdctl  set /ansible/hosts/zabbix/OTT-NA-EPG1 11
 
+``` 
 
 使用 列出变量
+```
 python etcd_hosts.py --host OTT-NA-EPG1
+{
+  "ansible_become_pass": "redhat", 
+  "ansible_host": "127.0.0.1", 
+  "ansible_port": "22", 
+  "ansible_ssh_pass": "redhat", 
+  "ansible_user": "monkey", 
+  "group_name": "\u6d77\u6797"
+}
 
 
 ansible -i etcd_hosts.py all -m shell  -a "echo group_name = {{  group_name }}"
+```
