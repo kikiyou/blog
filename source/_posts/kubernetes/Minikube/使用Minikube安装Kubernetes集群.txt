@@ -1,0 +1,176 @@
+[参考](http://www.10tiao.com/html/357/201704/2247485054/1.html)
+
+在容器编排工具中安装配置最复杂的就是Kubernetes，想要运行一个简单的容器集群环境，对于没有使用过Kubernetes的人来说，需要花费一定的时间去理解各组件的概念和功能，再做大量的安装配置工作才能运行一个kubernetes集群。
+
+从Kubernetes 1.3开始提供了一个叫Minikube的强大测试工具，可以在任意主机上运行单节点的小型集群，这个工具默认安装和配置了一个Linux  VM，Docker和Kubernetes的相关组件，并且提供Dashboard。目前支持在Linux, OS X及Windows上安装，今天我们介绍的是在OS X上如何安装Minitube。
+
+Minitube项目地址：https://github.com/kubernetes/minikube
+
+检查硬件环境
+
+Minikube要求在BIOS中对VT-x/AMD-v进行了虚拟化，如果已经设置了，则命令执行后会有以下内容输出：
+
+$ sysctl -a | grep machdep.cpu.features | grep VMX
+
+machdep.cpu.features: FPU VME DE PSE TSC MSR PAE MCE CX8 APIC SEP MTRR PGE MCA CMOV PAT PSE36 CLFSH DS ACPI MMX FXSR SSE SSE2 SS HTT TM PBE SSE3 PCLMULQDQ DTES64 MON DSCPL VMX EST TM2 SSSE3 FMA CX16 TPR PDCM SSE4.1 SSE4.2 x2APIC MOVBE POPCNT AES PCID XSAVE OSXSAVE SEGLIM64 TSCTMR AVX1.0 RDRAND F16C
+安装虚拟机驱动
+
+在OS X上支持xhyve driver、VirtualBox、VMware Fusion多种虚拟驱动 ，这里使用的是xhyve驱动。
+
+安装xhyve驱动
+
+$ brew install docker-machine-driver-xhyve
+# docker-machine-driver-xhyve need root owner and uid
+$ sudo chown root:wheel $(brew --prefix)/opt/docker-machine-driver-xhyve/bin/docker-machine-driver-xhyve
+$ sudo chmod u+s $(brew --prefix)/opt/docker-machine-driver-xhyve/bin/docker-machine-driver-xhyve
+安装Minitube
+
+Minitube是一个独立的Go应用，所以只要下载运行就可以了。这是针对Mac， 如果是Linux用minikube-linux-amd64代替minikube-darwin-amd64即可。
+
+$ curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-darwin-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/
+安装kubectl
+
+$ curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v1.5.3/bin/darwin/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
+启动Cluster
+
+要启动Kubernetes集群，通常使用minikube start命令。Minikube默认使用VirtualBox来驱动安装，我们这里使用xhyve driver来启动集群。
+
+$ minikube start --vm-driver=xhyve
+
+Starting local Kubernetes cluster...
+Starting VM...
+SSH-ing files into VM...
+Setting up certs...
+Starting cluster components...
+Connecting to cluster...
+Setting up kubeconfig...
+Kubectl is now configured to use the cluster.
+检查节点是否正常工作
+
+$ kubectl get nodes
+NAME       STATUS    AGE
+minikube   Ready     2h
+这样，就启动了一个单节点的Kubernetes集群。Minikube会给你配置好kubectl，现在就可以运行容器了。
+
+部署一个应用
+
+配置依赖镜像
+
+由于墙的原因，Minitube运行需要了的一些镜像是不能被下载的。故需要先解决下gcr.io的访问，这里一样采用绑定Host的方法。
+
+首先通过minikube ssh命令进入到运行服务的虚拟机中
+
+$ minikube ssh
+修改hosts文件，并增加如下内容：
+
+$ sudo vi /etc/hosts
+
+61.91.161.217 gcr.io
+61.91.161.217 www.gcr.io
+61.91.161.217 packages.cloud.google.com
+下载所需的镜像
+
+必须的镜像
+
+方法一：官方直接下载
+
+$ docker pull  gcr.io/google_containers/pause-amd64:3.0
+方法二：通过阿里云镜像下载并打tag
+
+$ docker pull registry.cn-hangzhou.aliyuncs.com/google-containers/pause-amd64:3.0
+$ docker tag registry.cn-hangzhou.aliyuncs.com/google-containers/pause-amd64:3.0 gcr.io/google_containers/pause-amd64:3.0
+测试用镜像
+
+方法一：官方直接下载
+
+$ docker pull gcr.io/google_containers/echoserver:1.4
+方法二：通过阿里云镜像下载并打tag
+
+$ docker pull registry.cn-hangzhou.aliyuncs.com/google-container/echoserver:1.4
+$ docker tag  registry.cn-hangzhou.aliyuncs.com/google-container/echoserver:1.4 gcr.io/google_containers/echoserver:1.4
+终极大招
+
+一次性下载所需镜像
+
+$ docker pull registry.cn-hangzhou.aliyuncs.com/google-containers/kube-addon-manager-amd64:v6.3
+$ docker tag registry.cn-hangzhou.aliyuncs.com/google-containers/kube-addon-manager-amd64:v6.3 gcr.io/google-containers/kube-addon-manager:v6.3
+
+$ docker pull registry.cn-hangzhou.aliyuncs.com/google-containers/kubernetes-dashboard-amd64:v1.5.1
+$ docker tag registry.cn-hangzhou.aliyuncs.com/google-containers/kubernetes-dashboard-amd64:v1.5.1 gcr.io/google_containers/kubernetes-dashboard-amd64:v1.5.1
+
+$ docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/kubedns-amd64:1.9
+$ ocker tag registry.cn-hangzhou.aliyuncs.com/google-containers/kubedns-amd64:1.9 gcr.io/google_containers/kubedns-amd64:1.9
+
+$ docker pull registry.cn-hangzhou.aliyuncs.com/google-containers/kube-dnsmasq-amd64:1.4
+$ docker tag registry.cn-hangzhou.aliyuncs.com/google-containers/kube-dnsmasq-amd64:1.4 gcr.io/google_containers/kube-dnsmasq-amd64:1.4
+
+$ docker pull registry.cn-hangzhou.aliyuncs.com/google-containers/exechealthz-amd64:1.2
+$ docker tag registry.cn-hangzhou.aliyuncs.com/google-containers/exechealthz-amd64:1.2 gcr.io/google_containers/exechealthz-amd64:1.2
+
+$ docker pull registry.cn-hangzhou.aliyuncs.com/google-container/echoserver:1.4
+$ docker tag  registry.cn-hangzhou.aliyuncs.com/google-container/echoserver:1.4 gcr.io/google_containers/echoserver:1.4
+
+$ docker pull registry.cn-hangzhou.aliyuncs.com/google-containers/pause-amd64:3.0
+$ docker tag registry.cn-hangzhou.aliyuncs.com/google-containers/pause-amd64:3.0 gcr.io/google_containers/pause-amd64:3.0
+启动一个echoserver pod
+
+$ kubectl run hello-minikube --image=gcr.io/google_containers/echoserver:1.4 --port=8080
+deployment "hello-minikube" created
+通过NodePort暴露的服务
+
+$ kubectl expose deployment hello-minikube --type=NodePort
+service "hello-minikube" exposed
+检查pod是否启动并运行
+
+$ kubectl get pod
+NAME                              READY     STATUS    RESTARTS   AGE
+hello-minikube-3015430129-8jqs6   1/1       Running   0          18s
+通过curl测试服务是否可访问
+
+$ curl $(minikube service hello-minikube --url)
+
+CLIENT VALUES:
+client_address=172.17.0.1
+command=GET
+real path=/
+query=nil
+request_version=1.1
+request_uri=http://192.168.64.2:8080/
+
+SERVER VALUES:
+server_version=nginx: 1.10.0 - lua: 10001
+
+HEADERS RECEIVED:
+accept=*/*
+host=192.168.64.2:32282
+user-agent=curl/7.51.0
+BODY:
+-no body in request-%
+查看minikube的状态
+
+$ minikube status
+minikubeVM: Running
+localkube: Running
+关闭cluster
+
+$ minikube stop
+Stopping local Kubernetes cluster...
+Stopping "minikube"...
+删除一个集群
+
+$ minikube delete
+Minikube自带了Kubernetes Dashboard。要浏览这个界面，可以使用内置的minikube dashboard命令。
+
+$ minikube dashboard
+Opening kubernetes dashboard in default browser...
+运行以上命令后，会自动在浏览器中打开dashboard界面：
+
+
+
+
+参考文档
+
+http://www.google.com
+http://www.jianshu.com/p/a552076d4fe3
+http://www.jianshu.com/p/a42eeb66a19c
+

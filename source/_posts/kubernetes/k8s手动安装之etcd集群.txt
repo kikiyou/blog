@@ -79,3 +79,24 @@ systemctl status etcd
 
 
 /etc/systemd/system
+
+
+
+
+
+
+
+
+
+
+
+v3 接口使用
+alias etcdctl=etcdctl
+
+export ETCDCTL_API=3
+export ETCDCTL_DIAL_TIMEOUT=3s
+export ETCDCTL_CACERT=/etc/kubernetes/ssl/ca.pem
+export ETCDCTL_CERT=/etc/etcd/ssl/etcd.pem
+export ETCDCTL_KEY=/etc/etcd/ssl/etcd-key.pem
+
+etcdctl --endpoints=[172.16.6.43:2379,172.16.6.170:2379,172.16.6.58:2379] member list

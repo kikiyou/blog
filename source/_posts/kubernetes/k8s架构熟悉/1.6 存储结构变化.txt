@@ -1,0 +1,36 @@
+[root@k8s-master ~]# etcdctl  get /registry/clusterrolebindings/cluster-admin  | python -m json.tool
+{
+    "apiVersion": "rbac.authorization.k8s.io/v1alpha1",
+    "kind": "ClusterRoleBinding",
+    "metadata": {
+        "creationTimestamp": "2017-04-01T08:33:26Z",
+        "name": "cluster-admin",
+        "uid": "e036684a-16b5-11e7-869d-5853c004060e"
+    },
+    "roleRef": {
+        "apiGroup": "rbac.authorization.k8s.io",
+        "kind": "ClusterRole",
+        "name": "cluster-admin"
+    },
+    "subjects": [
+        {
+            "kind": "Group",
+            "name": "system:masters"
+        }
+    ]
+}
+
+-------------下面是1.6的
+[root@monkey-1 ~]# etcdctl --endpoints=[172.16.6.43:2379,172.16.6.170:2379,172.16.6.58:2379] get /registry/clusterrolebindings/cluster-admin -w  fields
+"ClusterID" : 3215538241514032402
+"MemberID" : 15137601433618195765
+"Revision" : 991151
+"RaftTerm" : 6
+"Key" : "/registry/clusterrolebindings/cluster-admin"
+"CreateRevision" : 54
+"ModRevision" : 54
+"Version" : 1
+"Value" : "k8s\x00\n7\n!rbac.authorization.k8s.io/v1beta1\x12\x12ClusterRoleBinding\x12\xa4\x02\n\xb2\x01\n\rcluster-admin\x12\x00\x1a\x00\"\x00*$7020091d-3fba-11e7-ae0b-fa163ec954312\x008\x00B\f\b\xdb\xed\x90\xc9\x05\x10\xda\xe5\xfe\x8f\x02Z,\n\x1bkubernetes.io/bootstrapping\x12\rrbac-defaultsb3\n+rbac.authorization.kubernetes.io/autoupdate\x12\x04truez\x00\x124\n\x05Group\x12\x19rbac.authorization.k8s.io\x1a\x0esystem:masters\"\x00\x1a7\n\x19rbac.authorization.k8s.io\x12\vClusterRole\x1a\rcluster-admin\x1a\x00\"\x00"
+"Lease" : 0
+"More" : false
+"Count" : 1

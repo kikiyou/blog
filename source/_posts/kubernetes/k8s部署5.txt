@@ -90,3 +90,20 @@ systemctl status flanneld
 /kubernetes/network/subnets/172.30.27.0-24
 /kubernetes/network/subnets/172.30.3.0-24
 /kubernetes/network/subnets/172.30.6.0-24
+
+
+alias etcdctl="/root/local/bin/etcdctl \
+  --ca-file=/etc/kubernetes/ssl/ca.pem \
+  --cert-file=/etc/flanneld/ssl/flanneld.pem \
+  --key-file=/etc/flanneld/ssl/flanneld-key.pem"
+
+
+etcd 中flanneld结构
+[root@monkey-1 ~]# etcdctl ls -r /
+/kubernetes
+/kubernetes/network
+/kubernetes/network/config
+/kubernetes/network/subnets
+/kubernetes/network/subnets/172.30.27.0-24
+/kubernetes/network/subnets/172.30.3.0-24
+/kubernetes/network/subnets/172.30.6.0-24
