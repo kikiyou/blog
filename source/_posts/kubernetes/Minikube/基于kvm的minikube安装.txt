@@ -1,4 +1,20 @@
 
+Minikube是一个强大的使你能方便的在本地运行Kubernetes的工具。可以在任意主机上运行单节点的Kubernetes小型集群，这个工具默认安装和配置了一个Linux  VM，
+Docker和Kubernetes的相关组件，并且提供Kubernetes Dashboard，以便用户试图尝试使用Kubernetes或日常开发。
+
+
+## 安装kubectl
+curl -O https://storage.googleapis.com/kubernetes-release/release/v1.6.4/bin/linux/amd64/kubectl
+chmod +x kubectl
+sudo mv kubectl /usr/local/bin/
+
+## 安装kvm环境
+$ sudo yum install libvirt-daemon-kvm kvm
+$ sudo usermod -a -G libvirt $(whoami)
+$ newgrp libvirt
+
+## 安装Minitube
+Minitube是一个独立的Go应用，所以只要下载运行就可以了。
 
 1. 下载 docker-machine-Linux-x86_64
 
@@ -12,43 +28,87 @@ curl -L http://7xw819.com1.z0.glb.clouddn.com/docker-machine-driver-kvm-centos7_
 chmod +x docker-machine-driver-kvm
 sudo mv docker-machine-driver-kvm /usr/local/bin/docker-machine-driver-kvm  
 
-
-
-3. 下载minikube
-
+3. 下载 minikube
 
 curl -L http://7xw819.com1.z0.glb.clouddn.com/minikube-linux-amd64 -o minikube
 chmod +x minikube
 sudo mv minikube /usr/local/bin/
 
 
-
-启动：
+## 启动 minikube
++ 启动
 参考（https://github.com/kubernetes/minikube/issues/1107）
 
 $minikube start --vm-driver=kvm --v=7 --logtostderr
 Starting local Kubernetes v1.6.4 cluster...
 Starting VM...
 
++ 检查节点是否工作正常
+$ kubectl get nodes
+NAME       STATUS    AGE
+minikube   Ready     2h
+这样，就启动了一个单节点的Kubernetes集群。Minikube会给你配置好kubectl，现在就可以运行容器了。
 
++ 部署一个应用
 
+配置依赖镜像
 
+由于墙的原因，Minitube运行需要的一些镜像是不能被下载的。故需要先解决下gcr.io的访问，这里一样采用绑定Host的方法。
+
+首先通过minikube ssh命令进入到运行服务的虚拟机中。
+
+$ minikube ssh
+修改hosts文件，并增加如下内容：
+
+$ sudo vi /etc/hosts
+61.91.161.217 gcr.io
+61.91.161.217 www.gcr.io
+61.91.161.217 packages.cloud.google.com
+
+1. 启动一个echoserver pod
 $kubectl run hello-minikube --image=gcr.io/google_containers/echoserver:1.4 --port=8080
-$kubectl expose deployment hello-minikube --type=NodePort
 
-$minikube service hello-minikube --url
+2. 通过NodePort暴露的服务
+$ kubectl expose deployment hello-minikube --type=NodePort
+
+3. 检查pod是否启动并运行
+$ kubectl get pod
+NAME                             READY     STATUS    RESTARTS   AGE
+hello-minikube-938614450-drrww   1/1       Running   0          17h
+
+4. 通过curl测试服务是否可访问
+$ minikube service hello-minikube --url
 http://192.168.42.132:31624
-curl http://192.168.42.132:31624
 
+$ curl http://192.168.42.132:31624
 
+5. 查看minikube的状态
+$ minikube status
+minikubeVM: Running
+localkube: Running
 
-
+6. 关闭cluster
 $ minikube stop
 Stopping local Kubernetes cluster...
 Machine stopped.
 
++ 图形控制面板
 
-
+Minikube自带了Kubernetes Dashboard。要浏览这个界面，可以使用内置的minikube dashboard命令。
 打开 dashboard
 $ minikube dashboard
+Opening kubernetes dashboard in default browser...
+运行以上命令后，会自动在浏览器中打开dashboard界面：
+
 $ http://192.168.42.132:30000/
+
+
++ 把dashboard提供给外部访问
+$ kubectl proxy --address='0.0.0.0' --port=8086 --accept-hosts='^*$'
+
+
+这时，你就可以访问
+你的电脑的ip，比如我的是172.16.6.66
+
+浏览器打开：
+http://172.16.6.66:8086/ui 就可以访问dashboard
