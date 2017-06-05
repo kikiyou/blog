@@ -2,7 +2,7 @@ mkdir -p ~/.pip/
 
 vim ~/.pip/pip.conf
 [global]
-index-url = http://mirrors.aliyun.com/pypi/simple/
+index-url = https://mirrors.aliyun.com/pypi/simple/
 
 [install]
 trusted-host=mirrors.aliyun.com
@@ -14,14 +14,23 @@ python get-pip.py
 前提条件 先安装pip
 可以使用pip 安装本地的软件包。
 
+离线安装pip
+python pip-9.0.1-py2.py3-none-any.whl/pip install --no-index pip-9.0.1-py2.py3-none-any.whl
+
 生成软件包版本:
 pip freeze  > requirements.txt
 
 下载对应的软件包:
-pip download -r python_3rd/requirements.txt
+pip install --download /path/to/download/to_packagename
+
+下载源码包
+pip download --no-binary :all:  "requests[security]"
+pip download -r python_3rd/requirements.txt --trusted-host mirrors.aliyun.com
 
 安装对应的软件包:
 pip install -r python_3rd/requirements.txt  --no-index --find-links=file:///opt/fonsview/3RD/python_3rd/
+pip install --no-index --find-links="/path/to/downloaded/dependencies" packagename
+
 
 
 
