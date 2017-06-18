@@ -12,3 +12,15 @@
 
  https://github.com/paradoxxxzero/butterfly
  希望能移植到jumpserver
+
+
+ SHA 7bb68903
+by ibuler, 08/09/2016 01:05 AM
+parent 734f6564
+
+
+e content of README.md
+
+children bd3735e7
+on branches dev, origin/dev
+branches HEAD
