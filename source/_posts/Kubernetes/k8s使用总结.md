@@ -1,0 +1,1 @@
+kubectl -s 192.168.33.17:8080 run my-nginx --image=nginx:1.7.9
