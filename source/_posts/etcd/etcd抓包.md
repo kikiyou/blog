@@ -1,4 +1,4 @@
-#etcd抓包
+# k8s创建 Server过程中与etcd的通信 用到的相关etcd知识点
 
 k8s创建 Server过程中与etcd的通信
 1. 获取是否有什么资源配额的设定
