@@ -93,3 +93,81 @@ docker run \
 
 [docker和kubernetes日志收集方案](http://www.do1618.com/archives/908)
 $ docker run -it --log-opt max-size=10m --log-opt max-file=3 busybox /bin/sh -c 'i=0; while true; do echo "$i: $(date)"; i=$((i+1)); sleep 0.001; done'
+
+
+
+参考（http://www.simulmedia.com/blog/2016/02/19/centralized-docker-logging-with-rsyslog/）
+
+
+-------------实验
+https://github.com/jumanjihouse/docker-rsyslog
+
+Run a container from the CLI:
+
+docker run -d \
+  --name rsyslog.service \
+  -h $(hostname) \
+  jumanjiman/rsyslog
+Run a container that only logs to syslog:
+
+docker run -d \
+  --name tftp \
+  -h tftp.example.com \
+  --volumes-from rsyslog.service \
+  jumanjiman/tftp-hpa
+Now you can tail the logs from the tftp container:
+
+docker logs -f rsyslog.service
+
+
+rsyslogd -n -f /etc/rsyslogd.conf
+rsyslog 中配置：
+module(load="imtcp")
+input(type="imtcp" port="514")
+
+module(load="imudp")
+input(type="imudp" port="514")
+
+# Input modules
+module(load="imuxsock")
+input(type="imuxsock" Socket="/var/run/rsyslog/dev/log" CreatePath="on")
+
+
+# Output modes
+$ModLoad omstdout.so       # provide messages to stdout
+
+# Actions
+*.* :omstdout:             # send everything to stdout
+
+
+大概思路是：
+客户机把log输出到  /var/run/rsyslog/dev/log
+rsyslog 的 dev/log 和 客户机的这个文件是一个  ,当客户机把log输出到 dev/log rsyslog主机会收到
+
+tailf  /var/lib/docker/containers/28cd6345028e10151255c817fd2755112ca9ba435dc3f953869a492228609c14/28cd6345028e10151255c817fd2755112ca9ba435dc3f953869a492228609c14-json.log
+
+build镜像的时候：
+VOLUME /var/run/rsyslog/dev
+command: sh -c "ln -sf /var/run/rsyslog/dev/log /dev/log && logger md5sum is $$md5sum"
+
+
+查看文件侦听:
+netstat -na | egrep /dev/log
+
+
+------------
+## 发送日志的客户端
+docker run \
+      --log-driver syslog --log-opt syslog-address=tcp://192.168.3.16:514 \
+      alpine /bin/sh -c 'i=0; while true; do echo "$i: $(date)"; i=$((i+1)); sleep 0.001; done'
+
+
+## 使用nginx测试
+docker run \
+      --log-driver syslog --log-opt syslog-address=tcp://192.168.3.16:514 \
+       -p 80:80 nginx 
+
+
+## 参考文章  一个使用log的小系列
+https://medium.com/@yoanis_gil/logging-with-docker-part-1-b23ef1443aac
+https://medium.com/@yoanis_gil/logging-with-docker-part-1-1-965cb5e17165
