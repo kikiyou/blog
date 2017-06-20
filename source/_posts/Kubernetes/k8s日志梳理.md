@@ -43,6 +43,14 @@ logspout  监控docker的socket
 -----------
 It's plugged into Docker by using following arguments: "--log-driver=syslog --log-opt syslog-address=udp://localhost:8061 --log-opt tag={{.Name}}/{{.ID}}/{{.ImageName}}".
 
+### 官方推荐的日志收集-fluentd
+1. fluentd运行在每个node上，共享主机的卷
+
+实现方式是每个agent挂载目录/var/lib/docker/containers使用fluentd的tail插件扫描每个容器日志文件，直接发送给Elasticsearch。
+
+2. fluentd运行在每个pod,两个容器共享 emptyDir volume，收集数据
+
+
 
 ## docker plugin system  默认docker 1.12中实验性提供
 Logging driver plugins are available in Docker 17.05 and higher.
