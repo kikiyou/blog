@@ -196,3 +196,6 @@ cat >/etc/logrotate.d/docker-containers <<EOF
  -    create 0644 root root		
  -}		
  -EOF
+
+ ###好文章
+ http://help.papertrailapp.com/kb/configuration/configuring-centralized-logging-from-kubernetes/
