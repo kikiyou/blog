@@ -68,3 +68,9 @@ OpenResty最佳实践
 
 [The Standard Python Library](http://effbot.org/librarybook/)
 [The Python Standard Library by Example](http://ptgmedia.pearsoncmg.com/images/9780321767349/samplepages/0321767349.pdf)
+
+
+---------ansible 实践----
+1. ansible部署kubenates
+
+2. https://github.com/openshift/openshift-ansible

@@ -104,7 +104,7 @@ https://github.com/jumanjihouse/docker-rsyslog
 
 Run a container from the CLI:
 
-docker run -d \
+docker run -d -p 514:514\
   --name rsyslog.service \
   -h $(hostname) \
   jumanjiman/rsyslog
@@ -171,3 +171,28 @@ docker run \
 ## 参考文章  一个使用log的小系列
 https://medium.com/@yoanis_gil/logging-with-docker-part-1-b23ef1443aac
 https://medium.com/@yoanis_gil/logging-with-docker-part-1-1-965cb5e17165
+
+
+-----------主流的 容器输出日志的方式
+1. stdout / stderr (newline character delimits the message)
+2. syslog() /dev/log
+3. other libraries and facilities that use the above or write to their own sink (e.g. log4j, python logging, etc.)
+
+
+
+
+--------全局日志过滤
+cat >/etc/logrotate.d/docker-containers <<EOF		
+ -/var/lib/docker/containers/*/*-json.log {		
+ -    rotate 5		
+ -    copytruncate		
+ -    missingok		
+ -    notifempty		
+ -    compress		
+ -    maxsize 10M		
+ -    daily		
+ -    dateext		
+ -    dateformat -%Y%m%d-%s		
+ -    create 0644 root root		
+ -}		
+ -EOF

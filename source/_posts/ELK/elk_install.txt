@@ -35,6 +35,17 @@ bootstrap.system_call_filter:false
 http.cors.enabled: true
 http.cors.allow-origin: "*"
 ```
+
+```
+cluster.name: cluster-lqb
+node.name: node-1
+path.data: /home/appuser/elasticsearch-5.4.0/data
+path.logs: /home/appuser/elasticsearch-5.4.0/logs
+network.host: 192.168.180.23
+http.port: 9200
+http.cors.enabled:true
+http.cors.allow-origin:"*"
+```
 ```
 + 启动
 su - elasticsearch  -s /bin/bash
