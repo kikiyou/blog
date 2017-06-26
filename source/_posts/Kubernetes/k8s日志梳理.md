@@ -199,3 +199,36 @@ cat >/etc/logrotate.d/docker-containers <<EOF
 
  ###好文章
  http://help.papertrailapp.com/kb/configuration/configuring-centralized-logging-from-kubernetes/
+
+
+
+ ExecStart=/usr/bin/dockerd --insecure-registry=172.16.6.10:30088 \
+--log-driver=gelf \
+--log-opt gelf-address=udp://logstash.docker.fonsview.local:12201 \
+--log-opt tag=node1 \
+--log-opt labels=io.kubernetes.pod.namespace,io.kubernetes.container.name,io.kubernetes.pod.name
+
+--------------
+
+ln -s /usr/lib/systemd/system/docker.service /etc/systemd/system/
+
+
+172.16.6.16 es.fonsview.local
+127.0.0.1 logstash.docker.fonsview.local
+
+--------------
+
+ln -sf /dev/stdout /opt/fonsview/NE/desktop/log/desktop.log
+
+ln -sf /proc/1/fd/1 /opt/fonsview/NE/desktop/log/desktop.log
+
+
+/opt/fonsview/3RD/tomcat7.0.63/bin/catalina.sh stop
+
+/opt/fonsview/3RD/tomcat7.0.63/bin/catalina.sh start
+
+
+
+# forward request and error logs to docker log collector
+RUN ln -sf /dev/stdout /var/log/nginx/access.log \
+	&& ln -sf /dev/stderr /var/log/nginx/error.log
