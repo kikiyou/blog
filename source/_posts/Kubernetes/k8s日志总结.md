@@ -64,17 +64,20 @@ tomcat日志输出到对应网元的 log目录下面
 
 
 + log-driver 支持全局daemon 和 单独容器
+
 ``` bash
     docker daemon --log-driver
     docker run --log-driver
 ```
 + json-file：
+
 ``` bash
     -log-opt max-size=10m   设置文件大小
     --log-opt max-file=3    设置日志保留数量
 ``` 
 
 + syslog:
+
 ``` bash
 docker run --log-driver syslog \
 --log-opt syslog-facility=daemon \
@@ -85,6 +88,7 @@ docker run --log-driver syslog \
 <30>Jun 21 17:05:12 monkey.fonsview.com docker/nginx/monkey-nginx/5790672ab6a0[14077]: 3549: Wed Jun 21 09:05:12 UTC 2017
 ```
 + gelf
+
 ``` bash
 ExecStart=/usr/bin/dockerd \
 --log-driver=gelf \
