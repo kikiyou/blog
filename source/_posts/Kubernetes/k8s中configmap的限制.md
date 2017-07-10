@@ -1,0 +1,1 @@
+1. kubernates中对configmap的大小有限制，限制大小不能超过1M

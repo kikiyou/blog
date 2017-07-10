@@ -1,0 +1,12 @@
+问题：
+Zabbix escalator processes more than 75% busy
+
+处理：
+
+1.  
+update alerts set status = "1" where status = "0";
+
+2. 
+delete from escalations ;
+
+这样这个问题，一般就可以解决了
