@@ -1,6 +1,6 @@
 mkdir -p ~/.pip/
 
-vim ~/.pip/pip.conf
+vi ~/.pip/pip.conf
 [global]
 index-url = https://mirrors.aliyun.com/pypi/simple/
 
@@ -15,6 +15,7 @@ python get-pip.py
 可以使用pip 安装本地的软件包。
 
 离线安装pip
+wget http://7xw819.com1.z0.glb.clouddn.com/pip-9.0.1-py2.py3-none-any.whl
 python pip-9.0.1-py2.py3-none-any.whl/pip install --no-index pip-9.0.1-py2.py3-none-any.whl
 
 生成软件包版本:
