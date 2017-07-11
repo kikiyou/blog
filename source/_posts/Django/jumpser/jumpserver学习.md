@@ -22,3 +22,11 @@ parent 734f6564
 SHA 7a8d4a3a
 by ibuler, 08/16/2016 10:13 PM
 parent 3bf0d4aa
+
+
+by ibuler, 08/23/2016 12:18 PM ---添加django支持 flask的日志显示
+select2 是个不错的支持 jquery的选择框工具
+https://select2.github.io/examples.html
+
+https://github.com/jrief/django-websocket-redis
+基于django的 websocket  实时聊天

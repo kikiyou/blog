@@ -97,3 +97,10 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.abspath(os.path.join(BASE_DIR,'../static'))
 
 python manage.py collectstatic
+
++ django 可以载入假数据进行开发
+# Init data or generate fake data source for development
+FIXTURE_DIRS = [os.path.join(BASE_DIR, 'fixtures'), ]
+
+fake.json
+init.json
