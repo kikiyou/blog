@@ -1,6 +1,6 @@
 5、开启中文支持及更正中文乱码问题
 开启中文支持：
-vim /usr/share/zabbix/zabbix/include/locales.inc.php
+vim /usr/share/zabbix/include/locales.inc.php
 zh_CN' => array('name' => _('Chinese (zh_CN)'),        'display' => true),
 将false改为true
 更正中文乱码问题：

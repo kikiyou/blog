@@ -45,7 +45,7 @@ dnf install xx-net
 + 系统升级
 sudo dnf upgrade --refresh
 sudo dnf install dnf-plugin-system-upgrade
-sudo dnf system-upgrade download --refresh --releasever=25 --allowerasing --best --nogpgcheck
+sudo dnf system-upgrade download --refresh --releasever=26 --allowerasing --best --nogpgcheck
 ## 请加上--nogpgcheck 否则可以会因为某些key没有安装 出现无法安装
 
 sudo dnf system-upgrade reboot
@@ -57,6 +57,15 @@ https://getfedora.org/keys/
 $rpm --import PUBKEY https://getfedora.org/static/FDB19C98.txt
 + 安装dock
 https://extensions.gnome.org/extension/307/dash-to-dock/
+
+
+
++ 主题安装arc-icon-theme
+https://github.com/horst3180/arc-icon-theme
+
+dnf install arc-theme
+
+https://github.com/vinceliuice/vimix-gtk-themes
 
 + open terminal in current folder in fedora?
     - Open Terminal and type sudo yum install nautilus-open-terminal
