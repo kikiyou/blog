@@ -21,6 +21,8 @@ elasticsearch soft nofile 65536
 elasticsearch hard nofile 131072
 elasticsearch soft nproc 2048
 elasticsearch hard nproc 4096
+elasticsearch soft memlock unlimited
+elasticsearch hard memlock unlimited
 
 vi /etc/sysctl.conf
 vm.max_map_count=655360

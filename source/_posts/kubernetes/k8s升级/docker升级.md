@@ -6,6 +6,8 @@ k8s环境升级
 root/hello123
 
 ------------------
+注：运行过加固脚本的，请先执行解除加固的脚本
+
 1. 查看自己当前主机的ip
 ip a
 
@@ -72,6 +74,7 @@ mv /etc/yum.repos.d/*.repo /etc/yum.repos.d/bak/
 
 
 升级
+
 cat << "_EOF" > /etc/yum.repos.d/docker-main.repo
 [docker-main-repo]
 name=Docker main Repository
@@ -123,3 +126,14 @@ kubectl edit po/apigw-2061214945-zhw6f
 kubectl get pods -o wide | grep node1 | grep MatchNodeSelector|awk ' { print $1}' >1.txt
 
 for i in $(cat 1.txt) ;  do  kubectl delete pod ${i} ; done
+
+
+
+遇到报错处理：
+7月 12 14:53:55 hawaii dockerd[39497]: Error starting daemon: error initializing graphdriver: devmapper: Base Device UUID and Filesystem verification failed: devicemapper: Error running deviceCreate (ActivateDevice) dm_task_run failed
+
+
+
+处理办法：
+$ rm -rf /var/lib/docker/devicemapper
+$ systemctl start docker
