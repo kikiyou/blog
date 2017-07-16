@@ -49,6 +49,7 @@ sudo dnf system-upgrade download --refresh --releasever=26 --allowerasing --best
 ## 请加上--nogpgcheck 否则可以会因为某些key没有安装 出现无法安装
 
 sudo dnf system-upgrade reboot
+dnf clean packages
 + 升级后key会变，在下面网站 找寻对应的key替换
 
 https://getfedora.org/keys/
