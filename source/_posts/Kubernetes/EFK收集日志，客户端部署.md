@@ -59,7 +59,6 @@ ExecStart=/usr/bin/dockerd \
 </source>
 
 -----------------------------
-
 # fluentd/conf/fluent.conf
 <source>
   @type forward
@@ -68,12 +67,12 @@ ExecStart=/usr/bin/dockerd \
 </source>
 
 
-<filter docker.**>
-  @type parser
-  format json # apache2, nginx, etc...
-  key_name log
-  reserve_data true
-</filter>
+#<filter docker.**>
+#  @type parser
+#  format json # apache2, nginx, etc...
+#  key_name log
+#  reserve_data true
+#</filter>
 
 <filter docker.**>
   @type concat
@@ -90,7 +89,7 @@ ExecStart=/usr/bin/dockerd \
    host es.fonsview.local
    port 9200
    logstash_format true
-   logstash_prefix logstash-docker
+   logstash_prefix fluentd
    logstash_dateformat %Y%m%d
    include_tag_key true
    type_name access_log
