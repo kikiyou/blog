@@ -23,7 +23,7 @@ $ kube-apiserver --storage-backend='etcd2' $(EXISTING_ARGS)
 
 1. 迁移走这个节点的所有pod
 把这个节点设置成不可调度，并转移这个节点的所有pod
- $ kubectl drain —-force my_node_name 
+ $ kubectl drain --force my_node_name 
 
 查看pod是否已经迁移走
  $ kubectl get nodes 
@@ -143,4 +143,31 @@ kube-scheduler
 kube-apiserver
 kube-controller-manager
 
-docker tag gcr.io/google_containers/kube-proxy:e9033cca62c22462e4d265809247d752 gcr.io/google_containers/kube-proxy:v1.6.7
+
+
+导入 kube-proxy镜像
+curl -o /tmp/kube-scheduler.tar http://monkey.rhel.cc:8000/k8s_1_6/kube-scheduler.tar
+docker load < /tmp/kube-scheduler.tar
+
+curl -o /tmp/kube-apiserver.tar http://monkey.rhel.cc:8000/k8s_1_6/kube-apiserver.tar
+docker load < /tmp/kube-apiserver.tar
+
+curl -o /tmp/kube-controller-manager.tar http://monkey.rhel.cc:8000/k8s_1_6/kube-controller-manager.tar
+docker load < /tmp/kube-controller-manager.tar
+
+docker tag gcr.io/google_containers/kube-scheduler:d0b09c97b763b940e4f6237bced5ec7d gcr.io/google_containers/kube-scheduler:v1.6.7
+
+docker tag gcr.io/google_containers/kube-apiserver:0c91d6b7096af6d8c880c4502b8f945a gcr.io/google_containers/kube-apiserver:v1.6.7
+
+docker tag gcr.io/google_containers/kube-controller-manager:2f24e64882bbd076fe023b64c621f595 gcr.io/google_containers/kube-controller-manager:v1.6.7
+
+
+
+kubectl edit pod/kube-scheduler -n kube-system
+
+kubectl edit pod/kube-apiserver -n kube-system
+
+kubectl edit pod/kube-controller-manager -n kube-system
+
+
+--storage-type=etcd2 --storage-media-type=application/json
