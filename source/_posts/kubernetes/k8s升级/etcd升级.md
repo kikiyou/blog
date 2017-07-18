@@ -43,47 +43,60 @@ https://coreos.com/etcd/docs/latest/upgrades/upgrade_3_0.html
 kubectl get cs
 
 -------------------------------
-1. 升级前检查
-2.3.7
-$ etcdctl cluster-health
+etcd 2.3.7 升级到3.0.17
 
+注：升级中遇到的坑
+etcd不支持跨版本升级，etcd 2 直接升级到 etcd 3.2 会报错，需先升级到etcd 3.0
+
+1. 升级前检查，确保所有节点集群状态是正常的
+
+$ etcdctl cluster-health
 $ curl http://localhost:2379/version
 [root@k8s-node2 ~]# curl http://localhost:2379/version
 {"etcdserver":"2.3.7","etcdcluster":"2.3.0"}[root@k8s-node2 ~]# 
 
-2. 停止现存的etcd进程
-
+2. 随便选择一台etcd节点，停止现存的etcd进程
+（1） 停止
 systemctl stop etcd
-备份数据：
+（2）备份数据：
 $ etcdctl backup \
       --data-dir /opt/etcd/data/ \
       --backup-dir /tmp/etcd_backup
 
 3. 使用v3版本的etcd文件替换老的
-
+（1）替换etcd
 mv /usr/bin/etcd /tmp/etcd_v2
 curl -o /usr/bin/etcd  http://monkey.rhel.cc:8000/etcd_3/etcd
 chmod 755  /usr/bin/etcd
-
+（2）替换etcdctl
 mv /usr/bin/etcdctl /usr/bin/etcdctl_v2
 curl -o /usr/bin/etcdctl http://monkey.rhel.cc:8000/etcd_3/etcdctl
 chmod 755  /usr/bin/etcdctl
 
-
+（3）启动服务
 systemctl start etcd
+
+这时etcd日志中会显示：
+7月 13 19:22:10 k8s-node1 etcd[32329]: updating the cluster version from 2.3 to 3.0
+7月 13 19:22:10 k8s-node1 etcd[32329]: updated the cluster version from 2.3 to 3.0
+7月 13 19:22:10 k8s-node1 etcd[32329]: enabled capabilities for version 3.0
+
 + 替换后进行状态检查
 $ etcdctl cluster-health
 
-这时在日志中可以看到：
-
+curl http://localhost:2379/version
+{"etcdserver":"3.0.17","etcdcluster":"2.3.0"}
+注：所有节点没替换完全，会处于集群混合模式，etcdcluster依然以低版本运行
 4. 重复 第二步和第三步  把所有节点都替换
 
 5. 结束
+所有节点替换完，查看当前etcdcluster集群版本
+curl http://localhost:2379/version
+{"etcdserver":"3.0.17","etcdcluster":"3.0.0"}
 
 
 
-
-升级失败 还原：
+如果升级失败，还原办法：
 echo y |cp -rp   /tmp/etcd_v2 /usr/bin/etcd 
 echo y |cp -rp   /usr/bin/etcdctl_v2 /usr/bin/etcdctl
 
@@ -91,29 +104,9 @@ echo y |cp -rp   /usr/bin/etcdctl_v2 /usr/bin/etcdctl
 mv /opt/etcd/data/default.etcd /opt/etcd/data/default.etcd_bak
 cp -rp /tmp/etcd_backup /opt/etcd/data/default.etcd
 
-etcd -data-dir=/opt/etcd/data/default.etcd  -force-new-cluster
-
 chown -R etcd:etcd /opt/etcd/data/
-
 chmod 755 /opt/etcd/data/ -R
 
---------------------------
+etcd -data-dir=/opt/etcd/data/default.etcd  -force-new-cluster
 
-
-
-
-cp -rp /tmp/etcd_backup /opt/etcd/data
-
-
-
-etcd -data-dir=/opt/etcd/data  -force-new-cluster
-
-
-[root@k8s-node2 ~]# curl http://localhost:2379/version
-{"etcdserver":"3.0.17","etcdcluster":"3.0.0"}[root@k8s-node2 ~]# 
-
-
-
-7月 13 19:22:10 k8s-node1 etcd[32329]: updating the cluster version from 2.3 to 3.0
-7月 13 19:22:10 k8s-node1 etcd[32329]: updated the cluster version from 2.3 to 3.0
-7月 13 19:22:10 k8s-node1 etcd[32329]: enabled capabilities for version 3.0
+[升级参考](https://coreos.com/etcd/docs/latest/upgrades/upgrade_3_0.html)

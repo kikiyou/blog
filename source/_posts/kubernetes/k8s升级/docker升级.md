@@ -1,11 +1,4 @@
-主机信息：
-k8s环境升级
-172.16.6.85
-172.16.6.42
-
-root/hello123
-
-------------------
+docker 1.12.6 升级17.05.0-ce
 注：运行过加固脚本的，请先执行解除加固的脚本
 
 1. 查看自己当前主机的ip
@@ -22,58 +15,76 @@ kubectl get pods -o wide
 [root@k8s-master ~]# kubectl get pods  -o wide | grep master |wc -l
 5
 
+3. 升级前把容器迁移到别的主机，
 
-删除node
-kubectl delete node xxx
+示例:把node1 上的pod迁移到node2
 
-unschedule_node.yaml
+方法一：
+(1). 找到node1 主机上pod使用的deployments
+[root@k8s-master ~]#kubectl get deployments
+(2). 查看pod分布
+[root@k8s-master ~]# kubectl get pods -o wide | grep desktop
+desktop-4081196079-cqvkt            1/1       Running   0          1m        192.168.36.178    k8s-node1
+desktop-4081196079-xm9rp            1/1       Running   0          1m        192.168.36.171    k8s-node1
 
-apiVersion: v1
-kind: Node
-metadata:
-  name: k8s-node1
-  labels:
-    kubernetes.io/hostname: k8s-node1
-spec:
-  unschedulable: true
 
-kubectl replace -f unschedule_node.yaml
-查看Node的状态，可以观察到在Node的状态中增加了一项SchedulingDisabled：
+(3). 修改deployments 绑定到节点k8s-node2
+[root@k8s-master ~]# kubectl edit deploy/desktop
+deployment "desktop" edited
 
-$ kubectl get nodes
-NAME                 LABELS                                      STATUS
-kubernetes-minion1   kubernetes.io/hostname=kubernetes-minion1   Ready, SchedulingDisabled
-对于后续创建的Pod，系统将不会再向该Node进行调度。
-
-升级前把容器迁移到别的主机，
-我现在要把node1中的主机都迁移走
-ReplicationController
-在xx-controller.yaml 中
+编辑时加入： nodeName: k8s-node2
+具体插入位置如下：
     spec:
-      serviceAccountName: elasticsearch
-      nodeName: k8s-master
+      nodeName: k8s-node2
       containers:
-增加nodeName: node2
 
-把主机迁到node1中
-kubectl edit svc/apigw
+(4). 查看修改后分布
+[root@k8s-master ~]# kubectl get pods -o wide | grep desktop
+desktop-4105444400-22mpk            1/1       Running   0          1m        192.168.169.216   k8s-node2
+desktop-4105444400-zt8jh            1/1       Running   0          1m        192.168.169.217   k8s-node2
 
-3. 升级容器
-1. 查看当前容器版本：
+如上可以看到 pod desktop 已经迁移到 k8s-node2 主机上
+
+方法二： 使用标签选择器
+(1). 查询现有标签：
+kubectl get nodes --show-labels
+
+(2). 新增标签
+kubectl label node k8s-master networkSpeed=high
+kubectl label node k8s-node2 networkSpeed=high
+kubectl label node k8s-node1 networkSpeed=low
+
+(3). 删除标签
+You can remove incorrect label with <label>-
+
+$ kubectl label node 192.168.1.1 networkSpeed-
+
+
+(4). 编辑DEPLOYMENT
+
+(5). 查询现有deployments
+kubectl get deployments
+kubectl edit deploy/
+增加：
+      nodeSelector:
+        networkSpeed: "high"
+
+
+4. 升级容器
+(1). 查看当前容器版本：
 docker version | grep "Version"
-2. 停止当前docker
+(2). 停止当前docker
 systemctl stop docker
 
 检查是否真正停止了
 ps aux | grep docker
 
-3.
+(3).修改升级yum源
 
 mkdir -p /etc/yum.repos.d/bak
 mv /etc/yum.repos.d/*.repo /etc/yum.repos.d/bak/
 
-
-升级
+创建升级yum仓库
 
 cat << "_EOF" > /etc/yum.repos.d/docker-main.repo
 [docker-main-repo]
@@ -85,55 +96,31 @@ _EOF
 
 yum install docker-engine -y
 
-4. 启动服务：
+5. 启动服务：
 systemctl  start docker
 
 6. 查看当前版本
 docker version | grep "Version"
+ Version:      17.05.0-ce
+ Version:      17.05.0-ce
 
 7. 查看各个pod是否工作正常
 kubectl get pods -o wide
 
 如果都是Running说明正常
 
-
-参考：
-https://tachingchen.com/tw/blog/Kubernetes-Assigning-Pod-to-Nodes/
-
-查询现有标签：
-kubectl get nodes --show-labels
-
-1. 新增标签
-kubectl label node k8s-master networkSpeed=high
-kubectl label node k8s-node2 networkSpeed=high
-kubectl label node k8s-node1 networkSpeed=low
-
-2. 删除标签
-You can remove incorrect label with <label>-
-
-$ kubectl label node 192.168.1.1 networkSpeed-
-
-
-3. 编辑DEPLOYMENT
-增加：
-      nodeSelector:
-        networkSpeed: "high"
-
-
-kubectl edit po/apigw-2061214945-zhw6f
-
-
+如果标签选择器出错，创建大量状态为MatchNodeSelector的pod，可使用如下命令批量删除
 kubectl get pods -o wide | grep node1 | grep MatchNodeSelector|awk ' { print $1}' >1.txt
-
 for i in $(cat 1.txt) ;  do  kubectl delete pod ${i} ; done
-
 
 
 遇到报错处理：
 7月 12 14:53:55 hawaii dockerd[39497]: Error starting daemon: error initializing graphdriver: devmapper: Base Device UUID and Filesystem verification failed: devicemapper: Error running deviceCreate (ActivateDevice) dm_task_run failed
 
-
-
 处理办法：
 $ rm -rf /var/lib/docker/devicemapper
 $ systemctl start docker
+
+
+标签选择器参考：
+https://tachingchen.com/tw/blog/Kubernetes-Assigning-Pod-to-Nodes/
