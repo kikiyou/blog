@@ -15,7 +15,6 @@ kube-proxy
 kube-apiserver
 kube-controller-manager
 kube-scheduler
-policy-controller
 
 
 apiserver使用兼容模式运行：
@@ -98,7 +97,10 @@ chmod 755  /usr/bin/kubectl
 导入 kube-proxy镜像
 curl -o /tmp/kube-proxy.tar http://monkey.rhel.cc:8000/k8s_1_6/kube-proxy.tar
 docker load < /tmp/kube-proxy.tar
+docker tag gcr.io/google_containers/kube-proxy:e9033cca62c22462e4d265809247d752 gcr.io/google_containers/kube-proxy:v1.6.7
 
+查看镜像：
+docker images | grep proxy
 
 systemctl  start kubelet.service
 
@@ -106,20 +108,27 @@ systemctl  start kubelet.service
 [root@tom-4 ~]# kubelet --version
 Kubernetes v1.6.7
 
-kubectl version
 
+
+测试：
+kubelet --version
+kubectl version
+systemctl status kubelet
 
 [root@tom-3 ~]# docker load < /tmp/kube-proxy.tar
 e621494a2487: Loading layer [==================================================>]  42.05MB/42.05MB
 25ffec147d27: Loading layer [==================================================>]  4.744MB/4.744MB
 d7aca1b11cbe: Loading layer [==================================================>]  64.02MB/64.02MB
 Loaded image: gcr.io/google_containers/kube-proxy:e9033cca62c22462e4d265809247d752
+
+
 [root@tom-3 ~]# 
 [root@tom-3 ~]# kubectl edit ds/kube-proxy -n kube-system
 daemonset "kube-proxy" edited
 [root@tom-3 ~]# kubectl get pods -n 
 
 
+恢复调度：
  $ kubectl uncordon tom-4 
 
 删除节点
@@ -155,6 +164,8 @@ docker load < /tmp/kube-apiserver.tar
 curl -o /tmp/kube-controller-manager.tar http://monkey.rhel.cc:8000/k8s_1_6/kube-controller-manager.tar
 docker load < /tmp/kube-controller-manager.tar
 
+docker tag gcr.io/google_containers/kube-proxy:e9033cca62c22462e4d265809247d752 gcr.io/google_containers/kube-proxy:v1.6.7
+
 docker tag gcr.io/google_containers/kube-scheduler:d0b09c97b763b940e4f6237bced5ec7d gcr.io/google_containers/kube-scheduler:v1.6.7
 
 docker tag gcr.io/google_containers/kube-apiserver:0c91d6b7096af6d8c880c4502b8f945a gcr.io/google_containers/kube-apiserver:v1.6.7
@@ -171,3 +182,30 @@ kubectl edit pod/kube-controller-manager -n kube-system
 
 
 --storage-type=etcd2 --storage-media-type=application/json
+
+
+
+
+/usr/bin/kubeadm version
+
+mv /usr/bin/kubeadm /tmp/kubeadm_1.5
+curl -o /usr/bin/kubeadm http://monkey.rhel.cc:8000/k8s_1_6/kubeadm
+chmod 755  /usr/bin/kubeadm
+
+
+查看由多个 container组成的容器时，使用-c 指定container
+[root@tom-4 ~]# kubectl logs kube-dns-927355630-1pzv4  -n kube-system
+Error from server (BadRequest): a container name must be specified for pod kube-dns-927355630-1pzv4, choose one of: [kube-dns dnsmasq dnsmasq-metrics healthz]
+[root@tom-4 ~]# kubectl logs kube-dns-927355630-1pzv4  -n kube-system -c kube-dns
+
+
+
+wget http://monkey.rhel.cc:8000/etcd-v3.2.2-linux-amd64/etcdctl
+chmod 755 ./etcdctl
+ETCDCTL_API=3 ./etcdctl migrat --data-dir=/opt/etcd/data/
+
+
+
+升级完成后请重启
+systemctl  restart calico
+kubectl  get pods
