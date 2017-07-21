@@ -214,7 +214,42 @@ kubectl  get pods
 curl -o /tmp/kubernetes-dashboard-amd64_v1.6.1.tar http://monkey.rhel.cc:8000/k8s_1_6/kubernetes-dashboard-amd64_v1.6.1.tar
 docker load < /tmp/kubernetes-dashboard-amd64_v1.6.1.tar
 
+升级后最后看一下，那些容器状态是不正常的
+kubectl  get pods --all-namespaces=true | grep -v Running
 
+升级前：
+[root@master ~]# kubectl api-versions
+apps/v1beta1
+authentication.k8s.io/v1beta1
+authorization.k8s.io/v1beta1
+autoscaling/v1
+batch/v1
+certificates.k8s.io/v1alpha1
+extensions/v1beta1
+policy/v1beta1
+rbac.authorization.k8s.io/v1alpha1
+storage.k8s.io/v1beta1
+v1
+
+
+升级后：
+[root@k8s-master manifests]# kubectl api-versions
+apps/v1beta1
+authentication.k8s.io/v1
+authentication.k8s.io/v1beta1
+authorization.k8s.io/v1
+authorization.k8s.io/v1beta1
+autoscaling/v1
+batch/v1
+certificates.k8s.io/v1beta1
+extensions/v1beta1
+policy/v1beta1
+rbac.authorization.k8s.io/v1alpha1
+rbac.authorization.k8s.io/v1beta1
+settings.k8s.io/v1alpha1
+storage.k8s.io/v1
+storage.k8s.io/v1beta1
+v1
 
 
 
@@ -223,6 +258,7 @@ docker load < /tmp/kubernetes-dashboard-amd64_v1.6.1.tar
 kubectl logs kube-apiserver-k8s-master -n kube-system -f
 报错：
 E0721 07:57:01.680037       1 cacher.go:274] unexpected ListAndWatch error: k8s.io/kubernetes/vendor/k8s.io/apiserver/pkg/storage/cacher.go:215: Failed to list *certificates.CertificateSigningRequest: no kind "CertificateSigningRequest" is registered for version "certificates.k8s.io/v1alpha1"
+
 
 原因：
 certificates.k8s.io/v1alpha1 接口在1.6中被删除，在1.6中被命名为：certificates.k8s.io/v1beta1
@@ -238,6 +274,17 @@ https://kubernetes.io/docs/tasks/tls/managing-tls-in-a-cluster/
 
 修改技巧：
 cat csr-z2g50  | etcdctl put /registry/certificatesigningrequests/csr-z2g50
+
+
+修改好后：
+kubectl logs kube-controller-manager-k8s-node2 -n kube-system -f
+
+kube-controller-manager 日志如下：
+
+E0721 07:56:54.540403       1 reflector.go:201] k8s.io/kubernetes/pkg/client/informers/informers_generated/externalversions/factory.go:70: Failed to list *v1beta1.CertificateSigningRequest: the server cannot complete the requested operation at this time, try again later (get certificatesigningrequests.certificates.k8s.io)
+I0721 07:57:03.410328       1 garbagecollector.go:116] Garbage Collector: All resource monitors have synced. Proceeding to collect garbage
+W0721 08:08:18.345870       1 reflector.go:323] k8s.io/kubernetes/pkg/controller/garbagecollector/graph_builder.go:192: watch of <nil> ended with: etcdserver: mvcc: required revision has been compacted
+
 
 [root@k8s-master manifests]# export ETCDCTL_API=3
 [root@k8s-master manifests]# etcdctl get --prefix=true "" | grep certificates
