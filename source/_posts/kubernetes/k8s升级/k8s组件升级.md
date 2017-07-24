@@ -11,6 +11,17 @@ kube-controller-manager
 kube-scheduler
 kube-proxy
 
+依赖文件，远程仓库快速搭建：
+路径：
+it-fs/Upload/开放式架构版本/k8s_update_1.6.7.tar.xz
+
+1. tar xf k8s_update_1.6.7.tar.xz
+2. cd k8s_update
+3. python -m SimpleHTTPServer
+
+如上步骤，可以快速搭建一个基于http的远程仓库,下面部署中需要的文件，均从这里下载。
+
+
 *** 升级前，请先看版本发布文档，细看官方changelog，版本之间的变化请关注，尤其是api接口的变化 ***
 
 一、升级前检查
