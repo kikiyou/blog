@@ -45,5 +45,13 @@ http://www.debugrun.com/a/Ho02vpe.html
 http://blog.shurenyun.com/shurenyun-sre-256/
 
 
+中文文档：
+https://github.com/1046102779/prometheus/blob/master/alerting/clients.md
+
 ppt:
 https://www.slideshare.net/brianbrazil/prometheus-overview
+
+
+
+Prometheus 集成 OneAlert:
+http://www.songjiayang.com/technical/prometheus-with-alertmanager/
