@@ -43,3 +43,7 @@ https://www.addops.cn/post/Prometheus-first-exploration.html
 https://yami.io/golang-prometheus/
 http://www.debugrun.com/a/Ho02vpe.html
 http://blog.shurenyun.com/shurenyun-sre-256/
+
+
+ppt:
+https://www.slideshare.net/brianbrazil/prometheus-overview
