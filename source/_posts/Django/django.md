@@ -104,3 +104,36 @@ FIXTURE_DIRS = [os.path.join(BASE_DIR, 'fixtures'), ]
 
 fake.json
 init.json
+
+
+## Django 简单模板学习
+``` bash 
+from django.http import HttpResponse
+
+# Create your views here.
+def home(request):
+    html_var = 'xxx'
+    html_ = f"""<!DOCTYPE html>
+    <html lang=en>
+    <head>
+    </head>
+    <body>
+    <h1>Hello World!</h1>
+    <p> This is {html_var} coming through</p>
+    </body>
+    </html>
+    """
+    return HttpResponse(html_)
+
+``` 
+
+Django 模板调试参数verbatim
+
+如下使用,可以显示变量的名字
+``` <p> This is{% verbatim %} {{ html_var }} {% endverbatim %}coming through</p> ```
+
++ 使用Q 对象进行复杂的查询
+例如，下面的Q 对象封装一个LIKE 查询：
+
+from django.db.models import Q
+Q(question__startswith='What')
