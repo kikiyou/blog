@@ -183,19 +183,17 @@ https://medium.com/@yoanis_gil/logging-with-docker-part-1-1-965cb5e17165
 
 --------全局日志过滤
 cat >/etc/logrotate.d/docker-containers <<EOF		
- -/var/lib/docker/containers/*/*-json.log {		
- -    rotate 5		
- -    copytruncate		
- -    missingok		
- -    notifempty		
- -    compress		
- -    maxsize 10M		
- -    daily		
- -    dateext		
- -    dateformat -%Y%m%d-%s		
- -    create 0644 root root		
- -}		
- -EOF
+/var/lib/docker/containers/*/*-json.log {
+    rotate 5
+    copytruncate
+    missingok
+    notifempty
+    compress
+    maxsize 10M
+    daily
+    create 0644 root root
+}
+EOF
 
  ###好文章
  http://help.papertrailapp.com/kb/configuration/configuring-centralized-logging-from-kubernetes/
