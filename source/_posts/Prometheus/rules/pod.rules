@@ -4,8 +4,8 @@ ALERT Pod_is_not_Runing
   LABELS { severity = "critical" }
   ANNOTATIONS {
     # Prometheus templates apply here in the annotation and label fields of the alert.
-    summary = "Instance {{ $labels.pod }} is not runing",
-    description = "{{ $labels.pod }} in  {{ $labels.namespace }} is not runing  for more than 5 minutes."
+    summary = "Pod {{ $labels.pod }} 停止运行",
+    description = "{{ $labels.pod }} 在 {{ $labels.namespace }} 中已经超过五分钟没有运行了"
   }
 ALERT Pod_is_restart
   IF kube_pod_container_status_restarts{namespace="default"} > 0
@@ -13,8 +13,8 @@ ALERT Pod_is_restart
   LABELS { severity = "warning" }
   ANNOTATIONS {
     # Prometheus templates apply here in the annotation and label fields of the alert.
-    summary = "Instance {{ $labels.pod }} haved  restart {{ $value }} times",
-    description = "Instance {{ $labels.pod }} haved  restart {{ $value }} times"
+    summary = "Pod {{ $labels.pod }} 已经重启了 {{ $value }} 次",
+    description = "Pod {{ $labels.pod }} 已经重启了 {{ $value }} 次"
   }
 
 ALERT Pod_Cpu_Utilization
@@ -31,9 +31,8 @@ ALERT Pod_Mem_Used
    for 60s
    LABELS {Mem_Used = "1G" }
    ANNOTATIONS {
-   summary ="{{ $labels.pod_name }} Mem used in {{ $labels.namespace }} namespace more than 1G  ",
-   description = "{{ $labels.pod_name }}  Mem used in {{ $labels.namespace }} namespace ,use {{  $value }}G"
-
+   summary ="{{ $labels.pod_name }} 占用内存超过 1G",
+   description = "{{ $labels.pod_name }} 占用内存超过 1G ,当前使用 {{  $value }}G"
   }
 ALERT Pod_Out_Network_Used
   IF sum (rate (container_network_transmit_bytes_total{image!="",id=~"^/docker.*",name=~"^k8s_.*",pod_name=~"^$Deployment-[0-9].*$"}[1m])) /1024/1024/8  > 8
