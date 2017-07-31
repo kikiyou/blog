@@ -8,33 +8,33 @@ templates:
 route: 
     #报警接收器,默认接受
     receiver: 'team-X-pager'
-    receiver: 'alerta'
-    receiver: 'sendTomonkey'
+    # receiver: 'alerta'
+    # receiver: 'sendTomonkey'
 
     #分组
-    group_by: ['alertname','instance']
+    group_by: ['alertname']
     group_wait: 60s
     group_interval: 1m
     repeat_interval: 1m
 
     routes: 
     - match: 
-        instance: 'node1.sh.fonsview.com'
+        node: 'node1.sh.fonsview.com'
       # receiver: 'sendTomonkey'
       receiver: 'alerta'
       continue: true
     #group_by: [product, environment]
     # 正则匹配 
     - match_re:
-        instance: '^fonsview.com*'
+        node: '.*'
       receiver: 'alerta'
       continue: true
     - match_re:
-        instance: '^fonsview.com*'
+        node: '.*'
       receiver: 'team-X-pager'
       continue: true
     - match_re:
-        instance: '^fonsview.com*'
+        node: '.*'
       receiver: 'sendTomonkey'
       continue: true
 inhibit_rules:
@@ -58,7 +58,7 @@ receivers:
   email_configs: 
   - to: 'monkey@fonsview.com' 
     # html: '{{ template "monkey_email" . }}'
-    headers: { Subject: "[告警]上海电信 {{.Labels.alertname}} on {{ .Labels.instance }}" } 
+    # headers: { Subject: "[告警]上海电信 {{.Labels.alertname}} on {{ .Labels.instance }}" } 
 
 - name: "alerta"
   webhook_configs:
