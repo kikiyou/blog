@@ -1,0 +1,81 @@
+global:
+    smtp_smarthost: 'smtp.exmail.qq.com:25'
+    smtp_from: 'mail-helper@fonsview.com'
+    smtp_auth_username: 'mail-helper@fonsview.com'
+    smtp_auth_password: 'Hello123'
+templates:
+- '/etc/alertmanager/template/*.tmpl'
+route: 
+    #报警接收器,默认接受
+    receiver: 'alerta'
+    #分组
+    #group_by: ['alertname','instance']
+    group_wait: 60s
+    group_interval: 5m
+    repeat_interval: 3m
+
+    routes: 
+
+    - match: 
+        instance: 'node1.sh.fonsview.com'
+      # receiver: 'sendTomonkey'
+      receiver: 'alerta'
+    #group_by: [product, environment]
+    # 正则匹配 
+    - match_re:
+        instance: '^fonsview.com*'
+      receiver: 'alerta'
+    - match_re:
+        instance: '^fonsview.com*'
+      receiver: 'team-X-pager'
+    - match_re:
+        instance: '^fonsview.com*'
+      receiver: 'sendTomonkey'
+inhibit_rules:
+- source_match:
+    severity: 'critical'
+  target_match:
+    severity: 'warning'
+  equal: ['alertname']     
+        
+receivers: 
+- name: 'team-X-pager'
+  webhook_configs:
+  - url: 'http://api.110monitor.com/alert/api/event/prometheus/e947397c-17a7-c4b0-e9ca-364b47ff9411'
+    send_resolved: true
+
+- name: 'sendToweirong'
+  email_configs: 
+  - to: 'monkey@fonsview.com' 
+    #html表示的是邮件内容。
+    #html: '这个是干嘛的 {{ .ExternalURL }} '
+    #html: '{{ template "emailtest.html" . }}'
+    #headers: { Subject: "[WARN] 报警邮件test" }
+
+- name: 'sendTomonkey'
+  email_configs: 
+  - to: 'monkey@fonsview.com' 
+    html: '{{ template "monkey_email" . }}'
+    headers: { Subject: "[WARN] 报警邮件test" }
+
+- name: "alerta"
+  webhook_configs:
+  - url: 'http://localhost:8080/api/webhooks/prometheus?api-key=dWo31pZXZXnhh12YYAT-7FQFxctwdlZz2kuaWTV9'
+    send_resolved: true
+
+- name: 'default-receiver'
+  email_configs: 
+  - to: 'monkey@fonsview.com'
+    html: '{{ template "monkey_email" . }}'
+    headers: { Subject: "[WARN] 报警邮件test" } 
+#        headers: { subject: "You have {{ .Alerts.Firing | len }} firing alerts" }
+#        html: |
+#          Hi {{ .GroupLabels.alertname }},
+#          <p>
+#          You have the following firing alerts:
+#          <ul>
+#          {{ range .Alerts }}
+#          <li>{{.Labels.alertname}} on {{ .Labels.instance }}</li>
+#          {{ end }}
+#          </ul>
+#          </p> 
