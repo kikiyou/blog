@@ -1,0 +1,31 @@
+ALERT Node_Down
+  IF up == 0
+  FOR 300s
+  LABELS { severity = "critical" }
+  ANNOTATIONS {
+    # Prometheus templates apply here in the annotation and label fields of the alert.
+    summary = "Instance {{ $labels.instance }} down",
+    description = "{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 5 minutes."
+  }
+
+#100 - (avg(rate(node_cpu{mode="idle" }[1m]))by (instance)) *100
+ALERT  Node_CPU_utilization
+  #IF  irate(process_cpu_seconds_total [1m]) * 100 > 10
+  IF 100 - (avg(rate(node_cpu{mode="idle" }[1m]))by (instance)) *100 >10
+  FOR 60s
+  LABELS { severity = "warming" } 
+  ANNOTATIONS {
+     summary = " {{ $labels.kubernetes_io_hostname }} CPU utilization rate more than 10% ",
+     description  = " {{ $labels.kubernetes_io_hostname }} CPU utilization rate more than 10% 5 minutes "
+  }
+  
+
+ALERT Node_Unschedulable
+  IF kube_node_spec_unschedulable == 1
+  FOR 60s
+  LABELS { severity = "critical" }
+  ANNOTATIONS {
+    # Prometheus templates apply here in the annotation and label fields of the alert.
+    summary = "{{ $labels.node }} is unschedulable",
+    description = "{{ $labels.node }} unschedulable for more than 1 minutes."
+  }
