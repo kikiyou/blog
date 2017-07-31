@@ -7,30 +7,36 @@ templates:
 - '/etc/alertmanager/template/*.tmpl'
 route: 
     #报警接收器,默认接受
+    receiver: 'team-X-pager'
     receiver: 'alerta'
+    receiver: 'sendTomonkey'
+
     #分组
-    #group_by: ['alertname','instance']
+    group_by: ['alertname','instance']
     group_wait: 60s
-    group_interval: 5m
-    repeat_interval: 3m
+    group_interval: 1m
+    repeat_interval: 1m
 
     routes: 
-
     - match: 
         instance: 'node1.sh.fonsview.com'
       # receiver: 'sendTomonkey'
       receiver: 'alerta'
+      continue: true
     #group_by: [product, environment]
     # 正则匹配 
     - match_re:
         instance: '^fonsview.com*'
       receiver: 'alerta'
+      continue: true
     - match_re:
         instance: '^fonsview.com*'
       receiver: 'team-X-pager'
+      continue: true
     - match_re:
         instance: '^fonsview.com*'
       receiver: 'sendTomonkey'
+      continue: true
 inhibit_rules:
 - source_match:
     severity: 'critical'
@@ -47,16 +53,12 @@ receivers:
 - name: 'sendToweirong'
   email_configs: 
   - to: 'monkey@fonsview.com' 
-    #html表示的是邮件内容。
-    #html: '这个是干嘛的 {{ .ExternalURL }} '
-    #html: '{{ template "emailtest.html" . }}'
-    #headers: { Subject: "[WARN] 报警邮件test" }
 
 - name: 'sendTomonkey'
   email_configs: 
   - to: 'monkey@fonsview.com' 
-    html: '{{ template "monkey_email" . }}'
-    headers: { Subject: "[WARN] 报警邮件test" }
+    # html: '{{ template "monkey_email" . }}'
+    headers: { Subject: "[告警]上海电信 {{.Labels.alertname}} on {{ .Labels.instance }}" } 
 
 - name: "alerta"
   webhook_configs:
@@ -66,8 +68,8 @@ receivers:
 - name: 'default-receiver'
   email_configs: 
   - to: 'monkey@fonsview.com'
-    html: '{{ template "monkey_email" . }}'
-    headers: { Subject: "[WARN] 报警邮件test" } 
+    # html: '{{ template "monkey_email" . }}'
+    headers: { Subject: "[告警]上海电信 {{.Labels.alertname}} on {{ .Labels.instance }}" } 
 #        headers: { subject: "You have {{ .Alerts.Firing | len }} firing alerts" }
 #        html: |
 #          Hi {{ .GroupLabels.alertname }},
