@@ -7,6 +7,7 @@ ALERT Pod_is_not_Runing
     summary = "Pod {{ $labels.pod }} 停止运行",
     description = "{{ $labels.pod }} 在 {{ $labels.namespace }} 中已经超过五分钟没有运行了"
   }
+
 ALERT Pod_is_restart
   IF kube_pod_container_status_restarts{namespace="default"} > 10
   FOR 60s
@@ -26,6 +27,35 @@ ALERT Pod_Cpu_Utilization
    description = "{{ $labels.pod_name }} cpu 使用率 在 {{ $labels.name }}  中过高 ,已经占用了 {{  $value }}个核的资源"
 
   }
+
+ALERT Pod_Cpu_Utilization_nginx
+   IF sum (rate (container_cpu_usage_seconds_total{image!="",name=~"^k8s_.*",kubernetes_io_hostname=~"^node5.sh.fonsview.com$",pod_name="monkey1-nginx-4240558600-ndc45"}[1m])) by (pod_name) > 0.5
+   for 30s
+   LABELS { severity = "warning" }
+   ANNOTATIONS {
+   summary ="{{ $labels.pod_name }} CPU使用率过高, 所在物理主机{{ $labels.kubernetes_io_hostname }}",
+   description = "{{ $labels.pod_name }} CPU使用率过高 ,已经占用了 {{  $value }} 个核的资源"
+  }
+
+ALERT Pod_Mem_Used_nginx
+  IF sum (rate (container_network_receive_bytes_total{image!="",name=~"^k8s_.*",kubernetes_io_hostname=~"^node5.sh.fonsview.com$",pod_name="monkey1-nginx-4240558600-ndc45"}[1m])) by (pod_name) /1024/1024 > 10
+   for 30s
+   LABELS {Mem_Used = "10M" }
+   ANNOTATIONS {
+   summary ="{{ $labels.pod_name }} 占用内存超过 10M",
+   description = "{{ $labels.pod_name }} 占用内存超过 10M ,当前使用 {{  $value }}M"
+  }
+
+ALERT Pod_Out_Network_Used_nginx
+  IF sum (rate (container_network_transmit_bytes_total{image!="",name=~"^k8s_.*",pod_name=~"monkey1-nginx.*"}[1m])) by (pod_name) /1024/1024/8  > 20
+   for 30s
+   LABELS {Pod_Out_Network_Used = "20M" }
+   ANNOTATIONS {
+   summary ="{{ $labels.pod_name }} 出流量  in {{ $labels.namespace }} namespace more than 20M  ",
+   description = "{{ $labels.pod_name }} 出流量  in {{ $labels.namespace }} namespace ,use {{  $value }}M "
+
+  }
+
 ALERT Pod_Mem_Used
   IF sum (container_memory_working_set_bytes{image!="",name=~"^k8s_.*",namespace="default"}) by (pod_name) /1000/1000/1000 > 5
    for 60s

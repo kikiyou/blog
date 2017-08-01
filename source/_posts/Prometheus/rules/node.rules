@@ -9,15 +9,15 @@ ALERT Node_Down
   }
 
 #100 - (avg(rate(node_cpu{mode="idle" }[1m]))by (instance)) *100
-ALERT  Node_CPU_utilization
-  #IF  irate(process_cpu_seconds_total [1m]) * 100 > 10
-  IF 100 - (avg(rate(node_cpu{mode="idle" }[1m]))by (instance)) *100 >10
-  FOR 60s
-  LABELS { severity = "warming" } 
-  ANNOTATIONS {
-     summary = " {{ $labels.kubernetes_io_hostname }} CPU utilization rate more than 10% ",
-     description  = " {{ $labels.kubernetes_io_hostname }} CPU utilization rate more than 10% 5 minutes "
-  }
+# ALERT  Node_CPU_utilization
+#   #IF  irate(process_cpu_seconds_total [1m]) * 100 > 10
+#   IF 100 - (avg(rate(node_cpu{mode="idle" }[1m]))by (instance)) *100 >10
+#   FOR 60s
+#   LABELS { severity = "warming" } 
+#   ANNOTATIONS {
+#      summary = " {{ $labels.kubernetes_io_hostname }} CPU utilization rate more than 10% ",
+#      description  = " {{ $labels.kubernetes_io_hostname }} CPU utilization rate more than 10% 5 minutes "
+#   }
   
 
 # ALERT Node_Unschedulable
