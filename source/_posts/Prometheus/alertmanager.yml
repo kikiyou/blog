@@ -18,11 +18,11 @@ route:
     repeat_interval: 1m
 
     routes: 
-    - match: 
-        node: 'node1.sh.fonsview.com'
-      # receiver: 'sendTomonkey'
-      receiver: 'alerta'
-      continue: true
+    # - match: 
+    #     node: 'node1.sh.fonsview.com'
+    #   # receiver: 'sendTomonkey'
+    #   receiver: 'alerta'
+    #   continue: true
     #group_by: [product, environment]
     # 正则匹配 
     - match_re:
@@ -50,10 +50,6 @@ receivers:
   - url: 'http://api.110monitor.com/alert/api/event/prometheus/e947397c-17a7-c4b0-e9ca-364b47ff9411'
     send_resolved: true
 
-- name: 'sendToweirong'
-  email_configs: 
-  - to: 'monkey@fonsview.com' 
-
 - name: 'sendTomonkey'
   email_configs: 
   - to: 'monkey@fonsview.com' 
@@ -70,14 +66,3 @@ receivers:
   - to: 'monkey@fonsview.com'
     # html: '{{ template "monkey_email" . }}'
     headers: { Subject: "[告警]上海电信 {{.Labels.alertname}} on {{ .Labels.instance }}" } 
-#        headers: { subject: "You have {{ .Alerts.Firing | len }} firing alerts" }
-#        html: |
-#          Hi {{ .GroupLabels.alertname }},
-#          <p>
-#          You have the following firing alerts:
-#          <ul>
-#          {{ range .Alerts }}
-#          <li>{{.Labels.alertname}} on {{ .Labels.instance }}</li>
-#          {{ end }}
-#          </ul>
-#          </p> 
