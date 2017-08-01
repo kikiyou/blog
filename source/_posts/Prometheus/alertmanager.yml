@@ -7,7 +7,7 @@ templates:
 - '/etc/alertmanager/template/*.tmpl'
 route: 
     #报警接收器,默认接受
-    receiver: 'team-X-pager'
+    receiver: 'sendTomonkey'
     # receiver: 'alerta'
     # receiver: 'sendTomonkey'
 

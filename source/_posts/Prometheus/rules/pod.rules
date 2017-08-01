@@ -20,7 +20,7 @@ ALERT Pod_is_restart
 ALERT Pod_Cpu_Utilization
    IF sum (irate (container_cpu_usage_seconds_total{image!="",name=~"^k8s_.*",namespace="default"}[1m])) by (pod_name) > 1
    for 1s
-   LABELS { Cpu_Used = "1cores" }
+   LABELS { severity = "warning" }
    ANNOTATIONS {
    summary ="{{ $labels.pod_name }} cpu 使用率 在 {{ $labels.name }} 中过高",
    description = "{{ $labels.pod_name }} cpu 使用率 在 {{ $labels.name }}  中过高 ,已经占用了 {{  $value }}个核的资源"
