@@ -8,31 +8,31 @@ ALERT Pod_is_not_Runing
     description = "{{ $labels.pod }} 在 {{ $labels.namespace }} 中已经超过五分钟没有运行了"
   }
 ALERT Pod_is_restart
-  IF kube_pod_container_status_restarts{namespace="default"} > 0
+  IF kube_pod_container_status_restarts{namespace="default"} > 10
   FOR 60s
   LABELS { severity = "warning" }
   ANNOTATIONS {
     # Prometheus templates apply here in the annotation and label fields of the alert.
-    summary = "Pod {{ $labels.pod }} 已经重启了 {{ $value }} 次",
+    summary = "Pod {{ $labels.pod }} 重启超过10次,已经重启了 {{ $value }} 次",
     description = "Pod {{ $labels.pod }} 已经重启了 {{ $value }} 次"
   }
 
 ALERT Pod_Cpu_Utilization
-   IF sum (irate (container_cpu_usage_seconds_total{image!="",name=~"^k8s_.*",namespace="default"}[5m])) by (pod_name) > 2
-   for 60s
-   LABELS { Cpu_Used = "2cores" }
+   IF sum (irate (container_cpu_usage_seconds_total{image!="",name=~"^k8s_.*",namespace="default"}[1m])) by (pod_name) > 1
+   for 1s
+   LABELS { Cpu_Used = "1cores" }
    ANNOTATIONS {
-   summary ="{{ $labels.pod_name }} cpu Utilization in {{ $labels.name }} namespace more than 50%  ",
-   description = "{{ $labels.pod_name }} cpu Utilization in {{ $labels.name }} namespace ,use {{  $value }}  core"
+   summary ="{{ $labels.pod_name }} cpu 使用率 在 {{ $labels.name }} 中过高",
+   description = "{{ $labels.pod_name }} cpu 使用率 在 {{ $labels.name }}  中过高 ,已经占用了 {{  $value }}个核的资源"
 
   }
 ALERT Pod_Mem_Used
-  IF sum (container_memory_working_set_bytes{image!="",name=~"^k8s_.*",namespace="default"}) by (pod_name) /1000/1000/1000 > 1
+  IF sum (container_memory_working_set_bytes{image!="",name=~"^k8s_.*",namespace="default"}) by (pod_name) /1000/1000/1000 > 5
    for 60s
-   LABELS {Mem_Used = "1G" }
+   LABELS {Mem_Used = "5G" }
    ANNOTATIONS {
-   summary ="{{ $labels.pod_name }} 占用内存超过 1G",
-   description = "{{ $labels.pod_name }} 占用内存超过 1G ,当前使用 {{  $value }}G"
+   summary ="{{ $labels.pod_name }} 占用内存超过 5G",
+   description = "{{ $labels.pod_name }} 占用内存超过 5G ,当前使用 {{  $value }}G"
   }
 ALERT Pod_Out_Network_Used
   IF sum (rate (container_network_transmit_bytes_total{image!="",id=~"^/docker.*",name=~"^k8s_.*",pod_name=~"^$Deployment-[0-9].*$"}[1m])) /1024/1024/8  > 8
