@@ -20,7 +20,7 @@ ALERT Pod_is_restart
 
 ALERT Pod_Cpu_Utilization
    IF sum (irate (container_cpu_usage_seconds_total{image!="",name=~"^k8s_.*",namespace="default"}[1m])) by (pod_name) > 1
-   for 1s
+   for 60s
    LABELS { severity = "warning" }
    ANNOTATIONS {
    summary ="{{ $labels.pod_name }} cpu 使用率 在 {{ $labels.name }} 中过高",
@@ -33,7 +33,7 @@ ALERT Pod_Cpu_Utilization_nginx
    for 30s
    LABELS { severity = "warning" }
    ANNOTATIONS {
-   summary ="{{ $labels.pod_name }} CPU使用率过高, 所在物理主机{{ $labels.node }}",
+   summary ="{{ $labels.pod_name }} CPU使用率过高。",
    description = "{{ $labels.pod_name }} CPU使用率过高 ,已经占用了 {{  $value }} 个核的资源"
   }
 
@@ -57,12 +57,12 @@ ALERT Pod_Out_Network_Used_nginx
   }
 
 ALERT Pod_Mem_Used
-  IF sum (container_memory_working_set_bytes{image!="",name=~"^k8s_.*",namespace="default"}) by (pod_name) /1000/1000/1000 > 5
+  IF sum (container_memory_working_set_bytes{image!="",name=~"^k8s_.*",namespace="default"}) by (pod_name) /1000/1000/1000 > 6
    for 60s
-   LABELS {Mem_Used = "5G" }
+   LABELS {Mem_Used = "6G" }
    ANNOTATIONS {
-   summary ="{{ $labels.pod_name }} 占用内存超过 5G",
-   description = "{{ $labels.pod_name }} 占用内存超过 5G ,当前使用 {{  $value }}G"
+   summary ="{{ $labels.pod_name }} 占用内存超过 6G",
+   description = "{{ $labels.pod_name }} 占用内存超过 6G ,当前使用 {{  $value }}G"
   }
 ALERT Pod_Out_Network_Used
   IF sum (rate (container_network_transmit_bytes_total{image!="",id=~"^/docker.*",name=~"^k8s_.*",pod_name=~"^$Deployment-[0-9].*$"}[1m])) /1024/1024/8  > 8
