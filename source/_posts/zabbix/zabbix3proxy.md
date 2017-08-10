@@ -1,4 +1,3 @@
-
 ## 注(血的教训)： 
 zabbix server 和 zabbix proxy版本 必须 严格对应
 比如 
@@ -7,7 +6,14 @@ server： 3.0.8 proxy：3.0.8
 server： 3.0.7 proxy：3.0.8
 
 
+zabbix Server 版本查看：
+$ zabbix_server -V
 
+zabbix_server (Zabbix) 3.0.8
+Revision 65976 27 February 2017, compilation time: Mar  1 2017 01:29:36
+
+zabbix-proxy-sqlite 下载地址：
+https://mirrors.aliyun.com/zabbix/zabbix/3.0/rhel/6/x86_64/
 
 # yum install zabbix-proxy-sqlite
 # mkdir -p /opt/fonsview/3RD/zabbix_proxy
@@ -51,7 +57,7 @@ RefreshActiveChecks=120
 BufferSend=5
 BufferSize=100
 MaxLinesPerSecond=20
-Timeout=3
+Timeout=20
 AllowRoot=0
 User=zabbix
 Include=/opt/fonsview/3RD/zabbix/zabbix_agentd.d/
