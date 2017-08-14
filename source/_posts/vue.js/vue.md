@@ -114,3 +114,6 @@ methods:{
 计算属性可以实现方法同样的功能(注: 计算属性是有缓存的方法)
 
 看到了第22个视频
+
+vue 前端框架：iview
+https://github.com/iview/iview
