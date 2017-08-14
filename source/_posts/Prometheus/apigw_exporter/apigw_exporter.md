@@ -28,3 +28,6 @@ alias cnpm="npm --registry=https://registry.npm.taobao.org \
 
 1. json --> import "github.com/tidwall/gjson"
 2. redis --> import "github.com/go-redis/redis"
+
+写之前再看下这个：
+http://yunlzheng.github.io/2017/07/07/prometheus-exporter-example-go/
