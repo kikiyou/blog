@@ -61,3 +61,9 @@ rpcDurations.WithLabelValues("exponential").Observe(v)
 
 
 Observe 是添加数据的
+
+
+这个要多看
+http://cjting.me/linux/use-prometheus-to-monitor-server/
+
+http://172.16.18.5:4194/metrics
