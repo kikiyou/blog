@@ -67,3 +67,61 @@ Observe 是添加数据的
 http://cjting.me/linux/use-prometheus-to-monitor-server/
 
 http://172.16.18.5:4194/metrics
+
+
+
+prometheus.BuildFQName(*metricsNamespace, "upstream", metricName)
+
+prometheus.BuildFQName 方法，是用来把里面的三个参数使用-连接起来，作为名字使用
+return strings.Join([]string{namespace, subsystem, name}, "_")
+
+
+
+
+可以自己实现Exporter结构,这个结构要附带Describe 和 Collect
+
+
+
+# Server Requests
+nginx_server_requests{code="1xx",host="test.domain.com"} 0
+
+
+nginx_http_requests_total
+
+# 请求次数
+nginx_server_requests{service="desktop"} 100
+
+#状态码
+nginx_server_http_code{service="desktop",uri="getHomepage",remote_ip="192.168.169.248",http_method="GET"} 200
+
+#状态码---使用label
+nginx_http_requests_total{service="desktop",uri="getHomepage",remote_ip="192.168.169.248",http_method="GET",http_code="200"} 1
+
+#接收字节数
+nginx_server_bytes_recv{service="desktop",uri="getHomepage",remote_ip="192.168.169.248",http_method="GET",http_code="200"} 603
+
+#发送字节数
+nginx_server_bytes_sent{service="desktop",uri="getHomepage",remote_ip="192.168.169.248",http_method="GET",http_code="200"} 493
+
+#请求响应时间
+nginx_server_request_time{service="desktop",uri="getHomepage",remote_ip="192.168.169.248",http_method="GET",http_code="200"} 0.013
+
+#回源时间
+nginx_server_upstream_response_time{service="desktop",uri="getHomepage",remote_ip="192.168.169.248",http_method="GET",http_code="200"} 0.013
+
+
+
+0. 首先查询service有哪些标签
+label_values(service)
+
+
+1. service 标签可选
+All
+desktop
+weather
+
+
+2. 平均5分钟  http_code 对应的数量
+sum(irate(nginx_http_requests_total{role=~"$role",status=~"$status",host!="127.0.0.1"}[5m])) by (status)
+
+sum(rate(nginx_http_request_duration_seconds_sum{role="$role",host!="127.0.0.1"}[1m])) / sum(rate(nginx_http_request_duration_seconds_count{role="$role",host!="127.0.0.1"}[1m]))
