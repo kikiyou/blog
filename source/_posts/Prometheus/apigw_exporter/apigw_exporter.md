@@ -94,19 +94,19 @@ nginx_server_requests{service="desktop"} 100
 #状态码
 nginx_server_http_code{service="desktop",uri="getHomepage",remote_ip="192.168.169.248",http_method="GET"} 200
 
-#状态码---使用label
+#状态码---使用label counter
 nginx_http_requests_total{service="desktop",uri="getHomepage",remote_ip="192.168.169.248",http_method="GET",http_code="200"} 1
 
-#接收字节数
+#接收字节数 summery
 nginx_server_bytes_recv{service="desktop",uri="getHomepage",remote_ip="192.168.169.248",http_method="GET",http_code="200"} 603
 
-#发送字节数
+#发送字节数 summery
 nginx_server_bytes_sent{service="desktop",uri="getHomepage",remote_ip="192.168.169.248",http_method="GET",http_code="200"} 493
 
-#请求响应时间
+#请求响应时间 summery
 nginx_server_request_time{service="desktop",uri="getHomepage",remote_ip="192.168.169.248",http_method="GET",http_code="200"} 0.013
 
-#回源时间
+#回源时间 summery
 nginx_server_upstream_response_time{service="desktop",uri="getHomepage",remote_ip="192.168.169.248",http_method="GET",http_code="200"} 0.013
 
 
