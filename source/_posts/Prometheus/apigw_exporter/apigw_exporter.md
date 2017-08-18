@@ -172,3 +172,5 @@ https://www.addops.cn/post/Prometheus-first-exploration.html
 
 irate(): 计算的是给定时间窗口内的每秒瞬时增加速率.
 rate(): 计算的是给定时间窗口内的每秒的平均值.
+
+[Prometheus 初探](https://www.addops.cn/post/Prometheus-first-exploration.html)
