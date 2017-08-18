@@ -83,31 +83,31 @@ return strings.Join([]string{namespace, subsystem, name}, "_")
 
 
 # Server Requests
-nginx_server_requests{code="1xx",host="test.domain.com"} 0
+apigw_server_requests{code="1xx",host="test.domain.com"} 0
 
 
-nginx_http_requests_total
+apigw_http_requests_total
 
 # 请求次数
-nginx_server_requests{service="desktop"} 100
+apigw_server_requests{service="desktop"} 100
 
 #状态码
-nginx_server_http_code{service="desktop",uri="getHomepage",remote_ip="192.168.169.248",http_method="GET"} 200
+apigw_server_http_code{service="desktop",uri="getHomepage",remote_ip="192.168.169.248",http_method="GET"} 200
 
 #状态码---使用label counter
-nginx_http_requests_total{service="desktop",uri="getHomepage",remote_ip="192.168.169.248",http_method="GET",http_code="200"} 1
+apigw_http_requests_total{service="desktop",uri="getHomepage",remote_ip="192.168.169.248",http_method="GET",http_code="200"} 1
 
 #接收字节数 summery
-nginx_server_bytes_recv{service="desktop",uri="getHomepage",remote_ip="192.168.169.248",http_method="GET",http_code="200"} 603
+apigw_server_bytes_recv{service="desktop",uri="getHomepage",remote_ip="192.168.169.248",http_method="GET",http_code="200"} 603
 
 #发送字节数 summery
-nginx_server_bytes_sent{service="desktop",uri="getHomepage",remote_ip="192.168.169.248",http_method="GET",http_code="200"} 493
+apigw_server_bytes_sent{service="desktop",uri="getHomepage",remote_ip="192.168.169.248",http_method="GET",http_code="200"} 493
 
 #请求响应时间 summery
-nginx_server_request_time{service="desktop",uri="getHomepage",remote_ip="192.168.169.248",http_method="GET",http_code="200"} 0.013
+apigw_server_request_time{service="desktop",uri="getHomepage",remote_ip="192.168.169.248",http_method="GET",http_code="200"} 0.013
 
 #回源时间 summery
-nginx_server_upstream_response_time{service="desktop",uri="getHomepage",remote_ip="192.168.169.248",http_method="GET",http_code="200"} 0.013
+apigw_server_upstream_response_time{service="desktop",uri="getHomepage",remote_ip="192.168.169.248",http_method="GET",http_code="200"} 0.013
 
 
 
@@ -122,9 +122,9 @@ weather
 
 
 2. 平均5分钟  http_code 对应的数量
-sum(irate(nginx_http_requests_total{role=~"$role",status=~"$status",host!="127.0.0.1"}[5m])) by (status)
+sum(irate(apigw_http_requests_total{role=~"$role",status=~"$status",host!="127.0.0.1"}[5m])) by (status)
 
-sum(rate(nginx_http_request_duration_seconds_sum{role="$role",host!="127.0.0.1"}[1m])) / sum(rate(nginx_http_request_duration_seconds_count{role="$role",host!="127.0.0.1"}[1m]))
+sum(rate(apigw_http_request_duration_seconds_sum{role="$role",host!="127.0.0.1"}[1m])) / sum(rate(apigw_http_request_duration_seconds_count{role="$role",host!="127.0.0.1"}[1m]))
 
 
 
@@ -160,3 +160,15 @@ Summary和Histogram十分相似，常用于跟踪事件发生的规模，例如�
 [使用 prometheus + grafana 做性能测试图形化输出](http://blog.makerome.com/2017/03/11/use-promethues-and-grafana-as-perfomance-report.html)
 
 [图形展示看这里](https://www.howtoing.com/how-to-add-a-prometheus-dashboard-to-grafana/)
+
+
+
+https://www.addops.cn/post/Prometheus-first-exploration.html
+
+
+这里的 irate() 为 promethues 的查询函数.与之对应的是rate().
+
+这两个函数在 promethues 中经常用来计算增量或者速率,在使用时需要指定时间范围如[1m]
+
+irate(): 计算的是给定时间窗口内的每秒瞬时增加速率.
+rate(): 计算的是给定时间窗口内的每秒的平均值.
