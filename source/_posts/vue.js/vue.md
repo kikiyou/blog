@@ -117,3 +117,17 @@ methods:{
 
 vue 前端框架：iview
 https://github.com/iview/iview
+
++ watch 组件
+
+  watch:{
+  counter: function(value){
+      var vm = this;
+      setTimeout(function(){
+      vm.counter = 0;
+      },2000);
+  	}
+  },
+
++ 循环
+<div v-for="(value, key, index) in person">{{ key }}: {{ value }} {{i}} </div>
