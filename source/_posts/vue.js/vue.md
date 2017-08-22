@@ -131,3 +131,7 @@ https://github.com/iview/iview
 
 + 循环
 <div v-for="(value, key, index) in person">{{ key }}: {{ value }} {{i}} </div>
++ vuejs中的简写
+
+v-on：click  ---> @click
+v-bind:href="www.baidu.com  ---> ：href="www.baidu.com
