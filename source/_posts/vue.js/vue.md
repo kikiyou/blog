@@ -117,3 +117,8 @@ methods:{
 
 vue 前端框架：iview
 https://github.com/iview/iview
+
++ vuejs中的简写
+
+v-on：click  ---> @click
+v-bind:href="www.baidu.com  ---> ：href="www.baidu.com
