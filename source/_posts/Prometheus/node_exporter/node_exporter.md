@@ -173,3 +173,78 @@ init 初始化，定结构，update 附加新值
 
 + go方法的定义
 func (c *loadavgCollector) Update(ch chan<- prometheus.Metric) (err error) {
+
+
+
++ 获取主机名
+os.Hostname()
+
++ 最简单的log使用
+import "log"
+
+verbose          = flag.Bool("verbose", false, "Verbose output.")
+
+func debug(format string, a ...interface{}) {
+	if *verbose {
+		log.Printf(format, a...)
+	}
+}
+
+
+debug("last: %f", last)
+
++ 定义缓冲容量为1的频道
+sig := make(chan os.Signal, 1)
+
++ 引入收集器的概念
+
+
++ 并发思维
+wg := sync.WaitGroup{}
+wg.Add(len(e.collectors))
+for _, c := range e.collectors {
+	go func(c Collector) {
+		e.Execute(c)
+		wg.Done()
+	}(c)
+}
+wg.Wait()
+
+如上，添加所有任务并行的去执行，当所有都执行完之后，再一次把结果返回
+
++ 重载prometheus
+kill -HUP 1234
+
+curl -X POST http://localhost:9090/-/reload
+
+
++ 
+
+go build -tags 'ganglia runit' node_exporter.go
+
+
+是编译的时候，指定是否包含别的包  编译进来
+
+
+使用 --enabledCollectors  参数，可以指定是否启用
+
+1. cat /sys/class/net/bonding_masters
+bond0 bond2
+
+2. cat /sys/class/net/bond0/bonding/slaves
+eth0 eth1
+
+3. cat /sys/class/net/bond0/slave_eth0/operstate 
+up
+
+
+这样就获取到了，这台主机有哪些 bond和各自的状态
+
+
+
++ go语言中， 如果不存在就干什么。。。
+state, err := ioutil.ReadFile(path.Join(root, master, fmt.Sprintf("lower_%s", slave), "operstate"))
+if os.IsNotExist(err) {
+	// some older? kernels use slave_ prefix
+	state, err = ioutil.ReadFile(path.Join(root, master, fmt.Sprintf("slave_%s", slave), "operstate"))
+}
