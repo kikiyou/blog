@@ -248,3 +248,5 @@ if os.IsNotExist(err) {
 	// some older? kernels use slave_ prefix
 	state, err = ioutil.ReadFile(path.Join(root, master, fmt.Sprintf("slave_%s", slave), "operstate"))
 }
+
+把0.6 版本看完了
