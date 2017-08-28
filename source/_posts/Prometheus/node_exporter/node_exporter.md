@@ -224,6 +224,8 @@ go build -tags 'ganglia runit' node_exporter.go
 
 
 是编译的时候，指定是否包含别的包  编译进来
+go文件的第一行，书写构建约束
+// +build linux,!nofilesystem
 
 
 使用 --enabledCollectors  参数，可以指定是否启用
@@ -250,3 +252,48 @@ if os.IsNotExist(err) {
 }
 
 把0.6 版本看完了
+
++ 从0.8 开始 默认带了 认证功能
+``` golang
+authUser          = flag.String("auth.user", "", "Username for basic auth.")
+authPass          = flag.String("auth.pass", "", "Password for basic auth.")
+
+type basicAuthHandler struct {
+	handler  http.HandlerFunc
+	user     string
+	password string
+}
+
+func (h *basicAuthHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	user, password, ok := r.BasicAuth()
+	if !ok || password != h.password || user != h.user {
+		w.Header().Set("WWW-Authenticate", "Basic realm=\"metrics\"")
+		http.Error(w, "Invalid username or password", http.StatusUnauthorized)
+		return
+	}
+	h.handler(w, r)
+	return
+}
+
+handler := prometheus.Handler()
+if *authUser != "" || *authPass != "" {
+	if *authUser == "" || *authPass == "" {
+		glog.Fatal("You need to specify -auth.user and -auth.pass to enable basic auth")
+	}
+	handler = &basicAuthHandler{
+		handler:  prometheus.Handler().ServeHTTP,
+		user:     *authUser,
+		password: *authPass,
+	}
+}
+go func() {
+	http.Handle("/metrics", handler)
+	err := http.ListenAndServe(*listeningAddress, nil)
+	if err != nil {
+		glog.Fatal(err)
+	}
+}()
+
+``` 
+
++ 0.8.0 text file exporter|textfile
