@@ -297,3 +297,17 @@ go func() {
 ``` 
 
 + 0.8.0 text file exporter|textfile
+
+
++ node_expoter中有三个关键文件，node_exporter.go , collector/collector.go , loadavg_linux.go
+
+
++ 给结构绑定方法，操作结构的数据
+
+
++ textfile 用法
+go run node_exporter.go --collector.textfile.directory=/home/monkey/go/src/github.com/prometheus/node_exporter/collector/fixtures/textfile/two_metric_files
+
+直接输入值
+testmetric1_1{foo="bar"} 110
+[可以参考这个文章](https://www.robustperception.io/quick-sensor-metrics-with-the-textfile-collector/)
