@@ -44,6 +44,8 @@ Histogram(柱状图) --> 时间段
 
 Summary(概要) --> 分布情况
 
+
+
 Untyped  --> 无类型
 
 1. apigw_exporter 获取redis的信息
