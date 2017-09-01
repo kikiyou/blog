@@ -31,3 +31,6 @@ type Suppression struct {
 
 
 实现堆 需要实现,Len Less Swap Push Pop,这五个方法
+
+
+1. 创建一个以Suppression 堆为结构的堆，依EndsAt为排序依据的小堆
