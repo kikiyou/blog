@@ -77,3 +77,9 @@ ipmitool sel list
 
 获取详细状态：
 ipmitool sensor get  "PS1 Status"
+
+不同主板，电源线被拔出，显示的报错 符号不一致
+
+1. x10 主板  电源线拔出  0x0
+2. x9 主板  电源线拔出  0x3
+2. x8 主板  电源线拔出  0xb

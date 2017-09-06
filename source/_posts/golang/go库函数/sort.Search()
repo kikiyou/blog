@@ -1,0 +1,27 @@
+func Search(n int, f func(int) bool) int   
+
+search使用二分法进行查找，Search()方法回使用“二分查找”算法来搜索某指定切片[0:n]，并返回能够使f(i)=true的最小的i（0<=i<n）值，并且会假定，如果f(i)=true，则f(i+1)=true，即对于切片[0:n]，i之前的切片元素会使f()函数返回false，i及i之后的元素会使f()函数返回true。但是，当在切片中无法找到时f(i)=true的i时（此时切片元素都不能使f()函数返回true），Search()方法会返回n（而不是返回-1）。
+
+Search 常用于在一个已排序的，可索引的数据结构中寻找索引为 i 的值 x，例如数组或切片。这种情况下，实参 f，一般是一个闭包，会捕获所要搜索的值，以及索引并排序该数据结构的方式。
+
+为了查找某个值，而不是某一范围的值时，如果slice以升序排序，则　f func中应该使用＞＝,如果slice以降序排序，则应该使用<=. 例子如下：package main
+
+
+``` golang
+package main  
+  
+import (  
+    "fmt"  
+    "sort"  
+)  
+  
+func main() {  
+    a := []int{1, 2, 3, 4, 5}  
+    b := sort.Search(len(a), func(i int) bool { return a[i] >= 30 })  
+    fmt.Println(b)　　　　　　　//5，查找不到，返回a slice的长度５，而不是-1  
+    c := sort.Search(len(a), func(i int) bool { return a[i] <= 3 })  
+    fmt.Println(c)                             //0，利用二分法进行查找，返回符合条件的最左边数值的index，即为０  
+    d := sort.Search(len(a), func(i int) bool { return a[i] == 3 })  
+    fmt.Println(d)                          //2　　　  
+}  
+```
