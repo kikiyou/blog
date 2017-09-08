@@ -1,0 +1,115 @@
+2017 / 09 / 08 13: 57: 52[{
+    "labels": {
+        "alertname": "Pod_is_restart",
+        "app": "kube-state-metrics",
+        "container": "rsyslog-kafka",
+        "instance": "192.168.100.90:8080",
+        "job": "kubernetes-endpoints",
+        "kubernetes_name": "kube-state-metrics",
+        "kubernetes_namespace": "kube-system",
+        "namespace": "default",
+        "pod": "rsyslog-kafka-3594896142-04xl9",
+        "severity": "warning"
+    },
+    "annotations": {
+        "description": "Pod rsyslog-kafka-3594896142-04xl9 已经重启了 15 次",
+        "summary": "Pod rsyslog-kafka-3594896142-04xl9 重启超过10次,已经重启了 15 次"
+    },
+    "startsAt": "2017-08-10T10:12:52.84+08:00",
+    "endsAt": "0001-01-01T00:00:00Z",
+    "generatorURL": "http://zabbix.sh.fonsview.com:9090/graph?g0.expr=kube_pod_container_status_restarts%7Bnamespace%3D%22default%22%7D+%3E+10\u0026g0.tab=0"
+}, {
+    "labels": {
+        "alertname": "Pod_is_restart",
+        "app": "kube-state-metrics",
+        "container": "epgserver-nginx",
+        "instance": "192.168.100.90:8080",
+        "job": "kubernetes-endpoints",
+        "kubernetes_name": "kube-state-metrics",
+        "kubernetes_namespace": "kube-system",
+        "namespace": "default",
+        "pod": "epgserver-nginx-2144373282-sk9s8",
+        "severity": "warning"
+    },
+    "annotations": {
+        "description": "Pod epgserver-nginx-2144373282-sk9s8 已经重启了 15 次",
+        "summary": "Pod epgserver-nginx-2144373282-sk9s8 重启超过10次,已经重启了 15 次"
+    },
+    "startsAt": "2017-08-10T10:12:52.84+08:00",
+    "endsAt": "0001-01-01T00:00:00Z",
+    "generatorURL": "http://zabbix.sh.fonsview.com:9090/graph?g0.expr=kube_pod_container_status_restarts%7Bnamespace%3D%22default%22%7D+%3E+10\u0026g0.tab=0"
+}, {
+    "labels": {
+        "alertname": "Pod_is_restart",
+        "app": "kube-state-metrics",
+        "container": "influxdb-jmx",
+        "instance": "192.168.100.90:8080",
+        "job": "kubernetes-endpoints",
+        "kubernetes_name": "kube-state-metrics",
+        "kubernetes_namespace": "kube-system",
+        "namespace": "default",
+        "pod": "influxdb-jmx-3811915926-k3xhx",
+        "severity": "warning"
+    },
+    "annotations": {
+        "description": "Pod influxdb-jmx-3811915926-k3xhx 已经重启了 12 次",
+        "summary": "Pod influxdb-jmx-3811915926-k3xhx 重启超过10次,已经重启了 12 次"
+    },
+    "startsAt": "2017-08-10T11:10:52.84+08:00",
+    "endsAt": "0001-01-01T00:00:00Z",
+    "generatorURL": "http://zabbix.sh.fonsview.com:9090/graph?g0.expr=kube_pod_container_status_restarts%7Bnamespace%3D%22default%22%7D+%3E+10\u0026g0.tab=0"
+}]
+
+2017 / 09 / 08 13: 57: 52[{
+    "labels": {
+        "alertname": "Pod_Cpu_Utilization",
+        "pod_name": "authen-2871079035-kh5hw",
+        "severity": "warning"
+    },
+    "annotations": {
+        "description": "authen-2871079035-kh5hw cpu 使用率 在   中过高 ,已经占用了 2.717849743665041个核的资源",
+        "summary": "authen-2871079035-kh5hw cpu 使用率 在  中过高"
+    },
+    "startsAt": "2017-09-08T13:50:37.84+08:00",
+    "endsAt": "0001-01-01T00:00:00Z",
+    "generatorURL": "http://zabbix.sh.fonsview.com:9090/graph?g0.expr=sum%28irate%28container_cpu_usage_seconds_total%7Bimage%21%3D%22%22%2Cname%3D~%22%5Ek8s_.%2A%22%2Cnamespace%3D%22default%22%7D%5B1m%5D%29%29+BY+%28pod_name%29+%3E+1\u0026g0.tab=0"
+}, {
+    "labels": {
+        "alertname": "Pod_Cpu_Utilization",
+        "pod_name": "weather-1850586716-3bj7n",
+        "severity": "warning"
+    },
+    "annotations": {
+        "description": "weather-1850586716-3bj7n cpu 使用率 在   中过高 ,已经占用了 2.7457010199315848个核的资源",
+        "summary": "weather-1850586716-3bj7n cpu 使用率 在  中过高"
+    },
+    "startsAt": "2017-09-08T13:55:37.84+08:00",
+    "endsAt": "0001-01-01T00:00:00Z",
+    "generatorURL": "http://zabbix.sh.fonsview.com:9090/graph?g0.expr=sum%28irate%28container_cpu_usage_seconds_total%7Bimage%21%3D%22%22%2Cname%3D~%22%5Ek8s_.%2A%22%2Cnamespace%3D%22default%22%7D%5B1m%5D%29%29+BY+%28pod_name%29+%3E+1\u0026g0.tab=0"
+}, {
+    "labels": {
+        "alertname": "Pod_Cpu_Utilization",
+        "pod_name": "apigw-3844874450-7chk0",
+        "severity": "warning"
+    },
+    "annotations": {
+        "description": "apigw-3844874450-7chk0 cpu 使用率 在   中过高 ,已经占用了 3.540174149868697个核的资源",
+        "summary": "apigw-3844874450-7chk0 cpu 使用率 在  中过高"
+    },
+    "startsAt": "2017-09-08T13:52:22.84+08:00",
+    "endsAt": "0001-01-01T00:00:00Z",
+    "generatorURL": "http://zabbix.sh.fonsview.com:9090/graph?g0.expr=sum%28irate%28container_cpu_usage_seconds_total%7Bimage%21%3D%22%22%2Cname%3D~%22%5Ek8s_.%2A%22%2Cnamespace%3D%22default%22%7D%5B1m%5D%29%29+BY+%28pod_name%29+%3E+1\u0026g0.tab=0"
+}, {
+    "labels": {
+        "alertname": "Pod_Cpu_Utilization",
+        "pod_name": "aaa-2932834967-l6s03",
+        "severity": "warning"
+    },
+    "annotations": {
+        "description": "aaa-2932834967-l6s03 cpu 使用率 在   中过高 ,已经占用了 4.33351224551831个核的资源",
+        "summary": "aaa-2932834967-l6s03 cpu 使用率 在  中过高"
+    },
+    "startsAt": "2017-09-08T13:56:22.84+08:00",
+    "endsAt": "2017-09-08T13:57:52.84+08:00",
+    "generatorURL": "http://zabbix.sh.fonsview.com:9090/graph?g0.expr=sum%28irate%28container_cpu_usage_seconds_total%7Bimage%21%3D%22%22%2Cname%3D~%22%5Ek8s_.%2A%22%2Cnamespace%3D%22default%22%7D%5B1m%5D%29%29+BY+%28pod_name%29+%3E+1\u0026g0.tab=0"
+}]

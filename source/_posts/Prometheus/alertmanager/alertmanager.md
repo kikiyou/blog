@@ -84,3 +84,39 @@ type AggregationRule struct {
 SHA ba224785
 by Julius Volz, 07/23/2013 04:40 PM
 parent 00efa4a4
+
++ 添加告警支持
+
+在notifier.go中添加如下代码，会自动搜索配置文件，如果配置文件中flowdock_config的配置，就会自动套用flowdock_config的配置，发送告警信息到flowdock
+
+
+for _, fdConfig := range config.FlowdockConfig {
+    if op == notificationOpResolve && !fdConfig.GetSendResolved() {
+        continue
+    }
+    flowdockMessage := getFlowdockNotificationMessage(op, fdConfig, a)
+    url := *flowdockURL + "/" + fdConfig.GetApiToken()
+    httpResponse := postJSONtoURL(jsonize(flowdockMessage), url)
+    processResponse(httpResponse, "Flowdock", a)
+}
+
+
+
+alertmanager 使用fsnotify 来监控文件，如果文件发生了变更会触发事件
+[使用go-fsnotify文件监控工具](http://lihaoquan.me/2015/9/1/using-fsnotity.html)
+
+
+
+alertmanager的黑科技，把静态文件编译进二进制代码中
+
+
+看完了 0.0.3
+
++ api 增加一个接口的
+
+func (s AlertManagerService) Handler() http.Handler {
+	r := httprouter.New()
+	r.GET(s.PathPrefix+"api/alerts", s.getAlerts)
+}
+
+就像上面r.GET(),接口地址s.PathPrefix+"api/alerts 对应的方法s.getAlerts，实现个getAlerts方法即可

@@ -1,0 +1,4 @@
+export http_proxy='http://dawx:vvvv@proxy.rhel.cc:63xx'
+export https_proxy=$http_proxy
+
+go get -v golang.org/x/crypto/ssh/terminal
