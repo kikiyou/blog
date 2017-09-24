@@ -135,3 +135,6 @@ https://github.com/iview/iview
 
 v-on：click  ---> @click
 v-bind:href="www.baidu.com  ---> ：href="www.baidu.com
+
++ 动态的向数组中添加内容
+<button @click="ingredients.push('spices')">Add New</button>
