@@ -120,3 +120,61 @@ func (s AlertManagerService) Handler() http.Handler {
 }
 
 就像上面r.GET(),接口地址s.PathPrefix+"api/alerts 对应的方法s.getAlerts，实现个getAlerts方法即可
+
+
+有静默文件的时候 读取，没有的自己创建一个
+
+
+状态有两个 firing  和  resolved
+
+
+调度器，每次休眠30s，循环，
+如果s.suppressionReqs 通道有值就调度到 s.dispatchSuppression(suppression) 方法
+
+
+
+
+
+	i := sort.Search(len(*s.Suppressions), func(i int) bool {
+		return (*s.Suppressions)[i].EndsAt.After(t)
+	})
+
+	*s.Suppressions = (*s.Suppressions)[i:]
+
+
+在什么，之后
+
+
+30s 一聚合，把超过30s 前的数据会丢弃
+下面。三个任意两个有数据，就会推出
+s.dispatchSuppression(suppression)
+调度抑制
+s.queryInhibit(query)
+查询抑制
+s.generateSummary(summary)
+一般汇总
+
+type Filter struct {
+	Name  *regexp.Regexp
+	Value *regexp.Regexp
+
+	fingerprint uint64
+}
+
+
++ 全局配置里面的ResolveTimeout，就是如果多长世界内没有再次收到告警消息，自多发生告警恢复消息
+
++ alertmanager 自己为模板注册了一些函数
+
+``` golang
+var DefaultFuncs = FuncMap{
+	"toUpper": strings.ToUpper,
+	"toLower": strings.ToLower,
+	"title":   strings.Title,
+	// join is equal to strings.Join but inverts the argument order
+	// for easier pipelining in templates.
+	"join": func(sep string, s []string) string {
+		return strings.Join(s, sep)
+	},
+}
+```
