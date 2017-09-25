@@ -4,6 +4,10 @@ https://www.kernel.org/doc/Documentation/iostats.txt
 
 http://linuxtools-rst.readthedocs.io/zh_CN/latest/tool/iostat.html
 
+
+数据源：
+cat /proc/diskstats
+
 diskstats：
 + node_disk_bytes_read
 磁盘读总量
