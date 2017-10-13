@@ -1,0 +1,7 @@
+ALERT node_aaa_ping
+  IF node_aaa_ping{instance=~"^aaa.*"} != 1
+  LABELS {severity="warning"}
+  ANNOTATIONS {
+    summary = "aaa 访问超时",
+    description="curl  http://127.0.0.1:6600/aaa/appstatus",
+  }

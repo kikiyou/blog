@@ -16,3 +16,7 @@ sum(irate(node_network_receive_bytes{device=~"^eth[0-9]$",group="省中心点",i
 
 主机网卡bond状态
 node_bonding_active{master="bond0"} 2
+
+
+磁盘可用率：
+node_filesystem_avail{mountpoint="/"} / node_filesystem_size{mountpoint="/"} * 100

@@ -1,0 +1,8 @@
+ALERT Node_Down
+  IF absent(up{job="node"} == 1)
+  FOR 5m
+  LABELS { severity = "critical" }
+  ANNOTATIONS {
+    summary = "Server不能获取到node-exporter的数据",
+    description="可能原因: 1.客户端挂了 2.服务器挂了 3.网络异常",
+  }

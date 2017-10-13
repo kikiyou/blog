@@ -1,0 +1,58 @@
+ALERT node_disk_smartctl_health
+  IF node_disk_smartctl_health{job="node"} == 0
+  LABELS {
+    severity = "warning"
+  }
+  ANNOTATIONS {
+    summary = "磁盘{{ $labels.device }}损坏",
+    description = "使用smartctl -H /dev/{{ $labels.device }}检查不通过",
+  }
+
+ALERT node_disk_hddtemp_temperature
+  IF node_disk_hddtemp_temperature{job="node"} >= 50
+  FOR 5m
+  LABELS {severity="warning"}
+  ANNOTATIONS {
+    summary = "当前磁盘温度{{ $value }}",
+    description="磁盘温度连续5分钟,超过50度",
+  }
+
+ALERT node_hard_power_cable
+  IF node_hard_power_cable{instance!="LA-SS1:39100",job="node"} == 1
+  LABELS {severity="warning"}
+  ANNOTATIONS {
+    summary = "双电源异常，请检查电源线",
+    description="使用ipmitool sensor | grep PS，非0x1都为异常",
+  }
+
+ALERT node_system_corefile_file
+  IF node_system_corefile{job="node",method="file"} != 0
+  LABELS {severity="warning"}
+  ANNOTATIONS {
+    summary = "根目录下产生core文件",
+    description="根目录下产生core文件,确认后请mv到/root/bakup目录下",
+  }
+
+ALERT node_system_corefile_log
+  IF node_system_corefile{job="node",method="log"} != 0
+  LABELS {severity="warning"}
+  ANNOTATIONS {
+    summary = "ss 产生core {{ $value }}",
+    description="监控/var/log/message,发现ss产生core",
+  }
+
+ALERT node_system_raid
+  IF node_system_raid{job="node"} != 1
+  LABELS {severity="warning"}
+  ANNOTATIONS {
+    summary = "系统盘软raid 异常",
+    description="cat /proc/mdstat,不是[UU]即是异常",
+  }
+
+ALERT node_ntp_ping
+  IF node_ntp_ping{job="node"} != 1
+  LABELS {severity="warning"}
+  ANNOTATIONS {
+    summary = "ntp客户端异常",
+    description="ntpq -pn 执行结果中不包括*的都是同步异常",
+  }

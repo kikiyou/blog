@@ -1,0 +1,7 @@
+ALERT node_cms_ping
+  IF node_cms_ping{job="node"} != 1
+  LABELS {severity="warning"}
+  ANNOTATIONS {
+    summary = "cms 访问超时",
+    description="curl  http://127.0.0.1:6600/cms/index.html",
+  }
