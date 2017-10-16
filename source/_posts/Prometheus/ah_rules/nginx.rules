@@ -1,0 +1,7 @@
+ALERT node_nginx_ping
+  IF node_nginx_ping{job="node"} != 1
+  LABELS {severity="warning"}
+  ANNOTATIONS {
+    summary = "nginx 访问超时",
+    description="curl  访问nginx超时",
+  }

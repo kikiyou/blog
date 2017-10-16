@@ -1,0 +1,7 @@
+ALERT node_oss_ping
+  IF node_oss_ping{job="node"} != 1
+  LABELS {severity="warning"}
+  ANNOTATIONS {
+    summary = "oss 访问超时",
+    description="curl  http://127.0.0.1:8081/oss/index.html",
+  }

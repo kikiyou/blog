@@ -1,0 +1,7 @@
+ALERT node_rrs_ping
+  IF node_rrs_ping{job="node"} != 1
+  LABELS {severity="warning"}
+  ANNOTATIONS {
+    summary = "rrs 服务挂了",
+    description="/opt/fonsview/NE/rrs/bin/rrs_go.sh status",
+  }
