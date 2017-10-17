@@ -7,7 +7,7 @@ ALERT node_ss_uptime
   }
 
 ALERT node_ss_ha
-  IF node_ss_ha{job="node"} != 0
+  IF node_ss_ha{job="node",group="省中心点"} != 0 or node_ss_ha{job="node",group="合肥节点"} != 0
   LABELS {severity="warning"}
   ANNOTATIONS {
     summary = "ss 异常 当前状态码是 {{ $value }}",
