@@ -56,3 +56,11 @@ ALERT node_ntp_ping
     summary = "ntp客户端异常",
     description="ntpq -pn 执行结果中不包括*的都是同步异常",
   }
+
+ALERT node_network_transmit_bytes_all
+  IF irate(node_network_transmit_bytes_all[5m])/1024/1024 > 1600
+  LABELS {severity="warning"}
+  ANNOTATIONS {
+    summary = "出流大于1.6G",
+    description="出流大于1.6G，当前{{ $value }}M",
+  }

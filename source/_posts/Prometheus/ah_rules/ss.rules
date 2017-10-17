@@ -13,3 +13,11 @@ ALERT node_ss_ha
     summary = "ss 异常 当前状态码是 {{ $value }}",
     description="-1: ss 挂掉, 1: ss 同步异常",
   }
+
+ALERT node_ss_current_online_sessions
+  IF node_ss_current_online_sessions{job="node"} > 2600
+  LABELS {severity="warning"}
+  ANNOTATIONS {
+    summary = "ss节点 {{ $labels.group }},在线人数超过2600",
+    description="当前在线人数{{ $value }}",
+  }

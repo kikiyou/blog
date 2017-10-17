@@ -1,0 +1,7 @@
+ALERT node_mysql_ping
+  IF node_mysql_ping{job="node"} != 1
+  LABELS { severity = "critical" }
+  ANNOTATIONS {
+    summary = "MySql 挂了",
+    description="MySql 挂了",
+  }

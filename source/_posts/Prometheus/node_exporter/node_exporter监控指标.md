@@ -14,6 +14,9 @@ node_netstat_Tcp_CurrEstab 21
 总流量：
 sum(irate(node_network_receive_bytes{device=~"^eth[0-9]$",group="省中心点",instance="ZX-SS2:39100",job="node"}[5m]))
 
+单个主机总流量
+sum by (instance) (irate(node_network_receive_bytes{device=~"^eth[0-9]$",job="node"}[5m]))
+
 主机网卡bond状态
 node_bonding_active{master="bond0"} 2
 
