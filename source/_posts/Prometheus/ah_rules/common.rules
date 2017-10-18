@@ -58,9 +58,9 @@ ALERT node_ntp_ping
   }
 
 ALERT node_network_transmit_bytes_all
-  IF irate(node_network_transmit_bytes_all[5m])/1024/1024 > 1600
+  IF sum by (group,instance) (irate(node_network_transmit_bytes{device=~"^eth[0-9]$",job="node"}[5m]))  / 1024 / 1024  > 1600
   LABELS {severity="warning"}
   ANNOTATIONS {
-    summary = "出流大于1.6G",
-    description="出流大于1.6G，当前{{ $value }}M",
+    summary = "出流大于1.6Gbps",
+    description="出流大于1.6G，当前{{ $value }}Mbps",
   }

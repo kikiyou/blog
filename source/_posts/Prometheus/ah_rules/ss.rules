@@ -15,9 +15,9 @@ ALERT node_ss_ha
   }
 
 ALERT node_ss_current_online_sessions
-  IF node_ss_current_online_sessions{job="node"} > 2600
+  IF node_ss_current_online_sessions{job="node"} > 3000
   LABELS {severity="warning"}
   ANNOTATIONS {
-    summary = "ss节点 {{ $labels.group }},在线人数超过2600",
+    summary = "ss节点 {{ $labels.group }},在线人数超过3000",
     description="当前在线人数{{ $value }}",
   }
