@@ -65,3 +65,11 @@ ALERT node_network_transmit_bytes_all
     description="出流大于16G，当前{{ $value }}Gbps",
   }
 
+ALERT node_cpu_overload
+  IF 100 - (avg by (instance) (irate(node_cpu{job="node",mode="idle"}[5m])) * 100) > 90
+  FOR 5m
+  LABELS {severity="warning"}
+  ANNOTATIONS {
+    summary = "一级告警: CPU负载过高",
+    description="cpu使用率超过90%，当前{{ $value }}%",
+  }
