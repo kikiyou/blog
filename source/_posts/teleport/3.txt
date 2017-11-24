@@ -1,0 +1,19 @@
+1. 我应该从哪里看起
+
+1. 看proxy模块 ---是怎么搞的----
+http ---> proxy  ---> sshd
+
+----------
+其实每次登录都是在proxy操作的，没有路由到真正的主机
+
+1. 先看proxy
+2. 再看auth
+3. 最后看node  --- node基本是一个sshd服务
+-----------------------------------------
+	// defaults for the SSH proxy service:
+	cfg.Proxy.Enabled = true
+	cfg.Proxy.AssetsDir = defaults.DataDir
+	cfg.Proxy.SSHAddr = *defaults.ProxyListenAddr()
+	cfg.Proxy.WebAddr = *defaults.ProxyWebListenAddr()
+	cfg.Proxy.ReverseTunnelListenAddr = *defaults.ReverseTunnellListenAddr()
+	defaults.ConfigureLimiter(&cfg.Proxy.Limiter)

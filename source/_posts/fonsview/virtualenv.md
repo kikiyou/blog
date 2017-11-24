@@ -1,5 +1,7 @@
 # python 虚拟环境
-
+离线安装pip
+wget http://7xw819.com1.z0.glb.clouddn.com/pip-9.0.1-py2.py3-none-any.whl
+python pip-9.0.1-py2.py3-none-any.whl/pip install --no-index pip-9.0.1-py2.py3-none-any.whl
 
 1. 安装
 pip install virtualenv

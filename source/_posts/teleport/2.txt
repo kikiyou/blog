@@ -1,0 +1,45 @@
+启动：
+root ➜  build git:(be7abac2) ./teleport start 
+[AUTH]  Auth service is starting on 0.0.0.0:3025
+[Proxy] Successfully registered with the cluster
+[PROXY] Web proxy service is starting on 0.0.0.0:3080
+
+[Node] Successfully registered with the cluster
+[SSH]   Service is starting on 0.0.0.0:3022
+
+
+----
+https://127.0.0.1:3080/   只有https认证 
+
+
+./tctl users add monkey
+
+
+Signup token has been created and is valid for 3600 seconds. Share this URL with the user:
+https://monkey.fonsview.com:3080/web/newuser/bde6298531516e264df99bf538f36751
+
+NOTE: make sure 'monkey.fonsview.com' is accessible
+
+----------
+
+
+
+551860    
+
+
+列出用户：
+./tctl users ls
+
+
+添加用户：
+./teleport start --roles=node --auth-server=192.168.42.1 --token=xyz --nodename=f66
+
+
+./teleport start --roles=node --token=dc906a15447a70e23fb409573834e06a --auth-server=172.16.12.41:3025 --nodename=f66
+
+
+
+./tctl users add monkey2 monkey,fonsview,root
+
+
+monkey2 

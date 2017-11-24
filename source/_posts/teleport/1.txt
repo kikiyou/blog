@@ -1,0 +1,42 @@
+build 目录下面：
+
+
+teleport 支持的子命令：
+
+start
+configure
+version
+status
+help
+
+------
+快速启动：
+teleport start -d 
+
+
+---
+/var/lib/teleport  ---是认证目录，要保证这个目录，普通用户不能访问
+
+1. 推荐systemd 启动
+
+端口:
+3022  是ssh的端口
+3023  是proxy的端口
+3024  auth端口，转发3022的数据
+3080  https的连接，转发tsh  用户和web用户到集群，web UI 是一样的。
+
+
+node的启动方式：
+./teleport start --roles=node --advertise-ip=10.0.0.10 --nodename=monkey1  --labels uptime=[1m:"uptime -p"],kernel=[1h:"uname -r"]
+
+teleport start proxy
+
+teleport start auth
+
+
+pwgen  自动生成密码的工具,默认生成8位数密码
+--------
+1. 熟练使用
+2. 看代码抄袭思想 
+
+AejohB2u
