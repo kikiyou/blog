@@ -34,3 +34,22 @@ vue.js: {{site.brand}}
 ```
 我这个项目中还使用了flask-bootstrap作为模板，不幸的是，flask-bootstrap使用的大括号都没加空格，导致页面渲染时出现问题。
 所以我将flask-bootstrap源码进行了修改，安装时，只要用我的数据源安装即可git+https://github.com/Panmax/flask-bootstrap.git
+
+
+
+------vue 模板分隔符变换----------
+<div id="app">
+  <button type="button" @click="prompt()">按我取得訊息</button>
+  <p>${ msg }</p>
+</div>
+var vm = new Vue({
+  el: '#app',
+  delimiters: ['${', '}'],
+  data: {
+    msg: '沒發生任何事情！',
+  },
+  methods: {
+    prompt: function() {
+      this.msg = '按鈕被按了！監聽到 click 事件。';
+    }
+  }

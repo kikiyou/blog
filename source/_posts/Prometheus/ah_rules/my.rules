@@ -1,5 +1,5 @@
 ALERT Node_Down
-  IF absent(up{job="node"} == 1)
+  IF up{job="node"} < 1
   FOR 5m
   LABELS { severity = "critical" }
   ANNOTATIONS {
