@@ -23,11 +23,10 @@ Media           Disk      媒体资源库
 Public          Disk      System default share
 
 + 挂载
-sudo mount.cifs //172.16.200.250/Upload /home/monkey/it-fs/Upload -o domain=fonsview.com,username=monkey,password=123.coM
+sudo mount.cifs  //172.16.200.250/Upload /home/monkey/it-fs/Upload -o vers=1.0,domain=fonsview.com,username=monkey,password=123.coM
 
-
-sudo mount.cifs //172.16.200.250/Release /home/monkey/it-fs/Release -o domain=fonsview.com,username=monkey,password=123.coM
-sudo mount.cifs //172.16.200.250/Public /home/monkey/it-fs/Public -o domain=fonsview.com,username=monkey,password=123.coM
+sudo mount.cifs //172.16.200.250/Release /home/monkey/it-fs/Release -o vers=1.0,domain=fonsview.com,username=monkey,password=123.coM
+sudo mount.cifs //172.16.200.250/Public /home/monkey/it-fs/Public -o vers=1.0,domain=fonsview.com,username=monkey,password=123.coM
 
 + plank 小巧好用的dock
  dnf install plank
