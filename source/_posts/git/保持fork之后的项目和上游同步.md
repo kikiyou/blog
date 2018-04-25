@@ -29,7 +29,8 @@ git push origin master
 
 
 -------------------------
+git fetch upstream
 git checkout fsv
 git merge upstream/master
-
+go run build.go -buildNumber=6 package latest
 -----------------------
