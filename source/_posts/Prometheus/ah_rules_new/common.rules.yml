@@ -1,0 +1,87 @@
+groups:
+- name: /home/yh/sync/blog/source/_posts/Prometheus/ah_rules/common.rules
+  rules:
+  - alert: node_disk_smartctl_health
+    expr: node_disk_smartctl_health{job="node"} == 0
+    labels:
+      severity: warning
+    annotations:
+      description: 使用smartctl -H /dev/{{ $labels.device }}检查不通过
+      summary: 磁盘{{ $labels.device }}损坏
+  - alert: node_disk_hddtemp_temperature
+    expr: node_disk_hddtemp_temperature{job="node"} >= 50
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      description: 磁盘温度连续5分钟,超过50度
+      summary: 当前磁盘温度{{ $value }}
+  - alert: node_hard_power_cable
+    expr: node_hard_power_cable{instance!="LA-SS1:39100",job="node"} == 1
+    labels:
+      severity: warning
+    annotations:
+      description: 使用ipmitool sensor | grep PS，非0x1都为异常
+      summary: 双电源异常，请检查电源线
+  - alert: node_system_corefile_file
+    expr: node_system_corefile{job="node",method="file"} != 0
+    labels:
+      severity: warning
+    annotations:
+      description: 根目录下产生core文件,确认后请mv到/root/bakup目录下
+      summary: 根目录下产生core文件
+  - alert: node_system_corefile_log
+    expr: node_system_corefile{job="node",method="log"} != 0
+    labels:
+      severity: warning
+    annotations:
+      description: 监控/var/log/message,发现ss产生core
+      summary: ss 产生core {{ $value }}
+  - alert: node_system_raid
+    expr: node_system_raid{job="node"} != 1
+    labels:
+      severity: warning
+    annotations:
+      description: cat /proc/mdstat,不是[UU]即是异常
+      summary: 系统盘软raid 异常
+  - alert: node_ntp_ping
+    expr: node_ntp_ping{job="node"} != 1
+    labels:
+      severity: warning
+    annotations:
+      description: ntpq -pn 执行结果中不包括*的都是同步异常
+      summary: ntp客户端异常
+  - alert: node_network_transmit_bytes_all
+    expr: sum(irate(node_network_transmit_bytes{device=~"^eth[0-9]$",job="node"}[5m]))
+      BY (group, instance) * 8 / 1024 / 1024 > 16000
+    labels:
+      severity: warning
+    annotations:
+      description: 出流大于16G，当前{{ $value }}Gbps
+      summary: 出流大于16Gbps
+  - alert: node_cpu_overload
+    expr: 100 - (avg(irate(node_cpu{job="node",mode="idle"}[5m])) BY (instance) *
+      100) > 90
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      description: cpu使用率超过90%，当前{{ $value }}%
+      summary: '一级告警: CPU负载过高'
+  - alert: JobInstanceFlapping
+    expr: changes(process_start_time_seconds[1h]) > 3
+    annotations:
+      description: Job {{ $labels.instance }} instance {{ $labels.instance }} has
+        failed {{ $value }} times in the last 1h.
+      summary: Job instance is failing too often
+  - alert: NodeRebootsTooOften
+    expr: changes(node_boot_time{job="node"}[1d]) > 1
+    annotations:
+      description: Node {{ $labels.instance }} reboots too often ({{ $value }} is
+        more than 1 times per 1d)
+      summary: Node 重启次数过多
+  - alert: node_NodeReboot
+    expr: node_time{job="node"} - node_boot_time{job="node"} < 300
+    annotations:
+      description: 系统发生重启
+      summary: 系统发生重启

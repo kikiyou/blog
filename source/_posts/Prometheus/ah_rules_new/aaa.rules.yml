@@ -1,0 +1,10 @@
+groups:
+- name: /home/yh/sync/blog/source/_posts/Prometheus/ah_rules/aaa.rules
+  rules:
+  - alert: node_aaa_ping
+    expr: node_aaa_ping{instance=~"^aaa.*"} != 1
+    labels:
+      severity: warning
+    annotations:
+      description: curl  http://127.0.0.1:6600/aaa/appstatus
+      summary: aaa 访问超时

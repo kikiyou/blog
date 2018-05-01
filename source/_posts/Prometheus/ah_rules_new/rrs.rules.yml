@@ -1,0 +1,10 @@
+groups:
+- name: /home/yh/sync/blog/source/_posts/Prometheus/ah_rules/rrs.rules
+  rules:
+  - alert: node_rrs_ping
+    expr: node_rrs_ping{job="node"} != 1
+    labels:
+      severity: warning
+    annotations:
+      description: /opt/fonsview/NE/rrs/bin/rrs_go.sh status
+      summary: rrs 服务挂了

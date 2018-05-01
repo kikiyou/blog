@@ -1,0 +1,11 @@
+groups:
+- name: /home/yh/sync/blog/source/_posts/Prometheus/ah_rules/my.rules
+  rules:
+  - alert: Node_Down
+    expr: absent(up{job="node"} == 1)
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      description: '可能原因: 1.客户端挂了 2.服务器挂了 3.网络异常'
+      summary: Server不能获取到node-exporter的数据

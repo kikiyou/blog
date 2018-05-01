@@ -1,0 +1,10 @@
+groups:
+- name: /home/yh/sync/blog/source/_posts/Prometheus/ah_rules/nginx.rules
+  rules:
+  - alert: node_nginx_ping
+    expr: node_nginx_ping{job="node"} != 1
+    labels:
+      severity: warning
+    annotations:
+      description: curl  访问nginx超时
+      summary: nginx 访问超时

@@ -1,0 +1,10 @@
+groups:
+- name: /home/yh/sync/blog/source/_posts/Prometheus/ah_rules/cms.rules
+  rules:
+  - alert: node_cms_ping
+    expr: node_cms_ping{job="node"} != 1
+    labels:
+      severity: warning
+    annotations:
+      description: curl  http://127.0.0.1:6600/cms/index.html
+      summary: cms 访问超时

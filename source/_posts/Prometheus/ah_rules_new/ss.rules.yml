@@ -1,0 +1,25 @@
+groups:
+- name: /home/yh/sync/blog/source/_posts/Prometheus/ah_rules/ss.rules
+  rules:
+  - alert: node_ss_uptime
+    expr: node_ss_uptime{job="node"} < 300
+    labels:
+      severity: warning
+    annotations:
+      description: ss 服务发生了重启
+      summary: SS 刚才重启了
+  - alert: node_ss_ha
+    expr: node_ss_ha{group="省中心点",job="node"} != 0 or node_ss_ha{group="合肥节点",job="node"}
+      != 0
+    labels:
+      severity: warning
+    annotations:
+      description: '-1: ss 挂掉, 1: ss 同步异常'
+      summary: ss 异常 当前状态码是 {{ $value }}
+  - alert: node_ss_current_online_sessions
+    expr: node_ss_current_online_sessions{job="node"} > 3000
+    labels:
+      severity: warning
+    annotations:
+      description: 当前在线人数{{ $value }}
+      summary: ss节点 {{ $labels.group }},在线人数超过3000

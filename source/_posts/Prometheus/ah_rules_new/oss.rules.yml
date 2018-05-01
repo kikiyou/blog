@@ -1,0 +1,10 @@
+groups:
+- name: /home/yh/sync/blog/source/_posts/Prometheus/ah_rules/oss.rules
+  rules:
+  - alert: node_oss_ping
+    expr: node_oss_ping{job="node"} != 1
+    labels:
+      severity: warning
+    annotations:
+      description: curl  http://127.0.0.1:8081/oss/index.html
+      summary: oss 访问超时

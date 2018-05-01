@@ -3,5 +3,5 @@ ALERT node_aaa_ping
   LABELS {severity="warning"}
   ANNOTATIONS {
     summary = "aaa 访问超时",
-    description="curl  http://127.0.0.1:6600/aaa/appstatus",
+    description ="curl  http://127.0.0.1:6600/aaa/appstatus",
   }

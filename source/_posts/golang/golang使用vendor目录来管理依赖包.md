@@ -1,6 +1,6 @@
 # golang 包管理工具
 
-1. glide
+1. glide  --推荐这个
 2. gvt
 
 

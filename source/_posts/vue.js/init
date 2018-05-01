@@ -1,0 +1,14 @@
+1. 创建vue项目：
+yh ➜  sync vue init webpack monkey_vue 
+
+vue init browserify  monkey_vue
+
+2.安装依赖：
+
+cnpm install  vue-axios --save
+cnpm install  axios --save
+
+cnpm install bootstrap@4.0.0-alpha.6
+cnpm install vue-style-loader --save
+cnpm install  sass-loader --save
+cnpm install node-sass --save

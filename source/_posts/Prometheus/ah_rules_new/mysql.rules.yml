@@ -1,0 +1,10 @@
+groups:
+- name: /home/yh/sync/blog/source/_posts/Prometheus/ah_rules/mysql.rules
+  rules:
+  - alert: node_mysql_ping
+    expr: node_mysql_ping{job="node"} != 1
+    labels:
+      severity: critical
+    annotations:
+      description: MySql 挂了
+      summary: MySql 挂了
