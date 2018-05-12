@@ -14,3 +14,5 @@ prometheus不进行真正的数据存储。
 
 远程写：
 https://github.com/prometheus/prometheus/blob/master/documentation/examples/remote_storage/example_write_adapter/server.go
+
+把prometheus数据库，接收到的数据持续的写给别的数据库。
