@@ -86,7 +86,10 @@ curl http://localhost:8500/v1/catalog/service/web
 
 curl 'http://localhost:8500/v1/health/service/web?passing'
 
-
+删除一个服务：
+curl \
+    --request PUT \
+    http://localhost:8500/v1/agent/service/deregister/HLJ-ZX-CDN-OMC
 
 ## 启动web-ui
 
@@ -100,3 +103,5 @@ consul info
 
 https://github.com/jippi/hashi-ui
 nomad
+
+

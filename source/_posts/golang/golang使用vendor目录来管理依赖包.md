@@ -24,5 +24,13 @@ Run godep update foo/bar. (You can use the … wildcard, for example godep updat
 
 glide:
 1. glide create   创建新项目，生成glide.yaml
-2. glide install  根据glide.yaml，copy 依赖到 vendor
+2. glide install  根据glide.lock，copy 依赖到 vendor
 3. glide update  # 更新依赖包信息，更新glide.lock
+
+glide 添加一个包
+export GOPATH=/home/monkey/go
+glide get github.com/kr/pty
+
+
+glide 使用教程：
+https://gocn.vip/article/393

@@ -47,8 +47,12 @@ partx  -u /dev/sdq
 (3) 使用lvm
 pvcreate /dev/sdq1
 
-添加到卷组：
-vgextend vg_csk /dev/sdq1
+
+创建卷组：
+vgcreate vg_csk /dev/sdq1
+
+#添加到卷组：
+#vgextend vg_csk /dev/sdq1
 
 创建新的逻辑卷：
 lvcreate -l 100%VG -n disk2 vg_csk
